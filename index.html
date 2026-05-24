@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>Découvertes Musicales - Mélomanie</title>
+  <meta name="description" content="Une collection de mes plus belles découvertes de morceaux de musique, partagées sous forme de carnet musical interactif avec intégration Spotify.">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Mélomanie - Vitrine Musicale">
+  <meta property="og:description" content="Une collection de mes plus belles découvertes de morceaux, partagées sous forme de carnet musical interactif.">
+  <meta property="og:type" content="website">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/src/style.css">
+  
+  <!-- Icons -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231db954'%3E%3Cpath d='M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Écran de connexion Spotify -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <div class="login-header">
+        <span class="login-logo">🎧</span>
+        <h1>Mélomanie</h1>
+        <p>Générez et personnalisez de superbes vitrines interactives à partir de vos playlists Spotify.</p>
+      </div>
+      <button class="spotify-login-btn" id="spotify-login-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+        </svg>
+        Se connecter avec Spotify
+      </button>
+      <div class="login-footer">
+        <p>L'authentification s'effectue directement et de façon sécurisée via Spotify. Vos identifiants ne quittent jamais votre navigateur.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Écran principal de l'application -->
+  <div class="app-screen hidden" id="app-screen">
+    <div class="app-container">
+      
+      <!-- Navbar -->
+      <header class="navbar" id="main-nav">
+        <div class="navbar-left">
+          <a href="/" class="logo" id="logo-link">
+            <span class="logo-icon">🎧</span>
+            <span>Mélomanie</span>
+          </a>
+          
+          <div class="playlist-selector-wrapper">
+            <label for="playlist-select" class="selector-label" id="select-label">Saison :</label>
+            <select id="playlist-select" class="playlist-select">
+              <!-- Rempli dynamiquement -->
+            </select>
+          </div>
+        </div>
+
+        <div class="navbar-right">
+          <!-- Barre d'importation de playlist -->
+          <div class="import-wrapper">
+            <input type="text" id="playlist-input" class="playlist-input" placeholder="Coller une URL de playlist Spotify...">
+            <button id="import-btn" class="import-btn" title="Importer la playlist">
+              <span>Importer</span>
+              <span class="btn-loader hidden"></span>
+            </button>
+          </div>
+
+          <!-- Bouton de déconnexion -->
+          <button id="logout-btn" class="logout-btn" title="Se déconnecter">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Section Actions Globales (Exporter, Vider) -->
+      <div class="global-actions">
+        <button id="export-json-btn" class="action-btn secondary-btn" title="Télécharger les playlists et commentaires sous forme de fichier JSON">
+          📥 Exporter les données (JSON)
+        </button>
+        <button id="clear-data-btn" class="action-btn danger-btn" title="Effacer toutes les playlists importées de ce navigateur">
+          🗑️ Tout effacer
+        </button>
+      </div>
+
+      <!-- Playlist Hero Banner -->
+      <main>
+        <section class="hero-section" id="hero-area">
+          <div class="hero-tag" id="playlist-edition-tag">Saison</div>
+          <h1 class="hero-title" id="playlist-name">Mes Découvertes</h1>
+          <p class="hero-description" id="playlist-description">
+            Sélection en cours de chargement...
+          </p>
+          <a href="#" target="_blank" class="spotify-btn" id="playlist-spotify-link">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+            </svg>
+            Écouter la playlist complète
+          </a>
+        </section>
+
+        <!-- Tracklist Grid -->
+        <section class="tracks-grid" id="tracks-grid">
+          <!-- Rempli dynamiquement par JS -->
+        </section>
+        
+        <!-- Empty State / State de Chargement -->
+        <div id="loading-or-empty" class="empty-state hidden">
+          <div class="empty-state-icon" id="empty-icon">📂</div>
+          <h3 class="empty-state-title" id="empty-title">Aucune playlist importée</h3>
+          <p class="empty-state-desc" id="empty-desc">Collez un lien de playlist Spotify ci-dessus pour commencer.</p>
+        </div>
+      </main>
+    </div>
+
+    <!-- Persistent Audio Player -->
+    <div class="global-player" id="global-player">
+      <!-- Info morceau en cours -->
+      <div class="player-track-info" id="player-track-info">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pochette" class="player-art" id="player-art">
+        <div class="player-metadata">
+          <div class="player-title" id="player-title">Titre du morceau</div>
+          <div class="player-artist" id="player-artist">Artiste</div>
+        </div>
+      </div>
+
+      <!-- Contrôles du lecteur -->
+      <div class="player-controls" id="player-controls">
+        <div class="control-buttons">
+          <button class="player-btn" id="player-prev-btn" title="Précédent">
+            <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button class="player-btn play-pause" id="player-play-btn" title="Lire / Pause">
+            <svg viewBox="0 0 24 24" id="player-play-icon"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <button class="player-btn" id="player-next-btn" title="Suivant">
+            <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6zm9-12h2v12h-2z"/></svg>
+          </button>
+        </div>
+        <div class="progress-container">
+          <span class="time-display" id="time-current">0:00</span>
+          <div class="progress-bar-bg" id="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+          </div>
+          <span class="time-display" id="time-duration">0:30</span>
+        </div>
+      </div>
+
+      <!-- Contrôles volume et lien externe -->
+      <div class="player-right-controls" id="player-right-controls">
+        <a href="#" target="_blank" class="spotify-link-icon" id="player-spotify-link" title="Écouter le morceau sur Spotify">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
+        </a>
+        <div class="volume-container">
+          <span style="font-size: 1.1rem; opacity: 0.7;">🔊</span>
+          <div class="volume-slider" id="volume-slider">
+            <div class="volume-fill" id="volume-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
