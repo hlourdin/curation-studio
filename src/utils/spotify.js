@@ -1,5 +1,5 @@
 const CLIENT_ID = 'c02cddea8b654e68b14633346c93cc78';
-const REDIRECT_URI = 'https://127.0.0.1:5173'; // Doit correspondre exactement à la config Spotify Dashboard
+const REDIRECT_URI = window.location.origin.replace(/\/$/, '');
 const SCOPES = 'playlist-read-private playlist-read-collaborative';
 
 // Génère une chaîne aléatoire pour le Code Verifier
