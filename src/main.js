@@ -200,8 +200,9 @@ function setupApp(token) {
   // Remplir le sélecteur
   populatePlaylistSelector();
 
-  // Éditeur de description
+  // Éditeur de description & réorganisation
   setupDescriptionEditor();
+  setupReorderModal();
 
   // Charger la playlist active
   if (activePlaylistSlug) {
@@ -236,8 +237,21 @@ function loadPlaylistsData() {
     });
   }
 
-  // Définir la playlist active par défaut
-  const slugs = Object.keys(playlists);
+  initActivePlaylistSlug();
+}
+// Helper pour récupérer les slugs triés par ordre personnalisé
+function getSortedPlaylistSlugs(playlistsData = playlists) {
+  const slugs = Object.keys(playlistsData);
+  return slugs.sort((a, b) => {
+    const orderA = typeof playlistsData[a].order === 'number' ? playlistsData[a].order : 999;
+    const orderB = typeof playlistsData[b].order === 'number' ? playlistsData[b].order : 999;
+    return orderA - orderB;
+  });
+}
+
+// Définir la playlist active par défaut
+function initActivePlaylistSlug() {
+  const slugs = getSortedPlaylistSlugs(playlists);
   if (slugs.length > 0) {
     activePlaylistSlug = window.localStorage.getItem('melomanie_active_slug') || slugs[0];
     if (!playlists[activePlaylistSlug] || !playlists[activePlaylistSlug].tracks || playlists[activePlaylistSlug].tracks.length === 0) {
@@ -258,19 +272,19 @@ function savePlaylistsData() {
   }
 }
 
-// Rplit le sélecteur de saisons/playlists dans l'en-tête
+// Remplit le sélecteur de playlists dans l'en-tête selon l'ordre trié
 function populatePlaylistSelector() {
   playlistSelect.innerHTML = '';
-  const slugs = Object.keys(playlists);
+  const sortedSlugs = getSortedPlaylistSlugs(playlists);
 
-  if (slugs.length === 0) {
+  if (sortedSlugs.length === 0) {
     playlistSelect.closest('.playlist-selector-wrapper').classList.add('hidden');
     return;
   }
 
   playlistSelect.closest('.playlist-selector-wrapper').classList.remove('hidden');
   
-  slugs.forEach(slug => {
+  sortedSlugs.forEach(slug => {
     const option = document.createElement('option');
     option.value = slug;
     option.textContent = playlists[slug].name;
@@ -949,6 +963,101 @@ function slugify(text) {
     .replace(/\-\-+/g, '-')
     .replace(/^-+/, '')
     .replace(/-+$/, '');
+}
+
+// --- MODALE DE RÉORGANISATION DES PLAYLISTS ---
+let tempReorderSlugs = [];
+
+function setupReorderModal() {
+  const reorderBtn = document.getElementById('reorder-btn');
+  const reorderModal = document.getElementById('reorder-modal');
+  const closeBtn = document.getElementById('close-reorder-modal');
+  const saveBtn = document.getElementById('save-reorder-btn');
+
+  if (!reorderBtn || !reorderModal) return;
+
+  reorderBtn.onclick = () => openReorderModal();
+  if (closeBtn) closeBtn.onclick = () => reorderModal.classList.add('hidden');
+  if (saveBtn) saveBtn.onclick = () => saveReorder();
+}
+
+function openReorderModal() {
+  const reorderModal = document.getElementById('reorder-modal');
+  tempReorderSlugs = getSortedPlaylistSlugs(playlists);
+  renderReorderList();
+  if (reorderModal) reorderModal.classList.remove('hidden');
+}
+
+function moveReorderItem(index, direction) {
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= tempReorderSlugs.length) return;
+  const temp = tempReorderSlugs[index];
+  tempReorderSlugs[index] = tempReorderSlugs[newIndex];
+  tempReorderSlugs[newIndex] = temp;
+  renderReorderList();
+}
+
+function renderReorderList() {
+  const container = document.getElementById('reorder-list-container');
+  if (!container) return;
+
+  container.innerHTML = tempReorderSlugs.map((slug, idx) => {
+    const pl = playlists[slug];
+    const trackCount = pl && pl.tracks ? pl.tracks.length : 0;
+    const isFirst = idx === 0;
+    const isLast = idx === tempReorderSlugs.length - 1;
+    const name = pl ? pl.name : slug;
+
+    return `
+      <div class="reorder-item">
+        <div class="reorder-item-title">
+          <span>${idx + 1}.</span>
+          <span>${name}</span>
+          <span class="reorder-item-badge">(${trackCount} morceaux)</span>
+        </div>
+        <div class="reorder-btn-group">
+          <button class="reorder-action-btn up-btn" data-idx="${idx}" ${isFirst ? 'disabled' : ''} title="Monter">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+          </button>
+          <button class="reorder-action-btn down-btn" data-idx="${idx}" ${isLast ? 'disabled' : ''} title="Descendre">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.querySelectorAll('.up-btn').forEach(btn => {
+    btn.onclick = () => moveReorderItem(parseInt(btn.getAttribute('data-idx')), -1);
+  });
+
+  container.querySelectorAll('.down-btn').forEach(btn => {
+    btn.onclick = () => moveReorderItem(parseInt(btn.getAttribute('data-idx')), 1);
+  });
+}
+
+async function saveReorder() {
+  tempReorderSlugs.forEach((slug, idx) => {
+    if (playlists[slug]) {
+      playlists[slug].order = idx + 1;
+    }
+  });
+
+  savePlaylistsData();
+  populatePlaylistSelector();
+  const reorderModal = document.getElementById('reorder-modal');
+  if (reorderModal) reorderModal.classList.add('hidden');
+
+  // Mise à jour synchrone du site statique
+  try {
+    await fetch('/api/export-site', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(playlists)
+    });
+  } catch (e) {
+    console.warn("Mise à jour SSG locale :", e);
+  }
 }
 
 // Démarrer au chargement

@@ -48,7 +48,11 @@ export function buildStaticSite() {
     }
   }
 
-  const slugs = Object.keys(playlistsData);
+  const slugs = Object.keys(playlistsData).sort((a, b) => {
+    const orderA = typeof playlistsData[a].order === 'number' ? playlistsData[a].order : 999;
+    const orderB = typeof playlistsData[b].order === 'number' ? playlistsData[b].order : 999;
+    return orderA - orderB;
+  });
   console.log(`🔨 Génération du site statique Vercel pour ${slugs.length} playlist(s)...`);
 
   // --- 1. GÉNÉRATION DE LA PAGE D'ACCUEIL (site/index.html) ---

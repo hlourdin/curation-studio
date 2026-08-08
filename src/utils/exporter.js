@@ -643,7 +643,11 @@ const STATIC_PLAYER_JS = `(function () {
 
 export async function exportStudioSiteZIP(playlistsData) {
   const zip = new JSZip();
-  const slugs = Object.keys(playlistsData);
+  const slugs = Object.keys(playlistsData).sort((a, b) => {
+    const orderA = typeof playlistsData[a].order === 'number' ? playlistsData[a].order : 999;
+    const orderB = typeof playlistsData[b].order === 'number' ? playlistsData[b].order : 999;
+    return orderA - orderB;
+  });
 
   if (slugs.length === 0) {
     alert("Aucune playlist à exporter dans le studio.");

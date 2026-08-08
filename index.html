@@ -87,6 +87,9 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </span>
               </div>
+              <button id="reorder-btn" class="icon-btn-subtle" title="Organiser l'ordre d'affichage des playlists">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"></polyline><polyline points="7 11 12 6 17 11"></polyline></svg>
+              </button>
             </div>
           </div>
 
@@ -253,6 +256,25 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Modal de Réorganisation des Playlists -->
+  <div id="reorder-modal" class="modal-backdrop hidden">
+    <div class="modal-card double-bezel-shell">
+      <div class="double-bezel-core modal-inner">
+        <div class="modal-header">
+          <h3 class="modal-title">Organiser l'ordre des playlists</h3>
+          <button id="close-reorder-modal" class="close-modal-btn" title="Fermer">&times;</button>
+        </div>
+        <p class="modal-subtitle">Ajustez l'ordre de présentation des playlists sur votre site avec les flèches haut / bas.</p>
+        <div id="reorder-list-container" class="reorder-list">
+          <!-- Généré dynamiquement -->
+        </div>
+        <div class="modal-actions">
+          <button id="save-reorder-btn" class="nav-action-pill highlight">Enregistrer l'ordre</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="/src/main.js"></script>
