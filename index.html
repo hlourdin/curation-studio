@@ -5,168 +5,254 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO Meta Tags -->
-  <title>Découvertes Musicales - Mélomanie</title>
-  <meta name="description" content="Une collection de mes plus belles découvertes de morceaux de musique, partagées sous forme de carnet musical interactif avec intégration Spotify.">
+  <title>Le Son de la Curiosité — Curated Audio Discoveries</title>
+  <meta name="description" content="Une collection de mes plus belles découvertes musicales sous forme de vitrine interactive haut de gamme avec intégration Spotify.">
   <meta name="robots" content="index, follow">
   
   <!-- Open Graph -->
-  <meta property="og:title" content="Mélomanie - Vitrine Musicale">
-  <meta property="og:description" content="Une collection de mes plus belles découvertes de morceaux, partagées sous forme de carnet musical interactif.">
+  <meta property="og:title" content="Le Son de la Curiosité — Vitrine Musicale High-End">
+  <meta property="og:description" content="Carnet audio interactif d'exception & vitrine de découvertes Spotify.">
   <meta property="og:type" content="website">
+  
+  <!-- Typography & Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/src/style.css">
   
   <!-- Icons -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231db954'%3E%3Cpath d='M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'%3E%3Ccircle cx='12' cy='12' r='10' fill-opacity='0.15'/%3E%3Cpath d='M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z'/%3E%3C/svg%3E">
 </head>
 <body>
 
+  <!-- Ambient Film Grain & Noise Overlay -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- Ambient Glow Orbs -->
+  <div class="bg-glow-orb orb-primary" aria-hidden="true"></div>
+  <div class="bg-glow-orb orb-secondary" aria-hidden="true"></div>
+  <div class="bg-glow-orb orb-tertiary" aria-hidden="true"></div>
+
   <!-- Écran de connexion Spotify -->
   <div class="login-screen" id="login-screen">
-    <div class="login-card">
-      <div class="login-header">
-        <span class="login-logo">🎧</span>
-        <h1>Mélomanie</h1>
-        <p>Générez et personnalisez de superbes vitrines interactives à partir de vos playlists Spotify.</p>
-      </div>
-      <button class="spotify-login-btn" id="spotify-login-btn">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-        </svg>
-        Se connecter avec Spotify
-      </button>
-      <div class="login-footer">
-        <p>L'authentification s'effectue directement et de façon sécurisée via Spotify. Vos identifiants ne quittent jamais votre navigateur.</p>
+    <div class="double-bezel-shell login-card-shell">
+      <div class="double-bezel-core login-card">
+        <div class="login-header">
+          <div class="brand-badge-pill">
+            <span class="pulse-dot"></span>
+            <span>SPOTIFY DISCOVERIES ARCHIVE</span>
+          </div>
+          <h1>Le Son de la Curiosité</h1>
+          <p>Générez et personnalisez des vitrines musicales d'exception à partir de vos playlists Spotify.</p>
+        </div>
+        <button class="spotify-login-btn group" id="spotify-login-btn">
+          <span>Se connecter avec Spotify</span>
+          <span class="btn-icon-bubble">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+            </svg>
+          </span>
+        </button>
+        <div class="login-footer">
+          <p>Authentification sécurisée via OAuth 2.0 PKCE. Vos identifiants ne quittent jamais votre navigateur.</p>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Écran principal de l'application -->
   <div class="app-screen hidden" id="app-screen">
-    <div class="app-container">
-      
-      <!-- Navbar -->
-      <header class="navbar" id="main-nav">
-        <div class="navbar-left">
-          <a href="/" class="logo" id="logo-link">
-            <span class="logo-icon">🎧</span>
-            <span>Mélomanie</span>
-          </a>
-          
-          <div class="playlist-selector-wrapper">
-            <label for="playlist-select" class="selector-label" id="select-label">Saison :</label>
-            <select id="playlist-select" class="playlist-select">
-              <!-- Rempli dynamiquement -->
-            </select>
-          </div>
-        </div>
-
-        <div class="navbar-right">
-          <!-- Barre d'importation de playlist -->
-          <div class="import-wrapper">
-            <input type="text" id="playlist-input" class="playlist-input" placeholder="Coller une URL de playlist Spotify...">
-            <button id="import-btn" class="import-btn" title="Importer la playlist">
-              <span>Importer</span>
-              <span class="btn-loader hidden"></span>
-            </button>
+    
+    <!-- Floating Island Navbar -->
+    <div class="navbar-wrapper">
+      <header class="navbar double-bezel-shell" id="main-nav">
+        <div class="navbar-inner double-bezel-core">
+          <div class="navbar-left">
+            <a href="/" class="logo" id="logo-link">
+              <div class="logo-text-group">
+                <span class="logo-name">Le Son de la Curiosité</span>
+                <span class="logo-sub">AUDIO CURATION</span>
+              </div>
+            </a>
+            
+            <div class="playlist-selector-wrapper">
+              <span class="selector-label" id="select-label">PLAYLIST</span>
+              <div class="custom-select-container">
+                <select id="playlist-select" class="playlist-select">
+                  <!-- Rempli dynamiquement -->
+                </select>
+                <span class="select-chevron">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </div>
+            </div>
           </div>
 
-          <!-- Bouton de déconnexion -->
-          <button id="logout-btn" class="logout-btn" title="Se déconnecter">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z"/>
-            </svg>
-          </button>
+          <div class="navbar-right">
+            <!-- Barre d'importation de playlist -->
+            <div class="import-wrapper">
+              <div class="input-glow-shell">
+                <input type="text" id="playlist-input" class="playlist-input" placeholder="Lien ou ID de playlist Spotify...">
+              </div>
+              <button id="import-btn" class="import-btn group" title="Importer la playlist">
+                <span>Importer</span>
+                <span class="btn-loader hidden"></span>
+                <span class="btn-icon-bubble micro">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </span>
+              </button>
+            </div>
+
+            <!-- Actions Secondaires, Switcher Thème & Déconnexion -->
+            <div class="nav-actions-group">
+              <button id="theme-toggle-btn" class="nav-action-pill theme-toggle-btn" title="Basculer entre Mode Sombre et Mode Clair">
+                <span class="theme-icon-sun">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </span>
+                <span class="theme-icon-moon hidden">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </span>
+              </button>
+              <a href="./site/index.html" target="_blank" class="nav-action-pill site-link-btn" title="Voir la page d'accueil locale du site (site/index.html)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span>Voir le site</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;margin-left:2px;"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+              </a>
+              <button id="export-site-btn" class="nav-action-pill highlight" title="Générer le site statique Vercel dans le dossier site/">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                <span>Générer Site</span>
+              </button>
+              <button id="export-json-btn" class="nav-action-pill" title="Télécharger les playlists et commentaires sous forme de fichier JSON">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>JSON</span>
+              </button>
+              <button id="logout-btn" class="logout-btn" title="Se déconnecter">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              </button>
+            </div>
+          </div>
         </div>
       </header>
+    </div>
 
-      <!-- Section Actions Globales (Exporter, Vider) -->
-      <div class="global-actions">
-        <button id="export-json-btn" class="action-btn secondary-btn" title="Télécharger les playlists et commentaires sous forme de fichier JSON">
-          📥 Exporter les données (JSON)
-        </button>
-        <button id="clear-data-btn" class="action-btn danger-btn" title="Effacer toutes les playlists importées de ce navigateur">
-          🗑️ Tout effacer
-        </button>
+    <!-- Main Container -->
+    <div class="app-container">
+      <!-- Actions Globales mobile/fallback (caché si déjà dans la nav) -->
+      <div class="global-actions hidden">
+        <!-- Remplacé par nav-actions-group mais conservé pour compatibilité ID JS -->
       </div>
 
-      <!-- Playlist Hero Banner -->
+      <!-- Hero Banner -->
       <main>
         <section class="hero-section" id="hero-area">
-          <div class="hero-tag" id="playlist-edition-tag">Saison</div>
-          <h1 class="hero-title" id="playlist-name">Mes Découvertes</h1>
-          <p class="hero-description" id="playlist-description">
-            Sélection en cours de chargement...
-          </p>
-          <a href="#" target="_blank" class="spotify-btn" id="playlist-spotify-link">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-            </svg>
-            Écouter la playlist complète
-          </a>
+          <h1 class="hero-title">
+            <span class="hero-title-text" id="playlist-name">Mes Découvertes</span>
+            <a href="#" target="_blank" class="hero-title-external-link" id="playlist-spotify-link" title="Écouter la playlist complète sur spotify">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+          </h1>
+          <div class="hero-description-container" id="playlist-description-container">
+            <p class="hero-description" id="playlist-description" title="Cliquer pour éditer la description">
+              Sélection en cours de chargement...
+            </p>
+          </div>
         </section>
 
         <!-- Tracklist Grid -->
         <section class="tracks-grid" id="tracks-grid">
-          <!-- Rempli dynamiquement par JS -->
+          <!-- Rempli dynamiquement par JS avec Double-Bezel Architecture -->
         </section>
         
         <!-- Empty State / State de Chargement -->
-        <div id="loading-or-empty" class="empty-state hidden">
-          <div class="empty-state-icon" id="empty-icon">📂</div>
-          <h3 class="empty-state-title" id="empty-title">Aucune playlist importée</h3>
-          <p class="empty-state-desc" id="empty-desc">Collez un lien de playlist Spotify ci-dessus pour commencer.</p>
+        <div id="loading-or-empty" class="empty-state double-bezel-shell hidden">
+          <div class="double-bezel-core empty-state-inner">
+            <div class="empty-state-icon-badge" id="empty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </div>
+            <h3 class="empty-state-title" id="empty-title">Aucune playlist importée</h3>
+            <p class="empty-state-desc" id="empty-desc">Collez un lien de playlist Spotify ci-dessus pour commencer votre exploration.</p>
+          </div>
         </div>
       </main>
     </div>
 
-    <!-- Persistent Audio Player -->
-    <div class="global-player" id="global-player">
-      <!-- Info morceau en cours -->
-      <div class="player-track-info" id="player-track-info">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pochette" class="player-art" id="player-art">
-        <div class="player-metadata">
-          <div class="player-title" id="player-title">Titre du morceau</div>
-          <div class="player-artist" id="player-artist">Artiste</div>
-        </div>
-      </div>
-
-      <!-- Contrôles du lecteur -->
-      <div class="player-controls" id="player-controls">
-        <div class="control-buttons">
-          <button class="player-btn" id="player-prev-btn" title="Précédent">
-            <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-          </button>
-          <button class="player-btn play-pause" id="player-play-btn" title="Lire / Pause">
-            <svg viewBox="0 0 24 24" id="player-play-icon"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-          <button class="player-btn" id="player-next-btn" title="Suivant">
-            <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6zm9-12h2v12h-2z"/></svg>
-          </button>
-        </div>
-        <div class="progress-container">
-          <span class="time-display" id="time-current">0:00</span>
-          <div class="progress-bar-bg" id="progress-bar-bg">
-            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+    <!-- Floating Dock Audio Player -->
+    <div class="global-player-dock-wrapper">
+      <div class="global-player double-bezel-shell" id="global-player">
+        <div class="player-inner double-bezel-core" id="player-custom-ui">
+          
+          <!-- Track Info -->
+          <div class="player-track-info" id="player-track-info">
+            <div class="player-art-frame">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pochette" class="player-art" id="player-art">
+              <div class="player-equalizer-bars" id="player-equalizer">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="player-metadata">
+              <div class="player-title" id="player-title">Titre du morceau</div>
+              <div class="player-artist" id="player-artist">Artiste</div>
+            </div>
           </div>
-          <span class="time-display" id="time-duration">0:30</span>
-        </div>
-      </div>
 
-      <!-- Contrôles volume et lien externe -->
-      <div class="player-right-controls" id="player-right-controls">
-        <a href="#" target="_blank" class="spotify-link-icon" id="player-spotify-link" title="Écouter le morceau sur Spotify">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-        </a>
-        <div class="volume-container">
-          <span style="font-size: 1.1rem; opacity: 0.7;">🔊</span>
-          <div class="volume-slider" id="volume-slider">
-            <div class="volume-fill" id="volume-fill"></div>
+          <!-- Controls -->
+          <div class="player-controls" id="player-controls">
+            <div class="control-buttons">
+              <button class="player-btn" id="player-prev-btn" title="Précédent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+              </button>
+              <button class="player-btn play-pause group" id="player-play-btn" title="Lire / Pause">
+                <span class="play-icon-holder" id="player-play-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </span>
+              </button>
+              <button class="player-btn" id="player-next-btn" title="Suivant">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+              </button>
+            </div>
+            <div class="progress-container">
+              <span class="time-display" id="time-current">0:00</span>
+              <div class="progress-bar-bg" id="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar-fill">
+                  <span class="progress-glow-head"></span>
+                </div>
+              </div>
+              <span class="time-display" id="time-duration">0:30</span>
+            </div>
           </div>
+
+          <!-- Right Controls -->
+          <div class="player-right-controls" id="player-right-controls">
+            <a href="#" target="_blank" class="spotify-link-icon group" id="player-spotify-link" title="Écouter le morceau sur Spotify">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+              </svg>
+            </a>
+            <div class="volume-container">
+              <span class="vol-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+              </span>
+              <div class="volume-slider" id="volume-slider">
+                <div class="volume-fill" id="volume-fill"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Lecteur Spotify Intégré Fallback (Lecture Directe sur la Page) -->
+        <div class="player-inner double-bezel-core spotify-embed-container hidden" id="spotify-embed-container">
+          <iframe id="spotify-embed-iframe" src="" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius: 0;"></iframe>
         </div>
       </div>
     </div>
+
   </div>
 
   <script type="module" src="/src/main.js"></script>

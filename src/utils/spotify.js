@@ -203,12 +203,15 @@ export async function fetchSpotifyPlaylist(playlistId, token) {
       if (item.track) return item.track;
       return item;
     })
-    .filter(t => t && t.id && t.name) // Filtre pour s'assurer que c'est un morceau valide
     .map(t => {
       return {
         id: t.id,
         title: t.name,
         artist: t.artists ? t.artists.map(a => a.name).join(', ') : '',
+        artists: t.artists ? t.artists.map(a => ({
+          name: a.name,
+          url: a.external_urls?.spotify || (a.id ? `https://open.spotify.com/artist/${a.id}` : `https://open.spotify.com/search/${encodeURIComponent(a.name)}`)
+        })) : [],
         album: t.album ? t.album.name : '',
         image: t.album && t.album.images && t.album.images.length > 0 ? t.album.images[0].url : '',
         url: t.external_urls?.spotify || '',

@@ -9,6 +9,7 @@ import {
 
 import defaultConfig from './data/config.json';
 import defaultPlaylistsData from './data/playlists-data.json';
+import { exportStudioSiteZIP } from './utils/exporter.js';
 
 // Variables d'état global
 let playlists = {};
@@ -27,6 +28,7 @@ const spotifyLoginBtn = document.getElementById('spotify-login-btn');
 const playlistSelect = document.getElementById('playlist-select');
 const playlistName = document.getElementById('playlist-name');
 const playlistDescription = document.getElementById('playlist-description');
+const playlistDescriptionContainer = document.getElementById('playlist-description-container');
 const playlistSpotifyLink = document.getElementById('playlist-spotify-link');
 const playlistEditionTag = document.getElementById('playlist-edition-tag');
 const tracksGrid = document.getElementById('tracks-grid');
@@ -37,6 +39,7 @@ const importBtn = document.getElementById('import-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const exportJsonBtn = document.getElementById('export-json-btn');
 const clearDataBtn = document.getElementById('clear-data-btn');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
 // DOM Cache - Lecteur Audio Global
 const globalPlayer = document.getElementById('global-player');
@@ -57,8 +60,44 @@ const volumeFill = document.getElementById('volume-fill');
 
 let currentVolume = 0.8;
 
+// Initialisation du Thème (Clair / Sombre)
+function setupTheme() {
+  const savedTheme = localStorage.getItem('melomanie_theme') || 'dark';
+  applyTheme(savedTheme);
+
+  if (themeToggleBtn) {
+    themeToggleBtn.onclick = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      localStorage.setItem('melomanie_theme', newTheme);
+    };
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  
+  if (themeToggleBtn) {
+    const sunIcon = themeToggleBtn.querySelector('.theme-icon-sun');
+    const moonIcon = themeToggleBtn.querySelector('.theme-icon-moon');
+    if (sunIcon && moonIcon) {
+      if (theme === 'light') {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      }
+    }
+  }
+}
+
 // Initialisation de l'application
 async function init() {
+  // Gérer le thème dès le départ
+  setupTheme();
+
   // 1. Gérer l'authentification Spotify (redirection de retour)
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
@@ -124,8 +163,31 @@ function setupApp(token) {
   };
 
   // Événements d'export & d'effacement
-  exportJsonBtn.onclick = () => exportPlaylistsToJSON();
-  clearDataBtn.onclick = () => clearAllPlaylists();
+  const exportSiteBtn = document.getElementById('export-site-btn');
+  if (exportSiteBtn) {
+    exportSiteBtn.onclick = async () => {
+      try {
+        exportSiteBtn.disabled = true;
+        const res = await fetch('/api/export-site', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(playlists)
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`✨ Le site statique a été généré directement dans le répertoire "site/" (${data.count} playlist(s) traitée(s)) !\n\nVous pouvez cliquer sur "Voir le site" pour prévisualiser ou faire "git push" pour publier sur Vercel.`);
+        } else {
+          exportStudioSiteZIP(playlists);
+        }
+      } catch (e) {
+        exportStudioSiteZIP(playlists);
+      } finally {
+        exportSiteBtn.disabled = false;
+      }
+    };
+  }
+  if (exportJsonBtn) exportJsonBtn.onclick = () => exportPlaylistsToJSON();
+  if (clearDataBtn) clearDataBtn.onclick = () => clearAllPlaylists();
 
   // Événement de changement de playlist
   playlistSelect.onchange = (e) => {
@@ -137,6 +199,9 @@ function setupApp(token) {
 
   // Remplir le sélecteur
   populatePlaylistSelector();
+
+  // Éditeur de description
+  setupDescriptionEditor();
 
   // Charger la playlist active
   if (activePlaylistSlug) {
@@ -157,22 +222,25 @@ function loadPlaylistsData() {
       console.error("Échec de la lecture de melomanie_playlists dans localStorage, réinitialisation.");
       playlists = {};
     }
+  }
+
+  // Si playlists est vide ou si aucune playlist valide n'est présente, charger les données par défaut
+  if (!playlists || Object.keys(playlists).length === 0) {
+    playlists = defaultPlaylistsData;
   } else {
-    // Fallback sur les données du fichier local (s'il y en a)
-    const hasDefaultData = Object.keys(defaultPlaylistsData).length > 0;
-    if (hasDefaultData) {
-      playlists = defaultPlaylistsData;
-    } else {
-      playlists = {};
-    }
+    // S'assurer que la saison par défaut dispose toujours de ses morceaux
+    Object.keys(defaultPlaylistsData).forEach(slug => {
+      if (!playlists[slug] || !playlists[slug].tracks || playlists[slug].tracks.length === 0) {
+        playlists[slug] = defaultPlaylistsData[slug];
+      }
+    });
   }
 
   // Définir la playlist active par défaut
   const slugs = Object.keys(playlists);
   if (slugs.length > 0) {
-    // On charge le dernier ou le premier
     activePlaylistSlug = window.localStorage.getItem('melomanie_active_slug') || slugs[0];
-    if (!playlists[activePlaylistSlug]) {
+    if (!playlists[activePlaylistSlug] || !playlists[activePlaylistSlug].tracks || playlists[activePlaylistSlug].tracks.length === 0) {
       activePlaylistSlug = slugs[0];
     }
   } else {
@@ -302,9 +370,9 @@ function loadPlaylist(slug) {
 
   // Mettre à jour l'en-tête
   playlistName.textContent = data.name;
-  playlistDescription.textContent = data.description || "Aucune description fournie par Spotify.";
+  renderPlaylistDescription();
   playlistSpotifyLink.href = data.spotifyUrl;
-  playlistEditionTag.textContent = data.name;
+  if (playlistEditionTag) playlistEditionTag.textContent = data.name;
 
   // Si on lit un morceau qui ne fait pas partie de cette playlist, on cache le lecteur
   if (currentPlayingTrack && !playlistTracks.some(t => t.id === currentPlayingTrack.id)) {
@@ -315,16 +383,81 @@ function loadPlaylist(slug) {
   renderTracks(playlistTracks);
 }
 
+// Initialise l'éditeur de description de playlist
+function setupDescriptionEditor() {
+  if (!playlistDescriptionContainer) return;
+  playlistDescriptionContainer.onclick = () => {
+    if (!activePlaylistSlug || !playlists[activePlaylistSlug]) return;
+    if (playlistDescriptionContainer.querySelector('.hero-description-editor')) return;
+    enterEditPlaylistDescriptionMode();
+  };
+}
+
+// Ouvre l'éditeur de description en ligne
+function enterEditPlaylistDescriptionMode() {
+  const currentPlaylist = playlists[activePlaylistSlug];
+  if (!currentPlaylist) return;
+
+  const currentDesc = currentPlaylist.description || '';
+
+  playlistDescriptionContainer.innerHTML = `
+    <div class="hero-description-editor">
+      <textarea class="hero-description-textarea" placeholder="Rédigez la description de cette playlist...">${currentDesc}</textarea>
+      <div class="editor-actions">
+        <button class="editor-btn cancel-btn">Annuler</button>
+        <button class="editor-btn save-btn">Enregistrer</button>
+      </div>
+    </div>
+  `;
+
+  const textarea = playlistDescriptionContainer.querySelector('.hero-description-textarea');
+  textarea.focus();
+  const len = textarea.value.length;
+  textarea.setSelectionRange(len, len);
+
+  const cancelBtn = playlistDescriptionContainer.querySelector('.cancel-btn');
+  cancelBtn.onclick = (e) => {
+    e.stopPropagation();
+    renderPlaylistDescription();
+  };
+
+  const saveBtn = playlistDescriptionContainer.querySelector('.save-btn');
+  saveBtn.onclick = (e) => {
+    e.stopPropagation();
+    const newDesc = textarea.value.trim();
+    currentPlaylist.description = newDesc;
+    savePlaylistsData();
+    renderPlaylistDescription();
+  };
+}
+
+// Affiche la description actuelle de la playlist avec tooltip d'édition
+function renderPlaylistDescription() {
+  if (!playlistDescriptionContainer) return;
+  const currentPlaylist = playlists[activePlaylistSlug];
+  const descText = currentPlaylist ? (currentPlaylist.description || "Aucune description fournie par Spotify. Cliquer pour en ajouter une.") : "Aucune description.";
+  
+  playlistDescriptionContainer.innerHTML = `
+    <p class="hero-description" id="playlist-description" title="Cliquer pour modifier la description de cette playlist">
+      ${descText}
+    </p>
+  `;
+}
+
 // Affiche ou masque l'état vide
 function showEmptyState(show) {
   if (show) {
     tracksGrid.classList.add('hidden');
     loadingOrEmpty.classList.remove('hidden');
-    document.getElementById('hero-area').classList.add('hidden');
+    document.getElementById('hero-area').classList.remove('hidden');
+    playlistName.textContent = "Le Son de la Curiosité";
+    playlistDescription.textContent = "Importez une playlist Spotify ci-dessus pour afficher votre sélection musicale d'exception.";
+    playlistSpotifyLink.classList.add('hidden');
   } else {
     tracksGrid.classList.remove('hidden');
     loadingOrEmpty.classList.add('hidden');
     document.getElementById('hero-area').classList.remove('hidden');
+    playlistSpotifyLink.classList.remove('hidden');
   }
 }
 
@@ -342,56 +475,83 @@ function renderTracks(tracks) {
     return;
   }
 
-  tracks.forEach((track) => {
+  tracks.forEach((track, index) => {
     const card = document.createElement('div');
-    card.className = 'song-card';
+    card.className = 'song-card double-bezel-shell';
     card.id = `card-${track.id}`;
+    card.style.animationDelay = `${index * 60}ms`;
     
     const isCurrent = currentPlayingTrack && currentPlayingTrack.id === track.id;
     if (isCurrent && isPlaying) {
       card.classList.add('playing');
     }
 
-    // Bouton d'écoute ou icône Spotify
-    let playIconSVG = '';
-    if (isCurrent && isPlaying) {
-      playIconSVG = `<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
-    } else if (track.previewUrl) {
-      playIconSVG = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
-    } else {
-      playIconSVG = `<svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>`;
-    }
+    // Bouton d'écoute avec Button-in-Button architecture et picto chevauché Spotify + Play
+    let playIconSVG = (isCurrent && isPlaying)
+      ? `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.5"/><rect x="14" y="4" width="4" height="16" rx="1.5"/></svg>`
+      : getSpotifyPlayComboSVG();
 
     card.innerHTML = `
-      <div class="album-art-wrapper">
-        <img class="album-art" src="${track.image || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}" alt="${track.album}" loading="lazy">
-        <div class="play-overlay">
-          <button class="play-card-btn" data-id="${track.id}" title="${track.previewUrl ? 'Écouter un extrait' : 'Écouter le morceau entier sur Spotify'}">
-            ${playIconSVG}
-          </button>
+      <div class="double-bezel-core song-card-inner">
+        <div class="album-art-wrapper">
+          <img class="album-art" src="${track.image || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}" alt="${track.album}" loading="lazy">
+          <div class="play-overlay">
+            <button class="play-card-btn group" data-id="${track.id}" title="Écouter le morceau directement sur la page">
+              <span class="btn-icon-bubble">
+                ${playIconSVG}
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="song-info">
-        <div class="song-title-row">
-          <h3 class="song-title" title="${track.title}">${track.title}</h3>
-          <a href="${track.url}" target="_blank" class="spotify-link-icon" title="Écouter sur Spotify">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-          </a>
+        <div class="song-info">
+          <div class="song-title-row">
+            <h3 class="song-title" title="${track.title}">${track.title}</h3>
+            <a href="${track.url}" target="_blank" class="spotify-link-icon group" title="Lancer la lecture du morceau sur Spotify">
+              <span class="spotify-play-combo">
+                <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+                </svg>
+                <span class="play-badge-overlay">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </span>
+              </span>
+            </a>
+          </div>
+          <p class="song-artist">${getArtistHTML(track)}</p>
+          <p class="song-album" title="${track.album}">${track.album}</p>
         </div>
-        <p class="song-artist" title="${track.artist}">${track.artist}</p>
-        <p class="song-album" title="${track.album}">${track.album}</p>
-      </div>
-      <div class="comment-container" id="comment-container-${track.id}">
-        <!-- Injecté dynamiquement selon la présence d'un commentaire -->
+        <div class="comment-container" id="comment-container-${track.id}">
+          <!-- Injecté dynamiquement -->
+        </div>
       </div>
     `;
 
-    // Événement d'écoute
+    // Événement d'écoute (clic sur pochette, bouton play ou icône Spotify)
+    const artWrapper = card.querySelector('.album-art-wrapper');
+    if (artWrapper) {
+      artWrapper.style.cursor = 'pointer';
+      artWrapper.onclick = (e) => {
+        e.stopPropagation();
+        handlePlayClick(track);
+      };
+    }
+
     const playBtn = card.querySelector('.play-card-btn');
-    playBtn.onclick = (e) => {
-      e.stopPropagation();
-      handlePlayClick(track);
-    };
+    if (playBtn) {
+      playBtn.onclick = (e) => {
+        e.stopPropagation();
+        handlePlayClick(track);
+      };
+    }
+
+    const spotifyIcon = card.querySelector('.spotify-link-icon');
+    if (spotifyIcon) {
+      spotifyIcon.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        selectAndPlayTrack(track);
+      };
+    }
 
     // Rendre l'espace commentaire
     const commentWrapper = card.querySelector(`.comment-container`);
@@ -410,14 +570,17 @@ function renderCommentField(track, wrapper) {
     const box = document.createElement('div');
     box.className = 'song-comment-box';
     box.title = 'Cliquer pour modifier votre commentaire';
-    box.innerHTML = `${track.comment}`;
+    box.innerHTML = `<span class="comment-quote-mark">“</span><span class="comment-content">${track.comment}</span>`;
     box.onclick = () => enterEditCommentMode(track, wrapper);
     wrapper.appendChild(box);
   } else {
     // Mode "+ Ajouter un commentaire"
     const addBtn = document.createElement('button');
-    addBtn.className = 'add-comment-trigger-btn';
-    addBtn.textContent = '+ Ajouter une note ou critique';
+    addBtn.className = 'add-comment-trigger-btn group';
+    addBtn.innerHTML = `
+      <span class="add-icon-circle">+</span>
+      <span>Ajouter une note ou critique</span>
+    `;
     addBtn.onclick = () => enterEditCommentMode(track, wrapper);
     wrapper.appendChild(addBtn);
   }
@@ -479,17 +642,34 @@ function handlePlayClick(track) {
       playTrack();
     }
   } else {
-    if (!track.previewUrl) {
-      // Pas d'extrait audio disponible, ouvrir sur Spotify
-      window.open(track.url, '_blank');
-      return;
-    }
     selectAndPlayTrack(track);
   }
 }
 
-// Lance la lecture d'un nouveau morceau
-function selectAndPlayTrack(track) {
+// Récupère une URL audio lisible en direct (preview direct Spotify ou secours iTunes instantané)
+async function getTrackAudioUrl(track) {
+  if (track.previewUrl) return track.previewUrl;
+
+  try {
+    const artistName = Array.isArray(track.artists) && track.artists.length > 0 ? track.artists[0].name : (track.artist || '');
+    const query = `${artistName} ${track.title}`;
+    const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=1`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.results && data.results.length > 0 && data.results[0].previewUrl) {
+        track.previewUrl = data.results[0].previewUrl;
+        return track.previewUrl;
+      }
+    }
+  } catch (err) {
+    console.warn("Erreur fallback audio iTunes :", err);
+  }
+
+  return null;
+}
+
+// Lance la lecture d'un morceau directement sur la page
+async function selectAndPlayTrack(track) {
   if (currentPlayingTrack) {
     const oldCard = document.getElementById(`card-${currentPlayingTrack.id}`);
     if (oldCard) {
@@ -499,44 +679,75 @@ function selectAndPlayTrack(track) {
   }
 
   currentPlayingTrack = track;
-  isPlaying = true;
 
-  if (audio) {
-    audio.pause();
-  }
+  const playerCustomUI = document.getElementById('player-custom-ui');
+  const spotifyEmbedContainer = document.getElementById('spotify-embed-container');
+  const spotifyEmbedIframe = document.getElementById('spotify-embed-iframe');
 
-  audio = new Audio(track.previewUrl);
-  audio.volume = currentVolume;
-
-  audio.addEventListener('timeupdate', updateProgressBar);
-  audio.addEventListener('loadedmetadata', () => {
-    timeDuration.textContent = formatTime(audio.duration);
-  });
-  audio.addEventListener('ended', () => {
-    playNext();
-  });
-
+  // Mettre à jour et afficher le lecteur immédiatement avec les métadonnées
   playerArt.src = track.image || '';
   playerTitle.textContent = track.title;
-  playerArtist.textContent = track.artist;
+  playerArtist.innerHTML = getArtistHTML(track);
   playerSpotifyLinkIcon.href = track.url;
-  
   globalPlayer.classList.add('visible');
 
-  const newCard = document.getElementById(`card-${track.id}`);
-  if (newCard) {
-    newCard.classList.add('playing');
-    updateCardPlayButton(newCard, true);
-  }
+  // Récupérer le flux audio direct (avec fallback instantané si preview Spotify absente)
+  const audioUrl = await getTrackAudioUrl(track);
 
-  audio.play().catch(e => {
-    console.error("Échec de la lecture :", e);
-    isPlaying = false;
-    if (newCard) newCard.classList.remove('playing');
+  if (audioUrl) {
+    isPlaying = true;
+    if (spotifyEmbedContainer) spotifyEmbedContainer.classList.add('hidden');
+    if (playerCustomUI) playerCustomUI.classList.remove('hidden');
+
+    if (audio) {
+      audio.pause();
+    }
+
+    audio = new Audio(audioUrl);
+    audio.volume = currentVolume;
+
+    audio.addEventListener('timeupdate', updateProgressBar);
+    audio.addEventListener('loadedmetadata', () => {
+      timeDuration.textContent = formatTime(audio.duration);
+    });
+    audio.addEventListener('ended', () => {
+      playNext();
+    });
+
+    const newCard = document.getElementById(`card-${track.id}`);
+    if (newCard) {
+      newCard.classList.add('playing');
+      updateCardPlayButton(newCard, true);
+    }
+
+    try {
+      await audio.play();
+    } catch (e) {
+      console.error("Échec du démarrage de la lecture :", e);
+    }
+
     updateGlobalPlayerUI();
-  });
+  } else {
+    // Si vraiment aucune source audio directe n'est disponible
+    if (audio) {
+      audio.pause();
+      isPlaying = false;
+    }
+    
+    if (playerCustomUI) playerCustomUI.classList.add('hidden');
+    if (spotifyEmbedContainer) {
+      spotifyEmbedContainer.classList.remove('hidden');
+      if (spotifyEmbedIframe) {
+        spotifyEmbedIframe.src = `https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0&autoplay=1`;
+      }
+    }
 
-  updateGlobalPlayerUI();
+    const newCard = document.getElementById(`card-${track.id}`);
+    if (newCard) {
+      newCard.classList.add('playing');
+      updateCardPlayButton(newCard, true);
+    }
+  }
 }
 
 function playTrack() {
@@ -598,19 +809,23 @@ function playPrev() {
 function updateCardPlayButton(cardElement, playing) {
   const btn = cardElement.querySelector('.play-card-btn');
   if (btn) {
+    const bubble = btn.querySelector('.btn-icon-bubble') || btn;
     if (playing) {
-      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+      bubble.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.5"/><rect x="14" y="4" width="4" height="16" rx="1.5"/></svg>`;
     } else {
-      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+      bubble.innerHTML = getSpotifyPlayComboSVG();
     }
   }
 }
 
 function updateGlobalPlayerUI() {
+  const equalizer = document.getElementById('player-equalizer');
   if (isPlaying) {
-    playerPlayIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+    playerPlayIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.5"/><rect x="14" y="4" width="4" height="16" rx="1.5"/></svg>`;
+    if (equalizer) equalizer.classList.add('active');
   } else {
-    playerPlayIcon.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+    playerPlayIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+    if (equalizer) equalizer.classList.remove('active');
   }
 }
 
@@ -706,7 +921,38 @@ function clearAllPlaylists() {
   }
 }
 
-// --- UTILITAIRES ---
+// Helper pour générer le picto combiné (Spotify Logo + Play Badge superposé)
+function getSpotifyPlayComboSVG() {
+  return `
+    <span class="spotify-play-combo hover-cover-mode">
+      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+      </svg>
+      <span class="play-badge-overlay">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      </span>
+    </span>
+  `;
+}
+
+// Helper pour générer des liens cliquables vers Spotify pour les artistes
+function getArtistHTML(track) {
+  if (Array.isArray(track.artists) && track.artists.length > 0) {
+    return track.artists.map(a => {
+      const url = a.url || `https://open.spotify.com/search/${encodeURIComponent(a.name)}`;
+      return `<a href="${url}" target="_blank" class="artist-link" title="Ouvrir la page de ${a.name} sur Spotify" onclick="event.stopPropagation()">${a.name}</a>`;
+    }).join(', ');
+  } else if (track.artistUrl) {
+    return `<a href="${track.artistUrl}" target="_blank" class="artist-link" title="Ouvrir la page de l'artiste sur Spotify" onclick="event.stopPropagation()">${track.artist}</a>`;
+  } else if (track.artist) {
+    const artistNames = track.artist.split(', ');
+    return artistNames.map(name => {
+      const searchUrl = `https://open.spotify.com/search/${encodeURIComponent(name.trim())}`;
+      return `<a href="${searchUrl}" target="_blank" class="artist-link" title="Ouvrir la page de ${name.trim()} sur Spotify" onclick="event.stopPropagation()">${name.trim()}</a>`;
+    }).join(', ');
+  }
+  return 'Artiste inconnu';
+}
 
 function slugify(text) {
   return text
