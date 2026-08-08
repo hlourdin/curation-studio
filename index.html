@@ -147,39 +147,53 @@
         <!-- Remplacé par nav-actions-group mais conservé pour compatibilité ID JS -->
       </div>
 
-      <!-- Hero Banner -->
+      <!-- Main Content -->
       <main>
-        <section class="hero-section" id="hero-area">
-          <h1 class="hero-title">
-            <span class="hero-title-text" id="playlist-name">Mes Découvertes</span>
-            <a href="#" target="_blank" class="hero-title-external-link" id="playlist-spotify-link" title="Écouter la playlist complète sur spotify">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
-            </a>
-          </h1>
-          <div class="hero-description-container" id="playlist-description-container">
-            <p class="hero-description" id="playlist-description" title="Cliquer pour éditer la description">
-              Sélection en cours de chargement...
-            </p>
-          </div>
-        </section>
-
-        <!-- Tracklist Grid -->
-        <section class="tracks-grid" id="tracks-grid">
-          <!-- Rempli dynamiquement par JS avec Double-Bezel Architecture -->
-        </section>
-        
-        <!-- Empty State / State de Chargement -->
-        <div id="loading-or-empty" class="empty-state double-bezel-shell hidden">
-          <div class="double-bezel-core empty-state-inner">
-            <div class="empty-state-icon-badge" id="empty-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+        <!-- Vue Détail de Playlist Unique -->
+        <div id="single-playlist-view" class="single-playlist-view">
+          <section class="hero-section" id="hero-area">
+            <h1 class="hero-title">
+              <span class="hero-title-text" id="playlist-name">Mes Découvertes</span>
+              <a href="#" target="_blank" class="hero-title-external-link" id="playlist-spotify-link" title="Écouter la playlist complète sur spotify">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </h1>
+            <div class="hero-description-container" id="playlist-description-container">
+              <p class="hero-description" id="playlist-description" title="Cliquer pour éditer la description">
+                Sélection en cours de chargement...
+              </p>
             </div>
-            <h3 class="empty-state-title" id="empty-title">Aucune playlist importée</h3>
-            <p class="empty-state-desc" id="empty-desc">Collez un lien de playlist Spotify ci-dessus pour commencer votre exploration.</p>
+          </section>
+
+          <!-- Tracklist Grid -->
+          <section class="tracks-grid" id="tracks-grid">
+            <!-- Rempli dynamiquement par JS avec Double-Bezel Architecture -->
+          </section>
+          
+          <!-- Empty State / State de Chargement -->
+          <div id="loading-or-empty" class="empty-state double-bezel-shell hidden">
+            <div class="double-bezel-core empty-state-inner">
+              <div class="empty-state-icon-badge" id="empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              </div>
+              <h3 class="empty-state-title" id="empty-title">Aucune playlist importée</h3>
+              <p class="empty-state-desc" id="empty-desc">Collez un lien de playlist Spotify ci-dessus pour commencer votre exploration.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vue Catalogue Globale (Toutes les Playlists) -->
+        <div id="catalog-view" class="catalog-view hidden">
+          <div class="catalog-header">
+            <h1 class="catalog-title">Toutes les Playlists</h1>
+            <p class="catalog-subtitle">Gérez vos sélections musicales et réordonnez-les directement.</p>
+          </div>
+          <div id="catalog-grid" class="catalog-grid">
+            <!-- Rempli dynamiquement par JS -->
           </div>
         </div>
       </main>

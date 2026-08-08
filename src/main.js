@@ -149,6 +149,15 @@ function setupApp(token) {
   // Charger les données (fusion entre LocalStorage et fichiers de démo par défaut)
   loadPlaylistsData();
 
+  // Clic sur le logo de l'en-tête pour ouvrir le catalogue global
+  const logoLink = document.getElementById('logo-link');
+  if (logoLink) {
+    logoLink.onclick = (e) => {
+      e.preventDefault();
+      showCatalogView();
+    };
+  }
+
   // Événements d'importation
   importBtn.onclick = () => handleImport(token);
   playlistInput.onkeydown = (e) => {
@@ -365,6 +374,12 @@ async function handleImport(token) {
 function switchPlaylist(slug) {
   if (isPlaying) {
     pauseTrack();
+  }
+  const singleView = document.getElementById('single-playlist-view');
+  const catalogView = document.getElementById('catalog-view');
+  if (singleView && catalogView) {
+    catalogView.classList.add('hidden');
+    singleView.classList.remove('hidden');
   }
   activePlaylistSlug = slug;
   savePlaylistsData();
@@ -1057,6 +1072,150 @@ async function saveReorder() {
     });
   } catch (e) {
     console.warn("Mise à jour SSG locale :", e);
+  }
+}
+
+// --- VUE CATALOGUE GLOBALE ---
+function showCatalogView() {
+  const singleView = document.getElementById('single-playlist-view');
+  const catalogView = document.getElementById('catalog-view');
+  if (!singleView || !catalogView) return;
+
+  singleView.classList.add('hidden');
+  catalogView.classList.remove('hidden');
+  renderCatalogGrid();
+}
+
+function showSinglePlaylistView(slug) {
+  const singleView = document.getElementById('single-playlist-view');
+  const catalogView = document.getElementById('catalog-view');
+  if (!singleView || !catalogView) return;
+
+  catalogView.classList.add('hidden');
+  singleView.classList.remove('hidden');
+  
+  if (slug) {
+    switchPlaylist(slug);
+  }
+}
+
+function renderCatalogGrid() {
+  const grid = document.getElementById('catalog-grid');
+  if (!grid) return;
+
+  const sortedSlugs = getSortedPlaylistSlugs(playlists);
+
+  if (sortedSlugs.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state double-bezel-shell" style="grid-column: 1 / -1;">
+        <div class="double-bezel-core empty-state-inner">
+          <h3 class="empty-state-title">Aucune playlist disponible</h3>
+          <p class="empty-state-desc">Importez une playlist Spotify depuis la barre d'en-tête pour commencer.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = sortedSlugs.map((slug, idx) => {
+    const pl = playlists[slug];
+    const trackCount = pl && pl.tracks ? pl.tracks.length : 0;
+    const desc = pl && pl.description ? pl.description : "Aucune description fournie.";
+    const isFirst = idx === 0;
+    const isLast = idx === sortedSlugs.length - 1;
+    const name = pl ? pl.name : slug;
+
+    return `
+      <div class="catalog-card">
+        <div>
+          <div class="catalog-card-header">
+            <h2 class="catalog-card-title">${escapeHTML(name)}</h2>
+            <span class="catalog-card-badge">${trackCount} morceaux</span>
+          </div>
+          <p class="catalog-card-desc">${escapeHTML(desc)}</p>
+        </div>
+        <div class="catalog-card-footer">
+          <div class="catalog-card-actions">
+            <button class="nav-action-pill highlight open-playlist-btn" data-slug="${slug}" title="Ouvrir la playlist">
+              <span>Ouvrir</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;margin-left:2px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <button class="reorder-action-btn move-up-btn" data-slug="${slug}" data-idx="${idx}" ${isFirst ? 'disabled' : ''} title="Monter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+            <button class="reorder-action-btn move-down-btn" data-slug="${slug}" data-idx="${idx}" ${isLast ? 'disabled' : ''} title="Descendre">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </div>
+          <button class="icon-btn-subtle delete-playlist-btn" data-slug="${slug}" title="Supprimer la playlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Binder les événements sur les boutons des cartes
+  grid.querySelectorAll('.open-playlist-btn').forEach(btn => {
+    btn.onclick = () => showSinglePlaylistView(btn.getAttribute('data-slug'));
+  });
+
+  grid.querySelectorAll('.move-up-btn').forEach(btn => {
+    btn.onclick = () => moveCatalogPlaylistOrder(parseInt(btn.getAttribute('data-idx')), -1);
+  });
+
+  grid.querySelectorAll('.move-down-btn').forEach(btn => {
+    btn.onclick = () => moveCatalogPlaylistOrder(parseInt(btn.getAttribute('data-idx')), 1);
+  });
+
+  grid.querySelectorAll('.delete-playlist-btn').forEach(btn => {
+    btn.onclick = () => deleteCatalogPlaylist(btn.getAttribute('data-slug'));
+  });
+}
+
+async function moveCatalogPlaylistOrder(index, direction) {
+  const sortedSlugs = getSortedPlaylistSlugs(playlists);
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= sortedSlugs.length) return;
+
+  const temp = sortedSlugs[index];
+  sortedSlugs[index] = sortedSlugs[newIndex];
+  sortedSlugs[newIndex] = temp;
+
+  sortedSlugs.forEach((slug, idx) => {
+    if (playlists[slug]) {
+      playlists[slug].order = idx + 1;
+    }
+  });
+
+  savePlaylistsData();
+  populatePlaylistSelector();
+  renderCatalogGrid();
+
+  // Synchro SSG locale
+  try {
+    await fetch('/api/export-site', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(playlists)
+    });
+  } catch (e) {
+    console.warn("Mise à jour SSG :", e);
+  }
+}
+
+function deleteCatalogPlaylist(slug) {
+  const pl = playlists[slug];
+  if (!pl) return;
+  if (confirm(`Voulez-vous vraiment supprimer la playlist "${pl.name}" ?`)) {
+    delete playlists[slug];
+    savePlaylistsData();
+    const sortedSlugs = getSortedPlaylistSlugs(playlists);
+    if (activePlaylistSlug === slug) {
+      activePlaylistSlug = sortedSlugs.length > 0 ? sortedSlugs[0] : '';
+    }
+    populatePlaylistSelector();
+    renderCatalogGrid();
   }
 }
 

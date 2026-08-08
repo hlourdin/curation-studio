@@ -1667,3 +1667,98 @@ select.playlist-select option {
   display: flex;
   justify-content: flex-end;
 }
+
+/* --- VUE CATALOGUE GLOBALE --- */
+.catalog-view {
+  padding-bottom: 5rem;
+}
+
+.catalog-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-outer);
+  padding-bottom: 1.25rem;
+}
+
+.catalog-title {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+}
+
+.catalog-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-sub);
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.catalog-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-outer);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: border-color 0.3s var(--ease-spring), transform 0.3s var(--ease-spring);
+  position: relative;
+}
+
+.catalog-card:hover {
+  border-color: var(--accent-emerald);
+  transform: translateY(-2px);
+}
+
+.catalog-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.85rem;
+  gap: 1rem;
+}
+
+.catalog-card-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.25;
+}
+
+.catalog-card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--bg-shell);
+  border: 1px solid var(--border-outer);
+  color: var(--text-sub);
+  white-space: nowrap;
+}
+
+.catalog-card-desc {
+  font-size: 0.875rem;
+  color: var(--text-sub);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.catalog-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-outer);
+  padding-top: 1rem;
+}
+
+.catalog-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
