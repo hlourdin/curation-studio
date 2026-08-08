@@ -200,7 +200,12 @@ function setupApp(token) {
 
   // Événement de changement de playlist
   playlistSelect.onchange = (e) => {
-    switchPlaylist(e.target.value);
+    const val = e.target.value;
+    if (val === 'all') {
+      showCatalogView();
+    } else {
+      switchPlaylist(val);
+    }
   };
 
   // Lecteur audio
@@ -293,6 +298,12 @@ function populatePlaylistSelector() {
 
   playlistSelect.closest('.playlist-selector-wrapper').classList.remove('hidden');
   
+  // Option "Toutes les playlists"
+  const allOption = document.createElement('option');
+  allOption.value = 'all';
+  allOption.textContent = '📚 Toutes les playlists';
+  playlistSelect.appendChild(allOption);
+
   sortedSlugs.forEach(slug => {
     const option = document.createElement('option');
     option.value = slug;
@@ -300,7 +311,13 @@ function populatePlaylistSelector() {
     playlistSelect.appendChild(option);
   });
 
-  playlistSelect.value = activePlaylistSlug;
+  const catalogView = document.getElementById('catalog-view');
+  const isCatalogVisible = catalogView && !catalogView.classList.contains('hidden');
+  if (isCatalogVisible) {
+    playlistSelect.value = 'all';
+  } else {
+    playlistSelect.value = activePlaylistSlug || (sortedSlugs.length > 0 ? sortedSlugs[0] : 'all');
+  }
 }
 
 // Permet d'importer une nouvelle playlist Spotify
@@ -535,15 +552,8 @@ function renderTracks(tracks) {
         <div class="song-info">
           <div class="song-title-row">
             <h3 class="song-title" title="${track.title}">${track.title}</h3>
-            <a href="${track.url}" target="_blank" class="spotify-link-icon group" title="Lancer la lecture du morceau sur Spotify">
-              <span class="spotify-play-combo">
-                <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                </svg>
-                <span class="play-badge-overlay">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                </span>
-              </span>
+            <a href="${track.url}" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
             </a>
           </div>
           <p class="song-artist">${getArtistHTML(track)}</p>
@@ -576,9 +586,7 @@ function renderTracks(tracks) {
     const spotifyIcon = card.querySelector('.spotify-link-icon');
     if (spotifyIcon) {
       spotifyIcon.onclick = (e) => {
-        e.preventDefault();
         e.stopPropagation();
-        selectAndPlayTrack(track);
       };
     }
 
@@ -980,6 +988,16 @@ function slugify(text) {
     .replace(/-+$/, '');
 }
 
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // --- MODALE DE RÉORGANISATION DES PLAYLISTS ---
 let tempReorderSlugs = [];
 
@@ -1083,6 +1101,7 @@ function showCatalogView() {
 
   singleView.classList.add('hidden');
   catalogView.classList.remove('hidden');
+  if (playlistSelect) playlistSelect.value = 'all';
   renderCatalogGrid();
 }
 
