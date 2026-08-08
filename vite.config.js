@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import basicSsl from '@vitejs/plugin-basic-ssl';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -42,12 +41,10 @@ function exportSiteApiPlugin() {
 
 export default defineConfig({
   plugins: [
-    basicSsl(),
     exportSiteApiPlugin()
   ],
   server: {
     host: '127.0.0.1',
-    https: true,
     port: 5173,
     strictPort: true
   }
