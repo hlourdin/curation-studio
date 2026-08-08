@@ -17,6 +17,32 @@
     });
   }
 
+  // View Mode Toggle (Cards / List)
+  const gridBtn = document.getElementById('view-mode-grid');
+  const listBtn = document.getElementById('view-mode-list');
+  const gridContainer = document.getElementById('tracks-grid');
+
+  if (gridBtn && listBtn && gridContainer) {
+    const savedView = localStorage.getItem('melomanie_track_view_mode') || 'grid';
+    setViewMode(savedView);
+
+    gridBtn.addEventListener('click', () => setViewMode('grid'));
+    listBtn.addEventListener('click', () => setViewMode('list'));
+
+    function setViewMode(mode) {
+      localStorage.setItem('melomanie_track_view_mode', mode);
+      if (mode === 'list') {
+        gridContainer.classList.add('list-view');
+        listBtn.classList.add('active');
+        gridBtn.classList.remove('active');
+      } else {
+        gridContainer.classList.remove('list-view');
+        gridBtn.classList.add('active');
+        listBtn.classList.remove('active');
+      }
+    }
+  }
+
   // Audio Player Logic
   let currentAudio = null;
   let currentPlayingTrackId = null;

@@ -836,7 +836,22 @@ export async function exportStudioSiteZIP(playlistsData) {
         <p class="hero-description">${escapeHTML(pl.description || "Aucune description fournie.")}</p>
       </section>
 
-      <div class="tracks-grid">
+      <!-- Tracklist Toolbar (Cards / List Selector) -->
+      <div class="view-toggle-toolbar">
+        <span class="track-count-badge">${tracks.length} morceau${tracks.length > 1 ? 'x' : ''}</span>
+        <div class="view-toggle-group">
+          <button class="view-toggle-btn active" id="view-mode-grid" data-view="grid" title="Vue Grille de Cartes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Cartes</span>
+          </button>
+          <button class="view-toggle-btn" id="view-mode-list" data-view="list" title="Vue Liste Compacte">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            <span>Liste</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="tracks-grid" id="tracks-grid">
         ${tracksCardsHTML}
       </div>
     </main>

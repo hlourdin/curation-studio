@@ -18,6 +18,7 @@ let currentPlayingTrack = null;
 let isPlaying = false;
 let audio = null;
 let playlistTracks = [];
+let currentViewMode = localStorage.getItem('melomanie_track_view_mode') || 'grid';
 
 // DOM Cache - Écrans
 const loginScreen = document.getElementById('login-screen');
@@ -217,6 +218,7 @@ function setupApp(token) {
   // Éditeur de description & réorganisation
   setupDescriptionEditor();
   setupReorderModal();
+  setupViewModeToggle();
 
   // Charger la playlist active
   if (activePlaylistSlug) {
@@ -419,6 +421,12 @@ function loadPlaylist(slug) {
   renderPlaylistDescription();
   playlistSpotifyLink.href = data.spotifyUrl;
   if (playlistEditionTag) playlistEditionTag.textContent = data.name;
+
+  const trackCountLabel = document.getElementById('track-count-label');
+  if (trackCountLabel) {
+    const count = playlistTracks.length;
+    trackCountLabel.textContent = `${count} morceau${count > 1 ? 'x' : ''}`;
+  }
 
   // Si on lit un morceau qui ne fait pas partie de cette playlist, on cache le lecteur
   if (currentPlayingTrack && !playlistTracks.some(t => t.id === currentPlayingTrack.id)) {
@@ -996,6 +1004,35 @@ function escapeHTML(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+// --- TOGGLE DE VUE (CARTES / LISTE) ---
+function setupViewModeToggle() {
+  const gridBtn = document.getElementById('view-mode-grid');
+  const listBtn = document.getElementById('view-mode-list');
+  const gridContainer = document.getElementById('tracks-grid');
+
+  if (!gridBtn || !listBtn || !gridContainer) return;
+
+  function setViewMode(mode) {
+    currentViewMode = mode;
+    localStorage.setItem('melomanie_track_view_mode', mode);
+
+    if (mode === 'list') {
+      gridContainer.classList.add('list-view');
+      listBtn.classList.add('active');
+      gridBtn.classList.remove('active');
+    } else {
+      gridContainer.classList.remove('list-view');
+      gridBtn.classList.add('active');
+      listBtn.classList.remove('active');
+    }
+  }
+
+  gridBtn.onclick = () => setViewMode('grid');
+  listBtn.onclick = () => setViewMode('list');
+
+  setViewMode(currentViewMode);
 }
 
 // --- MODALE DE RÉORGANISATION DES PLAYLISTS ---
