@@ -21,9 +21,11 @@
   let currentAudio = null;
   let currentPlayingTrackId = null;
   let isPlaying = false;
+  let currentVolume = 0.8;
 
   const globalPlayer = document.getElementById('global-player');
   const playerArt = document.getElementById('player-art');
+  const playerEqualizer = document.getElementById('player-equalizer');
   const playerTitle = document.getElementById('player-title');
   const playerArtist = document.getElementById('player-artist');
   const playerPlayBtn = document.getElementById('player-play-btn');
@@ -31,9 +33,12 @@
   const playerPrevBtn = document.getElementById('player-prev-btn');
   const playerNextBtn = document.getElementById('player-next-btn');
   const progressBarFill = document.getElementById('progress-bar-fill');
-  const progressBarTrack = document.getElementById('progress-bar-track');
+  const progressBarBg = document.getElementById('progress-bar-bg') || document.getElementById('progress-bar-track');
   const timeCurrent = document.getElementById('time-current');
   const timeDuration = document.getElementById('time-duration');
+  const playerSpotifyLink = document.getElementById('player-spotify-link');
+  const volumeSlider = document.getElementById('volume-slider');
+  const volumeFill = document.getElementById('volume-fill');
 
   const tracks = window.__PLAYLIST_TRACKS__ || [];
 
@@ -87,6 +92,8 @@
 
     if (audioUrl) {
       currentAudio = new Audio(audioUrl);
+      currentAudio.volume = currentVolume;
+
       currentAudio.addEventListener('timeupdate', () => {
         if (!currentAudio) return;
         const cur = currentAudio.currentTime;
@@ -132,6 +139,16 @@
       if (playerArt) playerArt.src = track.image || '';
       if (playerTitle) playerTitle.textContent = track.title;
       if (playerArtist) playerArtist.textContent = track.artist;
+      if (playerSpotifyLink) playerSpotifyLink.href = track.url || '#';
+
+      if (playerEqualizer) {
+        if (playing) {
+          playerEqualizer.classList.add('active');
+        } else {
+          playerEqualizer.classList.remove('active');
+        }
+      }
+
       if (playerPlayIcon) {
         playerPlayIcon.innerHTML = playing
           ? `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.5"/><rect x="14" y="4" width="4" height="16" rx="1.5"/></svg>`
@@ -152,6 +169,18 @@
     const idx = tracks.findIndex(t => t.id === currentPlayingTrackId);
     const prevIdx = (idx - 1 + tracks.length) % tracks.length;
     playTrackById(tracks[prevIdx].id);
+  }
+
+  // Volume Slider
+  if (volumeSlider) {
+    volumeSlider.addEventListener('click', (e) => {
+      const rect = volumeSlider.getBoundingClientRect();
+      let pct = (e.clientX - rect.left) / rect.width;
+      pct = Math.max(0, Math.min(1, pct));
+      currentVolume = pct;
+      if (currentAudio) currentAudio.volume = currentVolume;
+      if (volumeFill) volumeFill.style.width = `${pct * 100}%`;
+    });
   }
 
   // Bind Clicks
@@ -182,10 +211,10 @@
   if (playerNextBtn) playerNextBtn.addEventListener('click', playNextTrack);
   if (playerPrevBtn) playerPrevBtn.addEventListener('click', playPrevTrack);
 
-  if (progressBarTrack) {
-    progressBarTrack.addEventListener('click', (e) => {
+  if (progressBarBg) {
+    progressBarBg.addEventListener('click', (e) => {
       if (!currentAudio || !currentAudio.duration) return;
-      const rect = progressBarTrack.getBoundingClientRect();
+      const rect = progressBarBg.getBoundingClientRect();
       const pct = (e.clientX - rect.left) / rect.width;
       currentAudio.currentTime = pct * currentAudio.duration;
     });

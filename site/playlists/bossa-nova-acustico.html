@@ -1071,39 +1071,68 @@
     </main>
   </div>
 
-  <!-- Audio Player Dock Fixe -->
-  <div class="global-player-dock hidden" id="global-player">
-    <div class="player-dock-inner">
-      <div class="player-track-meta">
-        <img class="player-art-img" id="player-art" src="" alt="Album Art">
-        <div class="player-track-text">
-          <span class="player-track-title" id="player-title">Morceau</span>
-          <span class="player-track-artist" id="player-artist">Artiste</span>
-        </div>
-      </div>
-
-      <div class="player-controls-group">
-        <div class="player-buttons">
-          <button class="player-btn" id="player-prev-btn" title="Morceau précédent">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
-          </button>
-          <button class="player-btn player-btn-main" id="player-play-btn" title="Lecture / Pause">
-            <span id="player-play-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-            </span>
-          </button>
-          <button class="player-btn" id="player-next-btn" title="Morceau suivant">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
-          </button>
-        </div>
-
-        <div class="progress-container">
-          <span id="time-current">0:00</span>
-          <div class="progress-bar-track" id="progress-bar-track">
-            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+  <!-- Floating Dock Audio Player -->
+  <div class="global-player-dock-wrapper">
+    <div class="global-player double-bezel-shell hidden" id="global-player">
+      <div class="player-inner double-bezel-core" id="player-custom-ui">
+        
+        <!-- Track Info -->
+        <div class="player-track-info" id="player-track-info">
+          <div class="player-art-frame">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pochette" class="player-art" id="player-art">
+            <div class="player-equalizer-bars" id="player-equalizer">
+              <span></span><span></span><span></span><span></span>
+            </div>
           </div>
-          <span id="time-duration">0:30</span>
+          <div class="player-metadata">
+            <div class="player-title" id="player-title">Titre du morceau</div>
+            <div class="player-artist" id="player-artist">Artiste</div>
+          </div>
         </div>
+
+        <!-- Controls -->
+        <div class="player-controls" id="player-controls">
+          <div class="control-buttons">
+            <button class="player-btn" id="player-prev-btn" title="Précédent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+            </button>
+            <button class="player-btn play-pause group" id="player-play-btn" title="Lire / Pause">
+              <span class="play-icon-holder" id="player-play-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </span>
+            </button>
+            <button class="player-btn" id="player-next-btn" title="Suivant">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+            </button>
+          </div>
+          <div class="progress-container">
+            <span class="time-display" id="time-current">0:00</span>
+            <div class="progress-bar-bg" id="progress-bar-bg">
+              <div class="progress-bar-fill" id="progress-bar-fill">
+                <span class="progress-glow-head"></span>
+              </div>
+            </div>
+            <span class="time-display" id="time-duration">0:30</span>
+          </div>
+        </div>
+
+        <!-- Right Controls -->
+        <div class="player-right-controls" id="player-right-controls">
+          <a href="#" target="_blank" class="spotify-link-icon group" id="player-spotify-link" title="Écouter le morceau sur Spotify">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+            </svg>
+          </a>
+          <div class="volume-container">
+            <span class="vol-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            </span>
+            <div class="volume-slider" id="volume-slider">
+              <div class="volume-fill" id="volume-fill"></div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
