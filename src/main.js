@@ -1099,6 +1099,14 @@ function showSinglePlaylistView(slug) {
   }
 }
 
+function getPlaylistCoverImage(pl) {
+  if (!pl) return '';
+  if (pl.coverImage) return pl.coverImage;
+  if (pl.image) return pl.image;
+  if (Array.isArray(pl.tracks) && pl.tracks.length > 0 && pl.tracks[0].image) return pl.tracks[0].image;
+  return '';
+}
+
 function renderCatalogGrid() {
   const grid = document.getElementById('catalog-grid');
   if (!grid) return;
@@ -1124,32 +1132,40 @@ function renderCatalogGrid() {
     const isFirst = idx === 0;
     const isLast = idx === sortedSlugs.length - 1;
     const name = pl ? pl.name : slug;
+    const coverUrl = getPlaylistCoverImage(pl);
+
+    const coverHTML = coverUrl
+      ? `<div class="catalog-card-cover-wrapper"><img src="${coverUrl}" alt="${escapeHTML(name)}" class="catalog-card-cover-img" loading="lazy"></div>`
+      : `<div class="catalog-card-cover-wrapper"><div class="catalog-card-cover-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div></div>`;
 
     return `
       <div class="catalog-card">
-        <div>
-          <div class="catalog-card-header">
-            <h2 class="catalog-card-title">${escapeHTML(name)}</h2>
-            <span class="catalog-card-badge">${trackCount} morceaux</span>
+        ${coverHTML}
+        <div class="catalog-card-body">
+          <div>
+            <div class="catalog-card-header">
+              <h2 class="catalog-card-title">${escapeHTML(name)}</h2>
+              <span class="catalog-card-badge">${trackCount} morceaux</span>
+            </div>
+            <p class="catalog-card-desc">${escapeHTML(desc)}</p>
           </div>
-          <p class="catalog-card-desc">${escapeHTML(desc)}</p>
-        </div>
-        <div class="catalog-card-footer">
-          <div class="catalog-card-actions">
-            <button class="nav-action-pill highlight open-playlist-btn" data-slug="${slug}" title="Ouvrir la playlist">
-              <span>Ouvrir</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;margin-left:2px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </button>
-            <button class="reorder-action-btn move-up-btn" data-slug="${slug}" data-idx="${idx}" ${isFirst ? 'disabled' : ''} title="Monter">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-            </button>
-            <button class="reorder-action-btn move-down-btn" data-slug="${slug}" data-idx="${idx}" ${isLast ? 'disabled' : ''} title="Descendre">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          <div class="catalog-card-footer">
+            <div class="catalog-card-actions">
+              <button class="nav-action-pill highlight open-playlist-btn" data-slug="${slug}" title="Ouvrir la playlist">
+                <span>Ouvrir</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;margin-left:2px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+              <button class="reorder-action-btn move-up-btn" data-slug="${slug}" data-idx="${idx}" ${isFirst ? 'disabled' : ''} title="Monter">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+              </button>
+              <button class="reorder-action-btn move-down-btn" data-slug="${slug}" data-idx="${idx}" ${isLast ? 'disabled' : ''} title="Descendre">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+            </div>
+            <button class="icon-btn-subtle delete-playlist-btn" data-slug="${slug}" title="Supprimer la playlist">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
-          <button class="icon-btn-subtle delete-playlist-btn" data-slug="${slug}" title="Supprimer la playlist">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          </button>
         </div>
       </div>
     `;

@@ -225,7 +225,7 @@ body {
 .playlist-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-outer);
-  padding: 1.25rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -233,12 +233,52 @@ body {
   text-decoration: none;
   color: inherit;
   box-shadow: var(--card-shadow);
+  overflow: hidden;
 }
 
 .playlist-card:hover {
   transform: translateY(-4px);
   border-color: var(--accent-emerald);
   box-shadow: 0 20px 40px var(--accent-emerald-glow);
+}
+
+.playlist-card-cover-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg-shell);
+  border-bottom: 1px solid var(--border-outer);
+}
+
+.playlist-card-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s var(--ease-spring);
+}
+
+.playlist-card:hover .playlist-card-cover-img {
+  transform: scale(1.06);
+}
+
+.playlist-card-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-shell) 0%, var(--bg-surface) 100%);
+  color: var(--text-sub);
+}
+
+.playlist-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
 }
 
 .playlist-card-header {

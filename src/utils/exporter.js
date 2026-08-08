@@ -663,18 +663,27 @@ export async function exportStudioSiteZIP(playlistsData) {
     const pl = playlistsData[slug];
     const trackCount = pl.tracks ? pl.tracks.length : 0;
     const desc = pl.description || "Aucune description fournie.";
+    const coverUrl = pl.coverImage || pl.image || (Array.isArray(pl.tracks) && pl.tracks.length > 0 ? pl.tracks[0].image : '');
+
+    const coverHTML = coverUrl
+      ? `<div class="playlist-card-cover-wrapper"><img src="${coverUrl}" alt="${escapeHTML(pl.name)}" class="playlist-card-cover-img" loading="lazy"></div>`
+      : `<div class="playlist-card-cover-wrapper"><div class="playlist-card-cover-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div></div>`;
+
     return `
       <a href="playlists/${slug}.html" class="playlist-card group">
-        <div>
-          <div class="playlist-card-header">
-            <h2 class="playlist-card-title">${escapeHTML(pl.name)}</h2>
-            <span class="playlist-track-badge">${trackCount} morceaux</span>
+        ${coverHTML}
+        <div class="playlist-card-body">
+          <div>
+            <div class="playlist-card-header">
+              <h2 class="playlist-card-title">${escapeHTML(pl.name)}</h2>
+              <span class="playlist-track-badge">${trackCount} morceaux</span>
+            </div>
+            <p class="playlist-card-desc">${escapeHTML(desc)}</p>
           </div>
-          <p class="playlist-card-desc">${escapeHTML(desc)}</p>
-        </div>
-        <div class="playlist-card-footer">
-          <span>Découvrir la sélection</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          <div class="playlist-card-footer">
+            <span>Découvrir la sélection</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
         </div>
       </a>
     `;
