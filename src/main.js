@@ -779,31 +779,15 @@ function pauseTrack() {
 function playNext() {
   if (!currentPlayingTrack || playlistTracks.length === 0) return;
   const currentIndex = playlistTracks.findIndex(t => t.id === currentPlayingTrack.id);
-  let nextIndex = currentIndex + 1;
-
-  while (nextIndex < playlistTracks.length) {
-    if (playlistTracks[nextIndex].previewUrl) {
-      selectAndPlayTrack(playlistTracks[nextIndex]);
-      return;
-    }
-    nextIndex++;
-  }
-  
-  pauseTrack();
+  const nextIndex = (currentIndex + 1) % playlistTracks.length;
+  selectAndPlayTrack(playlistTracks[nextIndex]);
 }
 
 function playPrev() {
   if (!currentPlayingTrack || playlistTracks.length === 0) return;
   const currentIndex = playlistTracks.findIndex(t => t.id === currentPlayingTrack.id);
-  let prevIndex = currentIndex - 1;
-
-  while (prevIndex >= 0) {
-    if (playlistTracks[prevIndex].previewUrl) {
-      selectAndPlayTrack(playlistTracks[prevIndex]);
-      return;
-    }
-    prevIndex--;
-  }
+  const prevIndex = (currentIndex - 1 + playlistTracks.length) % playlistTracks.length;
+  selectAndPlayTrack(playlistTracks[prevIndex]);
 }
 
 function updateCardPlayButton(cardElement, playing) {
