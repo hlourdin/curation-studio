@@ -1229,31 +1229,56 @@ function escapeHTML(str) {
 
 // --- TOGGLE DE VUE (CARTES / LISTE) ---
 function setupViewModeToggle() {
+  // Vue Détail Morceaux
   const gridBtn = document.getElementById('view-mode-grid');
   const listBtn = document.getElementById('view-mode-list');
-  const gridContainer = document.getElementById('tracks-grid');
+  const tracksGrid = document.getElementById('tracks-grid');
 
-  if (!gridBtn || !listBtn || !gridContainer) return;
+  if (gridBtn && listBtn && tracksGrid) {
+    function setTrackViewMode(mode) {
+      currentViewMode = mode;
+      localStorage.setItem('melomanie_track_view_mode', mode);
 
-  function setViewMode(mode) {
-    currentViewMode = mode;
-    localStorage.setItem('melomanie_track_view_mode', mode);
-
-    if (mode === 'list') {
-      gridContainer.classList.add('list-view');
-      listBtn.classList.add('active');
-      gridBtn.classList.remove('active');
-    } else {
-      gridContainer.classList.remove('list-view');
-      gridBtn.classList.add('active');
-      listBtn.classList.remove('active');
+      if (mode === 'list') {
+        tracksGrid.classList.add('list-view');
+        listBtn.classList.add('active');
+        gridBtn.classList.remove('active');
+      } else {
+        tracksGrid.classList.remove('list-view');
+        gridBtn.classList.add('active');
+        listBtn.classList.remove('active');
+      }
     }
+
+    gridBtn.onclick = () => setTrackViewMode('grid');
+    listBtn.onclick = () => setTrackViewMode('list');
+    setTrackViewMode(currentViewMode);
   }
 
-  gridBtn.onclick = () => setViewMode('grid');
-  listBtn.onclick = () => setViewMode('list');
+  // Vue Catalogue Playlists
+  const catalogGridBtn = document.getElementById('catalog-view-mode-grid');
+  const catalogListBtn = document.getElementById('catalog-view-mode-list');
+  const catalogGrid = document.getElementById('catalog-grid');
 
-  setViewMode(currentViewMode);
+  if (catalogGridBtn && catalogListBtn && catalogGrid) {
+    const savedCatalogView = localStorage.getItem('melomanie_catalog_view_mode') || 'grid';
+    function setCatalogViewMode(mode) {
+      localStorage.setItem('melomanie_catalog_view_mode', mode);
+      if (mode === 'list') {
+        catalogGrid.classList.add('list-view');
+        catalogListBtn.classList.add('active');
+        catalogGridBtn.classList.remove('active');
+      } else {
+        catalogGrid.classList.remove('list-view');
+        catalogGridBtn.classList.add('active');
+        catalogListBtn.classList.remove('active');
+      }
+    }
+
+    catalogGridBtn.onclick = () => setCatalogViewMode('grid');
+    catalogListBtn.onclick = () => setCatalogViewMode('list');
+    setCatalogViewMode(savedCatalogView);
+  }
 }
 
 // --- MODALE DE RÉORGANISATION DES PLAYLISTS ---
