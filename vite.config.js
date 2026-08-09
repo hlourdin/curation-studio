@@ -8,6 +8,64 @@ import { buildStaticSite } from './scripts/export-site.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Le dossier site/ est un site statique déjà généré, destiné à Vercel.
+// Sans ce plugin, Vite le fait passer par sa chaîne de transformation et
+// renvoie style.css sous forme de module JavaScript (pour le HMR) : le
+// navigateur refuse alors de l'appliquer et la page s'affiche sans style.
+// On sert donc /site/** tel quel, avant les middlewares internes de Vite.
+const STATIC_MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.ttf': 'font/ttf',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif',
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8'
+};
+
+function serveStaticSitePlugin() {
+  const siteDir = path.resolve(__dirname, 'site');
+
+  return {
+    name: 'serve-static-site',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = (req.url || '').split('?')[0].split('#')[0];
+        if (url !== '/site' && !url.startsWith('/site/')) return next();
+
+        let target;
+        try {
+          target = path.resolve(__dirname, '.' + decodeURIComponent(url));
+        } catch (e) {
+          return next();
+        }
+
+        // Refuser toute sortie du dossier site/ (remontées ../).
+        if (target !== siteDir && !target.startsWith(siteDir + path.sep)) return next();
+
+        if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
+          target = path.join(target, 'index.html');
+        }
+        if (!fs.existsSync(target) || !fs.statSync(target).isFile()) return next();
+
+        res.setHeader('Content-Type', STATIC_MIME[path.extname(target).toLowerCase()] || 'application/octet-stream');
+        // L'aperçu doit toujours refléter la dernière génération.
+        res.setHeader('Cache-Control', 'no-store');
+        fs.createReadStream(target).pipe(res);
+      });
+    }
+  };
+}
+
 function exportSiteApiPlugin() {
   return {
     name: 'export-site-api',
@@ -43,6 +101,7 @@ function exportSiteApiPlugin() {
 export default defineConfig({
   plugins: [
     basicSsl(),
+    serveStaticSitePlugin(),
     exportSiteApiPlugin()
   ],
   server: {
