@@ -94,6 +94,41 @@ function applyTheme(theme) {
   }
 }
 
+// Affiche une modale de notification permanente personnalisée
+function showNotificationModal({ title, message, showPreviewBtn = false }) {
+  const modal = document.getElementById('notification-modal');
+  const titleEl = document.getElementById('notification-title');
+  const messageEl = document.getElementById('notification-message');
+  const previewBtn = document.getElementById('notification-preview-btn');
+  const confirmBtn = document.getElementById('confirm-notification-btn');
+  const closeBtn = document.getElementById('close-notification-modal');
+
+  if (!modal) return;
+
+  if (titleEl) titleEl.textContent = title || 'Notification';
+  if (messageEl) messageEl.innerHTML = message || '';
+
+  if (previewBtn) {
+    if (showPreviewBtn) {
+      previewBtn.classList.remove('hidden');
+    } else {
+      previewBtn.classList.add('hidden');
+    }
+  }
+
+  modal.classList.remove('hidden');
+
+  const closeModal = () => {
+    modal.classList.add('hidden');
+  };
+
+  if (confirmBtn) confirmBtn.onclick = closeModal;
+  if (closeBtn) closeBtn.onclick = closeModal;
+  modal.onclick = (e) => {
+    if (e.target === modal) closeModal();
+  };
+}
+
 // Initialisation de l'application
 async function init() {
   // Gérer le thème dès le départ
@@ -175,41 +210,6 @@ function setupApp(token) {
     logout();
     showLoginScreen(true);
   };
-
-// Affiche une modale de notification permanente personnalisée
-function showNotificationModal({ title, message, showPreviewBtn = false }) {
-  const modal = document.getElementById('notification-modal');
-  const titleEl = document.getElementById('notification-title');
-  const messageEl = document.getElementById('notification-message');
-  const previewBtn = document.getElementById('notification-preview-btn');
-  const confirmBtn = document.getElementById('confirm-notification-btn');
-  const closeBtn = document.getElementById('close-notification-modal');
-
-  if (!modal) return;
-
-  if (titleEl) titleEl.textContent = title || 'Notification';
-  if (messageEl) messageEl.innerHTML = message || '';
-
-  if (previewBtn) {
-    if (showPreviewBtn) {
-      previewBtn.classList.remove('hidden');
-    } else {
-      previewBtn.classList.add('hidden');
-    }
-  }
-
-  modal.classList.remove('hidden');
-
-  const closeModal = () => {
-    modal.classList.add('hidden');
-  };
-
-  if (confirmBtn) confirmBtn.onclick = closeModal;
-  if (closeBtn) closeBtn.onclick = closeModal;
-  modal.onclick = (e) => {
-    if (e.target === modal) closeModal();
-  };
-}
 
   // Événements d'export & d'effacement
   const exportSiteBtn = document.getElementById('export-site-btn');
