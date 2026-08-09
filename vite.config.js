@@ -49,6 +49,9 @@ export default defineConfig({
     host: '127.0.0.1',
     https: true,
     port: 5173,
-    strictPort: true
+    strictPort: true,
+    watch: {
+      ignored: ['**/src/data/playlists-data.json', '**/site/**']
+    }
   }
 });
