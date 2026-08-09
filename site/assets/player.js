@@ -20,17 +20,20 @@
   // View Mode Toggle (Cards / List)
   const gridBtn = document.getElementById('view-mode-grid');
   const listBtn = document.getElementById('view-mode-list');
-  const gridContainer = document.getElementById('tracks-grid');
+  const gridContainer = document.getElementById('tracks-grid') || document.getElementById('catalog-grid');
 
   if (gridBtn && listBtn && gridContainer) {
-    const savedView = localStorage.getItem('melomanie_track_view_mode') || 'grid';
+    const isHomepage = !!document.getElementById('catalog-grid');
+    const storageKey = isHomepage ? 'melomanie_catalog_view_mode' : 'melomanie_track_view_mode';
+
+    const savedView = localStorage.getItem(storageKey) || 'grid';
     setViewMode(savedView);
 
     gridBtn.addEventListener('click', () => setViewMode('grid'));
     listBtn.addEventListener('click', () => setViewMode('list'));
 
     function setViewMode(mode) {
-      localStorage.setItem('melomanie_track_view_mode', mode);
+      localStorage.setItem(storageKey, mode);
       if (mode === 'list') {
         gridContainer.classList.add('list-view');
         listBtn.classList.add('active');

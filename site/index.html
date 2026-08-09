@@ -36,9 +36,24 @@
       </p>
     </section>
 
+    <!-- Playlist Catalog Toolbar (Cards / List Selector) -->
+    <div class="view-toggle-toolbar" style="margin-bottom: 1.5rem;">
+      <span class="track-count-badge">8 playlists</span>
+      <div class="view-toggle-group">
+        <button class="view-toggle-btn active" id="view-mode-grid" data-view="grid" title="Vue Grille de Cartes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Cartes</span>
+        </button>
+        <button class="view-toggle-btn" id="view-mode-list" data-view="list" title="Vue Liste Compacte">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+          <span>Liste</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Playlist Catalog -->
     <main>
-      <div class="playlists-catalog-grid">
+      <div class="playlists-catalog-grid" id="catalog-grid">
         
       <a href="playlists/curious-xxv-fw.html" class="playlist-card group">
         <div class="playlist-card-cover-wrapper"><img src="https://i.scdn.co/image/ab67616d0000b273208500450dcd0fd294d7bd3b" alt="CuriOus XXV F/W" class="playlist-card-cover-img" loading="lazy"></div>
