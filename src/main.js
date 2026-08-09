@@ -176,6 +176,41 @@ function setupApp(token) {
     showLoginScreen(true);
   };
 
+// Affiche une modale de notification permanente personnalisée
+function showNotificationModal({ title, message, showPreviewBtn = false }) {
+  const modal = document.getElementById('notification-modal');
+  const titleEl = document.getElementById('notification-title');
+  const messageEl = document.getElementById('notification-message');
+  const previewBtn = document.getElementById('notification-preview-btn');
+  const confirmBtn = document.getElementById('confirm-notification-btn');
+  const closeBtn = document.getElementById('close-notification-modal');
+
+  if (!modal) return;
+
+  if (titleEl) titleEl.textContent = title || 'Notification';
+  if (messageEl) messageEl.innerHTML = message || '';
+
+  if (previewBtn) {
+    if (showPreviewBtn) {
+      previewBtn.classList.remove('hidden');
+    } else {
+      previewBtn.classList.add('hidden');
+    }
+  }
+
+  modal.classList.remove('hidden');
+
+  const closeModal = () => {
+    modal.classList.add('hidden');
+  };
+
+  if (confirmBtn) confirmBtn.onclick = closeModal;
+  if (closeBtn) closeBtn.onclick = closeModal;
+  modal.onclick = (e) => {
+    if (e.target === modal) closeModal();
+  };
+}
+
   // Événements d'export & d'effacement
   const exportSiteBtn = document.getElementById('export-site-btn');
   if (exportSiteBtn) {
@@ -189,7 +224,11 @@ function setupApp(token) {
         });
         const data = await res.json();
         if (data.success) {
-          alert(`✨ Le site statique a été généré directement dans le répertoire "site/" (${data.count} playlist(s) traitée(s)) !\n\nVous pouvez cliquer sur "Voir le site" pour prévisualiser ou faire "git push" pour publier sur Vercel.`);
+          showNotificationModal({
+            title: '✨ Site Statique Généré',
+            message: `Le site statique a été généré avec succès dans le répertoire <strong>site/</strong> (${data.count} playlist(s) traitée(s)).<br><br>Vous pouvez prévisualiser le résultat localement en cliquant sur <strong>Voir le site</strong> ci-dessous ou exécuter <code>git push</code> pour le publier sur Vercel (lacurio.site).`,
+            showPreviewBtn: true
+          });
         } else {
           exportStudioSiteZIP(playlists);
         }
@@ -382,10 +421,18 @@ async function handleImport(token) {
     loadPlaylist(slug);
     
     playlistInput.value = '';
-    alert(`Playlist "${playlistData.name}" importée avec succès !`);
+    showNotificationModal({
+      title: '🎉 Playlist Importée',
+      message: `La playlist <strong>"${playlistData.name}"</strong> a été importée avec succès !`,
+      showPreviewBtn: false
+    });
   } catch (e) {
     console.error(e);
-    alert(e.message || "Une erreur est survenue lors de l'importation.");
+    showNotificationModal({
+      title: '❌ Erreur d\'importation',
+      message: e.message || "Une erreur est survenue lors de l'importation.",
+      showPreviewBtn: false
+    });
   } finally {
     importBtn.disabled = false;
     loader.classList.add('hidden');
@@ -396,7 +443,11 @@ async function handleImport(token) {
 // Permet de ré-importer la playlist active tout en conservant scrupuleusement les commentaires
 async function handleReimport(token) {
   if (!activePlaylistSlug || !playlists[activePlaylistSlug]) {
-    alert("Aucune playlist sélectionnée à ré-importer.");
+    showNotificationModal({
+      title: '⚠️ Attention',
+      message: "Aucune playlist sélectionnée à ré-importer.",
+      showPreviewBtn: false
+    });
     return;
   }
 
@@ -404,7 +455,11 @@ async function handleReimport(token) {
   const playlistId = currentPlaylist.id || extractPlaylistId(currentPlaylist.spotifyUrl);
 
   if (!playlistId) {
-    alert("Impossible de trouver l'ID Spotify de cette playlist.");
+    showNotificationModal({
+      title: '⚠️ Attention',
+      message: "Impossible de trouver l'ID Spotify de cette playlist.",
+      showPreviewBtn: false
+    });
     return;
   }
 
@@ -427,7 +482,11 @@ async function handleReimport(token) {
     }
 
     if (!activeToken) {
-      alert("Veuillez vous connecter à Spotify pour ré-importer cette playlist.");
+      showNotificationModal({
+        title: '🔒 Connexion Spotify Requise',
+        message: "Veuillez vous connecter à Spotify pour ré-importer cette playlist.",
+        showPreviewBtn: false
+      });
       return;
     }
 
@@ -480,10 +539,18 @@ async function handleReimport(token) {
     populatePlaylistSelector();
     loadPlaylist(slug);
 
-    alert(`✨ Playlist "${playlistData.name}" ré-importée avec succès ! Vos commentaires ont été conservés.`);
+    showNotificationModal({
+      title: '✨ Playlist Ré-importée',
+      message: `La playlist <strong>"${playlistData.name}"</strong> a été ré-importée avec succès ! Tous vos commentaires ont été conservés.`,
+      showPreviewBtn: true
+    });
   } catch (e) {
     console.error("Erreur lors de la ré-importation :", e);
-    alert(e.message || "Une erreur est survenue lors de la ré-importation.");
+    showNotificationModal({
+      title: '❌ Erreur de ré-importation',
+      message: e.message || "Une erreur est survenue lors de la ré-importation.",
+      showPreviewBtn: false
+    });
   } finally {
     if (reimportBtn) {
       reimportBtn.disabled = false;
