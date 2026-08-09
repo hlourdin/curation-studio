@@ -1,20 +1,39 @@
 /* ==========================================================================
-   LE SON DE LA CURIOSITÉ — STANDALONE AUDIO PLAYER (VERCEL)
+   LE SON DE LA CURIOSITÉ - STANDALONE AUDIO PLAYER (VERCEL)
    ========================================================================== */
 
 (function () {
   // Theme Toggle
+  // Le thème est déjà posé par le script inline du <head> (préférence
+  // enregistrée, sinon préférence système). On ne fait que le basculer ici.
   const themeBtn = document.getElementById('theme-toggle-btn');
   if (themeBtn) {
-    const savedTheme = localStorage.getItem('melomanie_theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    
     themeBtn.addEventListener('click', () => {
       const current = document.documentElement.getAttribute('data-theme');
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('melomanie_theme', next);
+      try { localStorage.setItem('melomanie_theme', next); } catch (e) {}
     });
+  }
+
+  // Apparition au défilement : hiérarchise la lecture d'un index long.
+  // IntersectionObserver uniquement, jamais d'écouteur de scroll.
+  const reveals = document.querySelectorAll('.reveal');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reveals.length && !prefersReducedMotion && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+
+    reveals.forEach((el) => observer.observe(el));
+  } else {
+    reveals.forEach((el) => el.classList.add('is-in'));
   }
 
   // View Mode Toggle (Cards / List)
@@ -70,6 +89,11 @@
   const volumeFill = document.getElementById('volume-fill');
 
   const tracks = window.__PLAYLIST_TRACKS__ || [];
+
+  function getCardById(id) {
+    return Array.from(document.querySelectorAll('.song-card'))
+      .find(c => c.getAttribute('data-id') === id) || null;
+  }
 
   function formatTime(sec) {
     if (isNaN(sec)) return "0:00";
@@ -170,7 +194,10 @@
     }
 
     currentPlayingTrackId = id;
+    const card = getCardById(id);
     const audioUrl = await getTrackAudioUrl(track);
+
+    if (card) card.classList.toggle('unavailable', !audioUrl);
 
     if (audioUrl) {
       currentAudio = new Audio(audioUrl);

@@ -1,813 +1,559 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CURiOus-XXIV.2 — Le Son de la Curiosité</title>
+  <title>CURiOus-XXIV.2 · Le Son de la Curiosité</title>
   <meta name="description" content="Q2 2024">
+  <link rel="preload" href="../assets/fonts/playfair-display-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/archivo-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../assets/style.css">
+  <script>
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem('melomanie_theme'); } catch (e) {}
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.add('js-reveal');
+    })();
+  </script>
   <script>
     window.__PLAYLIST_TRACKS__ = [{"id":"1lk7yaYquaKwiXPmdZD6mn","title":"Sister Andre","artist":"Pokey LaFarge","artists":[{"name":"Pokey LaFarge","url":"https://open.spotify.com/artist/6hAUCkzZpoYGObd8qFW5TT"}],"album":"Sister Andre","image":"https://i.scdn.co/image/ab67616d0000b273a57f7df72e0e9a7a9d40acca","url":"https://open.spotify.com/track/1lk7yaYquaKwiXPmdZD6mn","previewUrl":"","comment":""},{"id":"3nHdM5QweTqnTfpib7W3fV","title":"Crever l'Asphalte","artist":"Françoiz Breut","artists":[{"name":"Françoiz Breut","url":"https://open.spotify.com/artist/5bWRCM3vFGqamlNxSzNj1O"}],"album":"Crever l'Asphalte","image":"https://i.scdn.co/image/ab67616d0000b2730115ff7672d64058c2f1e576","url":"https://open.spotify.com/track/3nHdM5QweTqnTfpib7W3fV","previewUrl":"","comment":""},{"id":"6G0KITyDe4EQREYyuVQmOn","title":"Nothing Burns Like The Cold","artist":"Snoh Aalegra, Vince Staples","artists":[{"name":"Snoh Aalegra","url":"https://open.spotify.com/artist/1A9o3Ljt67pFZ89YtPPL5X"},{"name":"Vince Staples","url":"https://open.spotify.com/artist/68kEuyFKyqrdQQLLsmiatm"}],"album":"FEELS","image":"https://i.scdn.co/image/ab67616d0000b2731fb58426012eeb7361e2070a","url":"https://open.spotify.com/track/6G0KITyDe4EQREYyuVQmOn","previewUrl":"","comment":""},{"id":"5VjpC47CHFA7wuk8k6WD4O","title":"Pères - Remasterisé en 2012","artist":"Dominique A","artists":[{"name":"Dominique A","url":"https://open.spotify.com/artist/6IoS9ojtxKCL1tW5VL1buI"}],"album":"Remué (Edition spéciale) [Remasterisé en 2012]","image":"https://i.scdn.co/image/ab67616d0000b273bae5775d2550093e74fe6175","url":"https://open.spotify.com/track/5VjpC47CHFA7wuk8k6WD4O","previewUrl":"","comment":""},{"id":"4csm3bIilOko37LEVW1v8P","title":"Mannequin Love","artist":"Justice, The Flints","artists":[{"name":"Justice","url":"https://open.spotify.com/artist/1gR0gsQYfi6joyO1dlp76N"},{"name":"The Flints","url":"https://open.spotify.com/artist/4yJmzmjRodRbsqgOVpHD1v"}],"album":"Hyperdrama","image":"https://i.scdn.co/image/ab67616d0000b273730e327760fe592ad69bf18e","url":"https://open.spotify.com/track/4csm3bIilOko37LEVW1v8P","previewUrl":"","comment":""},{"id":"3XGdHT92GyDWN5XiCO9PdJ","title":"On My Mind","artist":"Baby Rose, BADBADNOTGOOD","artists":[{"name":"Baby Rose","url":"https://open.spotify.com/artist/6Z4JcgqrqgysyHIPRtDIHo"},{"name":"BADBADNOTGOOD","url":"https://open.spotify.com/artist/65dGLGjkw3UbddUg2GKQoZ"}],"album":"Slow Burn","image":"https://i.scdn.co/image/ab67616d0000b273940ad8d7580e7baf57851098","url":"https://open.spotify.com/track/3XGdHT92GyDWN5XiCO9PdJ","previewUrl":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c6/23/bb/c623bb5e-e8fd-ae67-20ef-c0c97a55e9c5/mzaf_12067700115457864917.plus.aac.p.m4a","comment":""},{"id":"5lhIY0YgH7JhszpQNUC1dm","title":"The End","artist":"Justice, Thundercat","artists":[{"name":"Justice","url":"https://open.spotify.com/artist/1gR0gsQYfi6joyO1dlp76N"},{"name":"Thundercat","url":"https://open.spotify.com/artist/4frXpPxQQZwbCu3eTGnZEw"}],"album":"Hyperdrama","image":"https://i.scdn.co/image/ab67616d0000b273730e327760fe592ad69bf18e","url":"https://open.spotify.com/track/5lhIY0YgH7JhszpQNUC1dm","previewUrl":"","comment":""},{"id":"3HjRISOy6fhuXb73Pf2kN3","title":"you up?","artist":"Yaya Bey","artists":[{"name":"Yaya Bey","url":"https://open.spotify.com/artist/6tpaMMCs8X6o8j9H5OmWmT"}],"album":"exodus the north star","image":"https://i.scdn.co/image/ab67616d0000b273b7437dd382fa985c48b727d6","url":"https://open.spotify.com/track/3HjRISOy6fhuXb73Pf2kN3","previewUrl":"","comment":""},{"id":"3tLVfEh8kJhMkDaxvOzK1M","title":"Insecure","artist":"Tom Misch","artists":[{"name":"Tom Misch","url":"https://open.spotify.com/artist/1uiEZYehlNivdK3iQyAbye"}],"album":"Insecure","image":"https://i.scdn.co/image/ab67616d0000b273b6883e5145565b73701b0f7d","url":"https://open.spotify.com/track/3tLVfEh8kJhMkDaxvOzK1M","previewUrl":"","comment":""},{"id":"5Y7JotQ5AHvJik2c0MYTgS","title":"Le courage des oiseaux","artist":"Mini Ouenzé","artists":[{"name":"Mini Ouenzé","url":"https://open.spotify.com/artist/1aNLeQtzJ0jCjtPF9xRh1i"}],"album":"Lamuka","image":"https://i.scdn.co/image/ab67616d0000b27374b6465052a84a29a8da7925","url":"https://open.spotify.com/track/5Y7JotQ5AHvJik2c0MYTgS","previewUrl":"","comment":""},{"id":"1Splev28AddACLjvRbs6vJ","title":"Dune Cruiser","artist":"Cloudchord, Monster Rally","artists":[{"name":"Cloudchord","url":"https://open.spotify.com/artist/5EjKjFGvMmVUGCfAyDY2lG"},{"name":"Monster Rally","url":"https://open.spotify.com/artist/3DtnSKmpjFGUzZcccWfG43"}],"album":"Dune Cruiser","image":"https://i.scdn.co/image/ab67616d0000b273a559b00002392ed5b4d35bad","url":"https://open.spotify.com/track/1Splev28AddACLjvRbs6vJ","previewUrl":"","comment":""},{"id":"7pbnV1FkBjeE8aGWRiDqRD","title":"Hold The Line!","artist":"Ghostpoet","artists":[{"name":"Ghostpoet","url":"https://open.spotify.com/artist/69lEbRQRe29JdyLrewNAvD"}],"album":"Hold The Line!","image":"https://i.scdn.co/image/ab67616d0000b273955d5987174392f6c098e5e9","url":"https://open.spotify.com/track/7pbnV1FkBjeE8aGWRiDqRD","previewUrl":"","comment":""},{"id":"7AvuIMRKdo5RvS6YIzXjsj","title":"Tell Me Why","artist":"Gotts Street Park, Olive Jones","artists":[{"name":"Gotts Street Park","url":"https://open.spotify.com/artist/2hwy5DELim1AxB1sHPqn4y"},{"name":"Olive Jones","url":"https://open.spotify.com/artist/2DwbPVZ7uyW2B0AgoHuzLn"}],"album":"On The Inside","image":"https://i.scdn.co/image/ab67616d0000b2734ffa7cc0ea75c1e23e54ccb9","url":"https://open.spotify.com/track/7AvuIMRKdo5RvS6YIzXjsj","previewUrl":"","comment":""},{"id":"2JvYSUbSUqawKyfLSF25GJ","title":"La Forêt","artist":"Lescop","artists":[{"name":"Lescop","url":"https://open.spotify.com/artist/2KlDlqEMf0YyYW8rBKUx6W"}],"album":"Lescop","image":"https://i.scdn.co/image/ab67616d0000b2739fb3b418c4b27cd3f75fe112","url":"https://open.spotify.com/track/2JvYSUbSUqawKyfLSF25GJ","previewUrl":"","comment":""},{"id":"4BNDJ8JLYVc5nkoaIeogna","title":"Omission","artist":"Julian Lage","artists":[{"name":"Julian Lage","url":"https://open.spotify.com/artist/2TSuAchdgVzsAa9wDK1IeT"}],"album":"Speak To Me","image":"https://i.scdn.co/image/ab67616d0000b27382d8cf453da3df05d48ea115","url":"https://open.spotify.com/track/4BNDJ8JLYVc5nkoaIeogna","previewUrl":"","comment":""},{"id":"0iSn4xw5kpFHDdW5UtCgLz","title":"Say What","artist":"Idris Muhammad","artists":[{"name":"Idris Muhammad","url":"https://open.spotify.com/artist/6ghiUK2ao3KcmmDt2pbNzN"}],"album":"Turn This Mutha Out","image":"https://i.scdn.co/image/ab67616d0000b273d7de90b4628456f13fe629d2","url":"https://open.spotify.com/track/0iSn4xw5kpFHDdW5UtCgLz","previewUrl":"","comment":""},{"id":"7vTZDxi1XZoTzOzVfToLdM","title":"State Of The Art (A.E.I.O.U.)","artist":"Jim James","artists":[{"name":"Jim James","url":"https://open.spotify.com/artist/1MhtYlJvUqfd2EgHSQTGK4"}],"album":"Regions of Light and Sound of God","image":"https://i.scdn.co/image/ab67616d0000b273f457384a49a08e9eedfa327a","url":"https://open.spotify.com/track/7vTZDxi1XZoTzOzVfToLdM","previewUrl":"","comment":""},{"id":"09WxJCWFMWAxTHBLLelpDS","title":"Woo Hah!! Got You All in Check","artist":"Busta Rhymes","artists":[{"name":"Busta Rhymes","url":"https://open.spotify.com/artist/1YfEcTuGvBQ8xSD1f53UnK"}],"album":"The Coming","image":"https://i.scdn.co/image/ab67616d0000b2732d70105f3c5168daf33d2a6b","url":"https://open.spotify.com/track/09WxJCWFMWAxTHBLLelpDS","previewUrl":"","comment":""},{"id":"3Ff2iqsPtk3vtl0LPbTZx6","title":"Les garçons","artist":"Lescop","artists":[{"name":"Lescop","url":"https://open.spotify.com/artist/2KlDlqEMf0YyYW8rBKUx6W"}],"album":"Rêve parti","image":"https://i.scdn.co/image/ab67616d0000b273e33f8ad838f52f6246dd28fa","url":"https://open.spotify.com/track/3Ff2iqsPtk3vtl0LPbTZx6","previewUrl":"","comment":""},{"id":"6c0VFhbAhe6Xmcd1fDLyd5","title":"Let's Dance","artist":"Grandmagneto","artists":[{"name":"Grandmagneto","url":"https://open.spotify.com/artist/0PVnBUKxmTIvMsb0o5zHYN"}],"album":"Let 'S Dance","image":"https://i.scdn.co/image/ab67616d0000b27300cc64002a15650b31ee7453","url":"https://open.spotify.com/track/6c0VFhbAhe6Xmcd1fDLyd5","previewUrl":"","comment":""}];
   </script>
 </head>
 <body>
-  <div class="site-container">
-    <!-- Header Navbar -->
-    <header class="site-header">
-      <nav class="nav-island">
-        <a href="../index.html" class="brand-logo">
-          <div class="brand-text">
-            <span class="brand-name">Le Son de la Curiosité</span>
-            <span class="brand-sub">Audio Curation</span>
-          </div>
-        </a>
-        <div class="header-controls">
-          <button id="theme-toggle-btn" class="icon-btn" title="Changer le thème (Sombre/Clair)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          </button>
-        </div>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="wordmark" href="../index.html">
+        <span class="wordmark-name">Le Son de la Curiosité</span>
+        <span class="wordmark-sub">Audio Curation</span>
+      </a>
+      <nav class="masthead-nav">
+        <a class="masthead-link" href="../index.html">Collections</a>
+        <button type="button" id="theme-toggle-btn" class="theme-btn" title="Changer de thème" aria-label="Changer de thème">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <!-- Playlist Hero Section -->
-    <main>
-      <section class="hero-section">
-        <h1 class="hero-title">
-          <span class="hero-title-text">CURiOus-XXIV.2</span>
-          <a href="https://open.spotify.com/playlist/5KxDy3QMbm3S9heyX9mrZi" target="_blank" class="hero-title-external-link" title="Écouter la playlist complète sur spotify">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-          </a>
-        </h1>
-        <p class="hero-description">Q2 2024</p>
-      </section>
+  <main>
+    <div class="wrap">
+      <a class="back-link" href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg><span>Toutes les collections</span></a>
+    </div>
 
-      <!-- Tracklist Toolbar (Cards / List Selector) -->
-      <div class="view-toggle-toolbar">
-        <span class="track-count-badge">20 morceaux</span>
-        <div class="view-toggle-group">
-          <button class="view-toggle-btn active" id="view-mode-grid" data-view="grid" title="Vue Grille de Cartes">
+    <section class="collection-head">
+      <div class="wrap">
+        <h1 class="collection-head-title">CURiOus-XXIV.2</h1>
+        <div class="collection-head-frame"><img src="https://i.scdn.co/image/ab67616d0000b273a57f7df72e0e9a7a9d40acca" alt="Pochette de CURiOus-XXIV.2" fetchpriority="high" decoding="async"></div>
+        <div class="collection-head-facts">
+          <p class="collection-head-desc">Q2 2024</p>
+          <div class="collection-head-actions">
+            <span class="meta">20 titres</span>
+            <a class="btn btn-ghost" href="https://open.spotify.com/playlist/5KxDy3QMbm3S9heyX9mrZi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg><span>Ouvrir sur Spotify</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tracklist">
+      <div class="wrap">
+        <div class="toolbar">
+          <h2 class="toolbar-title">Titres</h2>
+          <div class="toolbar-side">
+            <span class="meta">20 titres</span>
+        <div class="view-toggle-group" role="group" aria-label="Mode d'affichage">
+          <button type="button" class="view-toggle-btn active" id="view-mode-grid" data-view="grid" title="Affichage en planche">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            <span>Cartes</span>
+            <span>Planche</span>
           </button>
-          <button class="view-toggle-btn" id="view-mode-list" data-view="list" title="Vue Liste Compacte">
+          <button type="button" class="view-toggle-btn" id="view-mode-list" data-view="list" title="Affichage en index">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-            <span>Liste</span>
+            <span>Index</span>
           </button>
         </div>
+          </div>
+        </div>
+      <div class="track-set" id="tracks-grid">
+        <article class="song-card reveal" data-id="1lk7yaYquaKwiXPmdZD6mn" style="--i:0">
+          <div class="song-card-inner">
+            <span class="track-index">01</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273a57f7df72e0e9a7a9d40acca" alt="Pochette de Sister Andre" loading="eager" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="1lk7yaYquaKwiXPmdZD6mn" aria-label="Écouter Sister Andre">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Sister Andre</h3>
+                <a class="track-out" href="https://open.spotify.com/track/1lk7yaYquaKwiXPmdZD6mn" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Sister Andre sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/6hAUCkzZpoYGObd8qFW5TT" target="_blank" rel="noopener" class="artist-link" title="Voir Pokey LaFarge sur Spotify">Pokey LaFarge</a></p>
+              <p class="track-album">Sister Andre</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="3nHdM5QweTqnTfpib7W3fV" style="--i:1">
+          <div class="song-card-inner">
+            <span class="track-index">02</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b2730115ff7672d64058c2f1e576" alt="Pochette de Crever l'Asphalte" loading="eager" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="3nHdM5QweTqnTfpib7W3fV" aria-label="Écouter Crever l'Asphalte">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Crever l'Asphalte</h3>
+                <a class="track-out" href="https://open.spotify.com/track/3nHdM5QweTqnTfpib7W3fV" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Crever l'Asphalte sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/5bWRCM3vFGqamlNxSzNj1O" target="_blank" rel="noopener" class="artist-link" title="Voir Françoiz Breut sur Spotify">Françoiz Breut</a></p>
+              <p class="track-album">Crever l'Asphalte</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="6G0KITyDe4EQREYyuVQmOn" style="--i:2">
+          <div class="song-card-inner">
+            <span class="track-index">03</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b2731fb58426012eeb7361e2070a" alt="Pochette de FEELS" loading="eager" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="6G0KITyDe4EQREYyuVQmOn" aria-label="Écouter Nothing Burns Like The Cold">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Nothing Burns Like The Cold</h3>
+                <a class="track-out" href="https://open.spotify.com/track/6G0KITyDe4EQREYyuVQmOn" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Nothing Burns Like The Cold sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/1A9o3Ljt67pFZ89YtPPL5X" target="_blank" rel="noopener" class="artist-link" title="Voir Snoh Aalegra sur Spotify">Snoh Aalegra</a>, <a href="https://open.spotify.com/artist/68kEuyFKyqrdQQLLsmiatm" target="_blank" rel="noopener" class="artist-link" title="Voir Vince Staples sur Spotify">Vince Staples</a></p>
+              <p class="track-album">FEELS</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="5VjpC47CHFA7wuk8k6WD4O" style="--i:3">
+          <div class="song-card-inner">
+            <span class="track-index">04</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273bae5775d2550093e74fe6175" alt="Pochette de Remué (Edition spéciale) [Remasterisé en 2012]" loading="eager" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="5VjpC47CHFA7wuk8k6WD4O" aria-label="Écouter Pères - Remasterisé en 2012">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Pères - Remasterisé en 2012</h3>
+                <a class="track-out" href="https://open.spotify.com/track/5VjpC47CHFA7wuk8k6WD4O" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Pères - Remasterisé en 2012 sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/6IoS9ojtxKCL1tW5VL1buI" target="_blank" rel="noopener" class="artist-link" title="Voir Dominique A sur Spotify">Dominique A</a></p>
+              <p class="track-album">Remué (Edition spéciale) [Remasterisé en 2012]</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="4csm3bIilOko37LEVW1v8P" style="--i:4">
+          <div class="song-card-inner">
+            <span class="track-index">05</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273730e327760fe592ad69bf18e" alt="Pochette de Hyperdrama" loading="eager" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="4csm3bIilOko37LEVW1v8P" aria-label="Écouter Mannequin Love">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Mannequin Love</h3>
+                <a class="track-out" href="https://open.spotify.com/track/4csm3bIilOko37LEVW1v8P" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Mannequin Love sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/1gR0gsQYfi6joyO1dlp76N" target="_blank" rel="noopener" class="artist-link" title="Voir Justice sur Spotify">Justice</a>, <a href="https://open.spotify.com/artist/4yJmzmjRodRbsqgOVpHD1v" target="_blank" rel="noopener" class="artist-link" title="Voir The Flints sur Spotify">The Flints</a></p>
+              <p class="track-album">Hyperdrama</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="3XGdHT92GyDWN5XiCO9PdJ" style="--i:5">
+          <div class="song-card-inner">
+            <span class="track-index">06</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273940ad8d7580e7baf57851098" alt="Pochette de Slow Burn" loading="eager" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="3XGdHT92GyDWN5XiCO9PdJ" aria-label="Écouter On My Mind">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">On My Mind</h3>
+                <a class="track-out" href="https://open.spotify.com/track/3XGdHT92GyDWN5XiCO9PdJ" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir On My Mind sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/6Z4JcgqrqgysyHIPRtDIHo" target="_blank" rel="noopener" class="artist-link" title="Voir Baby Rose sur Spotify">Baby Rose</a>, <a href="https://open.spotify.com/artist/65dGLGjkw3UbddUg2GKQoZ" target="_blank" rel="noopener" class="artist-link" title="Voir BADBADNOTGOOD sur Spotify">BADBADNOTGOOD</a></p>
+              <p class="track-album">Slow Burn</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="5lhIY0YgH7JhszpQNUC1dm" style="--i:0">
+          <div class="song-card-inner">
+            <span class="track-index">07</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273730e327760fe592ad69bf18e" alt="Pochette de Hyperdrama" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="5lhIY0YgH7JhszpQNUC1dm" aria-label="Écouter The End">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">The End</h3>
+                <a class="track-out" href="https://open.spotify.com/track/5lhIY0YgH7JhszpQNUC1dm" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir The End sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/1gR0gsQYfi6joyO1dlp76N" target="_blank" rel="noopener" class="artist-link" title="Voir Justice sur Spotify">Justice</a>, <a href="https://open.spotify.com/artist/4frXpPxQQZwbCu3eTGnZEw" target="_blank" rel="noopener" class="artist-link" title="Voir Thundercat sur Spotify">Thundercat</a></p>
+              <p class="track-album">Hyperdrama</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="3HjRISOy6fhuXb73Pf2kN3" style="--i:1">
+          <div class="song-card-inner">
+            <span class="track-index">08</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273b7437dd382fa985c48b727d6" alt="Pochette de exodus the north star" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="3HjRISOy6fhuXb73Pf2kN3" aria-label="Écouter you up?">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">you up?</h3>
+                <a class="track-out" href="https://open.spotify.com/track/3HjRISOy6fhuXb73Pf2kN3" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir you up? sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/6tpaMMCs8X6o8j9H5OmWmT" target="_blank" rel="noopener" class="artist-link" title="Voir Yaya Bey sur Spotify">Yaya Bey</a></p>
+              <p class="track-album">exodus the north star</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="3tLVfEh8kJhMkDaxvOzK1M" style="--i:2">
+          <div class="song-card-inner">
+            <span class="track-index">09</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273b6883e5145565b73701b0f7d" alt="Pochette de Insecure" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="3tLVfEh8kJhMkDaxvOzK1M" aria-label="Écouter Insecure">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Insecure</h3>
+                <a class="track-out" href="https://open.spotify.com/track/3tLVfEh8kJhMkDaxvOzK1M" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Insecure sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/1uiEZYehlNivdK3iQyAbye" target="_blank" rel="noopener" class="artist-link" title="Voir Tom Misch sur Spotify">Tom Misch</a></p>
+              <p class="track-album">Insecure</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="5Y7JotQ5AHvJik2c0MYTgS" style="--i:3">
+          <div class="song-card-inner">
+            <span class="track-index">10</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b27374b6465052a84a29a8da7925" alt="Pochette de Lamuka" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="5Y7JotQ5AHvJik2c0MYTgS" aria-label="Écouter Le courage des oiseaux">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Le courage des oiseaux</h3>
+                <a class="track-out" href="https://open.spotify.com/track/5Y7JotQ5AHvJik2c0MYTgS" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Le courage des oiseaux sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/1aNLeQtzJ0jCjtPF9xRh1i" target="_blank" rel="noopener" class="artist-link" title="Voir Mini Ouenzé sur Spotify">Mini Ouenzé</a></p>
+              <p class="track-album">Lamuka</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="1Splev28AddACLjvRbs6vJ" style="--i:4">
+          <div class="song-card-inner">
+            <span class="track-index">11</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273a559b00002392ed5b4d35bad" alt="Pochette de Dune Cruiser" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="1Splev28AddACLjvRbs6vJ" aria-label="Écouter Dune Cruiser">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Dune Cruiser</h3>
+                <a class="track-out" href="https://open.spotify.com/track/1Splev28AddACLjvRbs6vJ" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Dune Cruiser sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/5EjKjFGvMmVUGCfAyDY2lG" target="_blank" rel="noopener" class="artist-link" title="Voir Cloudchord sur Spotify">Cloudchord</a>, <a href="https://open.spotify.com/artist/3DtnSKmpjFGUzZcccWfG43" target="_blank" rel="noopener" class="artist-link" title="Voir Monster Rally sur Spotify">Monster Rally</a></p>
+              <p class="track-album">Dune Cruiser</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="7pbnV1FkBjeE8aGWRiDqRD" style="--i:5">
+          <div class="song-card-inner">
+            <span class="track-index">12</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273955d5987174392f6c098e5e9" alt="Pochette de Hold The Line!" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="7pbnV1FkBjeE8aGWRiDqRD" aria-label="Écouter Hold The Line!">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Hold The Line!</h3>
+                <a class="track-out" href="https://open.spotify.com/track/7pbnV1FkBjeE8aGWRiDqRD" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Hold The Line! sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/69lEbRQRe29JdyLrewNAvD" target="_blank" rel="noopener" class="artist-link" title="Voir Ghostpoet sur Spotify">Ghostpoet</a></p>
+              <p class="track-album">Hold The Line!</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="7AvuIMRKdo5RvS6YIzXjsj" style="--i:0">
+          <div class="song-card-inner">
+            <span class="track-index">13</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b2734ffa7cc0ea75c1e23e54ccb9" alt="Pochette de On The Inside" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="7AvuIMRKdo5RvS6YIzXjsj" aria-label="Écouter Tell Me Why">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Tell Me Why</h3>
+                <a class="track-out" href="https://open.spotify.com/track/7AvuIMRKdo5RvS6YIzXjsj" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Tell Me Why sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/2hwy5DELim1AxB1sHPqn4y" target="_blank" rel="noopener" class="artist-link" title="Voir Gotts Street Park sur Spotify">Gotts Street Park</a>, <a href="https://open.spotify.com/artist/2DwbPVZ7uyW2B0AgoHuzLn" target="_blank" rel="noopener" class="artist-link" title="Voir Olive Jones sur Spotify">Olive Jones</a></p>
+              <p class="track-album">On The Inside</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="2JvYSUbSUqawKyfLSF25GJ" style="--i:1">
+          <div class="song-card-inner">
+            <span class="track-index">14</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b2739fb3b418c4b27cd3f75fe112" alt="Pochette de Lescop" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="2JvYSUbSUqawKyfLSF25GJ" aria-label="Écouter La Forêt">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">La Forêt</h3>
+                <a class="track-out" href="https://open.spotify.com/track/2JvYSUbSUqawKyfLSF25GJ" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir La Forêt sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/2KlDlqEMf0YyYW8rBKUx6W" target="_blank" rel="noopener" class="artist-link" title="Voir Lescop sur Spotify">Lescop</a></p>
+              <p class="track-album">Lescop</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="4BNDJ8JLYVc5nkoaIeogna" style="--i:2">
+          <div class="song-card-inner">
+            <span class="track-index">15</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b27382d8cf453da3df05d48ea115" alt="Pochette de Speak To Me" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="4BNDJ8JLYVc5nkoaIeogna" aria-label="Écouter Omission">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Omission</h3>
+                <a class="track-out" href="https://open.spotify.com/track/4BNDJ8JLYVc5nkoaIeogna" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Omission sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/2TSuAchdgVzsAa9wDK1IeT" target="_blank" rel="noopener" class="artist-link" title="Voir Julian Lage sur Spotify">Julian Lage</a></p>
+              <p class="track-album">Speak To Me</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="0iSn4xw5kpFHDdW5UtCgLz" style="--i:3">
+          <div class="song-card-inner">
+            <span class="track-index">16</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273d7de90b4628456f13fe629d2" alt="Pochette de Turn This Mutha Out" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="0iSn4xw5kpFHDdW5UtCgLz" aria-label="Écouter Say What">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Say What</h3>
+                <a class="track-out" href="https://open.spotify.com/track/0iSn4xw5kpFHDdW5UtCgLz" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Say What sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/6ghiUK2ao3KcmmDt2pbNzN" target="_blank" rel="noopener" class="artist-link" title="Voir Idris Muhammad sur Spotify">Idris Muhammad</a></p>
+              <p class="track-album">Turn This Mutha Out</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="7vTZDxi1XZoTzOzVfToLdM" style="--i:4">
+          <div class="song-card-inner">
+            <span class="track-index">17</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273f457384a49a08e9eedfa327a" alt="Pochette de Regions of Light and Sound of God" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="7vTZDxi1XZoTzOzVfToLdM" aria-label="Écouter State Of The Art (A.E.I.O.U.)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">State Of The Art (A.E.I.O.U.)</h3>
+                <a class="track-out" href="https://open.spotify.com/track/7vTZDxi1XZoTzOzVfToLdM" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir State Of The Art (A.E.I.O.U.) sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/1MhtYlJvUqfd2EgHSQTGK4" target="_blank" rel="noopener" class="artist-link" title="Voir Jim James sur Spotify">Jim James</a></p>
+              <p class="track-album">Regions of Light and Sound of God</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="09WxJCWFMWAxTHBLLelpDS" style="--i:5">
+          <div class="song-card-inner">
+            <span class="track-index">18</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b2732d70105f3c5168daf33d2a6b" alt="Pochette de The Coming" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="09WxJCWFMWAxTHBLLelpDS" aria-label="Écouter Woo Hah!! Got You All in Check">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Woo Hah!! Got You All in Check</h3>
+                <a class="track-out" href="https://open.spotify.com/track/09WxJCWFMWAxTHBLLelpDS" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Woo Hah!! Got You All in Check sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/1YfEcTuGvBQ8xSD1f53UnK" target="_blank" rel="noopener" class="artist-link" title="Voir Busta Rhymes sur Spotify">Busta Rhymes</a></p>
+              <p class="track-album">The Coming</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="3Ff2iqsPtk3vtl0LPbTZx6" style="--i:0">
+          <div class="song-card-inner">
+            <span class="track-index">19</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b273e33f8ad838f52f6246dd28fa" alt="Pochette de Rêve parti" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="3Ff2iqsPtk3vtl0LPbTZx6" aria-label="Écouter Les garçons">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Les garçons</h3>
+                <a class="track-out" href="https://open.spotify.com/track/3Ff2iqsPtk3vtl0LPbTZx6" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Les garçons sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/2KlDlqEMf0YyYW8rBKUx6W" target="_blank" rel="noopener" class="artist-link" title="Voir Lescop sur Spotify">Lescop</a></p>
+              <p class="track-album">Rêve parti</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+        <article class="song-card reveal" data-id="6c0VFhbAhe6Xmcd1fDLyd5" style="--i:1">
+          <div class="song-card-inner">
+            <span class="track-index">20</span>
+            <div class="track-frame">
+              <img src="https://i.scdn.co/image/ab67616d0000b27300cc64002a15650b31ee7453" alt="Pochette de Let 'S Dance" loading="lazy" decoding="async">
+              <span class="track-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button type="button" class="play-card-btn" data-id="6c0VFhbAhe6Xmcd1fDLyd5" aria-label="Écouter Let's Dance">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+              </button>
+            </div>
+            <div class="track-text">
+              <div class="track-title-row">
+                <h3 class="track-title">Let's Dance</h3>
+                <a class="track-out" href="https://open.spotify.com/track/6c0VFhbAhe6Xmcd1fDLyd5" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir Let's Dance sur Spotify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+              </div>
+              <p class="track-artist"><a href="https://open.spotify.com/artist/0PVnBUKxmTIvMsb0o5zHYN" target="_blank" rel="noopener" class="artist-link" title="Voir Grandmagneto sur Spotify">Grandmagneto</a></p>
+              <p class="track-album">Let 'S Dance</p>
+              <p class="track-unavailable">Extrait indisponible</p>
+            </div>
+          </div>
+        </article>
+      </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <div class="wrap colophon-inner">
+      <p class="colophon-text">
+        <span class="colophon-name">Le Son de la Curiosité</span>
+        Sélections personnelles, mises à jour au fil des saisons. Les extraits de 30 secondes proviennent de Spotify et d'Apple Music.
+      </p>
+      <a class="btn btn-ghost" href="https://open.spotify.com" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
+        <span>Spotify</span>
+      </a>
+    </div>
+  </footer>
+
+  <div class="global-player hidden" id="global-player">
+    <div class="player-inner">
+      <div class="player-track-info" id="player-track-info">
+        <div class="player-art-frame">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="player-art" id="player-art">
+          <div class="player-equalizer-bars" id="player-equalizer" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="player-metadata">
+          <div class="player-title" id="player-title">Aucun titre</div>
+          <div class="player-artist" id="player-artist">Sélectionnez un morceau</div>
+        </div>
       </div>
 
-      <!-- Tracklist Grid -->
-      <div class="tracks-grid" id="tracks-grid">
-        
-        <div class="song-card" data-id="1lk7yaYquaKwiXPmdZD6mn">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273a57f7df72e0e9a7a9d40acca" alt="Sister Andre" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="1lk7yaYquaKwiXPmdZD6mn" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Sister Andre</h3>
-                <a href="https://open.spotify.com/track/1lk7yaYquaKwiXPmdZD6mn" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/6hAUCkzZpoYGObd8qFW5TT" target="_blank" class="artist-link" title="Ouvrir la page de Pokey LaFarge sur Spotify" onclick="event.stopPropagation()">Pokey LaFarge</a></p>
-              <p class="song-album">Sister Andre</p>
-            </div>
-            
-          </div>
+      <div class="player-controls">
+        <div class="control-buttons">
+          <button type="button" class="player-btn" id="player-prev-btn" title="Titre précédent" aria-label="Titre précédent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg></button>
+          <button type="button" class="player-btn play-pause" id="player-play-btn" title="Lecture ou pause" aria-label="Lecture ou pause">
+            <span class="play-icon-holder" id="player-play-icon"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></span>
+          </button>
+          <button type="button" class="player-btn" id="player-next-btn" title="Titre suivant" aria-label="Titre suivant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg></button>
         </div>
-      
-
-        <div class="song-card" data-id="3nHdM5QweTqnTfpib7W3fV">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b2730115ff7672d64058c2f1e576" alt="Crever l'Asphalte" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="3nHdM5QweTqnTfpib7W3fV" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Crever l'Asphalte</h3>
-                <a href="https://open.spotify.com/track/3nHdM5QweTqnTfpib7W3fV" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/5bWRCM3vFGqamlNxSzNj1O" target="_blank" class="artist-link" title="Ouvrir la page de Françoiz Breut sur Spotify" onclick="event.stopPropagation()">Françoiz Breut</a></p>
-              <p class="song-album">Crever l'Asphalte</p>
-            </div>
-            
+        <div class="progress-container">
+          <span class="time-display" id="time-current">0:00</span>
+          <div class="progress-bar-bg" id="progress-bar-bg" role="slider" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+            <div class="progress-bar-fill" id="progress-bar-fill"><span class="progress-glow-head"></span></div>
           </div>
+          <span class="time-display" id="time-duration">0:30</span>
         </div>
-      
-
-        <div class="song-card" data-id="6G0KITyDe4EQREYyuVQmOn">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b2731fb58426012eeb7361e2070a" alt="FEELS" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="6G0KITyDe4EQREYyuVQmOn" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Nothing Burns Like The Cold</h3>
-                <a href="https://open.spotify.com/track/6G0KITyDe4EQREYyuVQmOn" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/1A9o3Ljt67pFZ89YtPPL5X" target="_blank" class="artist-link" title="Ouvrir la page de Snoh Aalegra sur Spotify" onclick="event.stopPropagation()">Snoh Aalegra</a>, <a href="https://open.spotify.com/artist/68kEuyFKyqrdQQLLsmiatm" target="_blank" class="artist-link" title="Ouvrir la page de Vince Staples sur Spotify" onclick="event.stopPropagation()">Vince Staples</a></p>
-              <p class="song-album">FEELS</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="5VjpC47CHFA7wuk8k6WD4O">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273bae5775d2550093e74fe6175" alt="Remué (Edition spéciale) [Remasterisé en 2012]" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="5VjpC47CHFA7wuk8k6WD4O" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Pères - Remasterisé en 2012</h3>
-                <a href="https://open.spotify.com/track/5VjpC47CHFA7wuk8k6WD4O" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/6IoS9ojtxKCL1tW5VL1buI" target="_blank" class="artist-link" title="Ouvrir la page de Dominique A sur Spotify" onclick="event.stopPropagation()">Dominique A</a></p>
-              <p class="song-album">Remué (Edition spéciale) [Remasterisé en 2012]</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="4csm3bIilOko37LEVW1v8P">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273730e327760fe592ad69bf18e" alt="Hyperdrama" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="4csm3bIilOko37LEVW1v8P" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Mannequin Love</h3>
-                <a href="https://open.spotify.com/track/4csm3bIilOko37LEVW1v8P" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/1gR0gsQYfi6joyO1dlp76N" target="_blank" class="artist-link" title="Ouvrir la page de Justice sur Spotify" onclick="event.stopPropagation()">Justice</a>, <a href="https://open.spotify.com/artist/4yJmzmjRodRbsqgOVpHD1v" target="_blank" class="artist-link" title="Ouvrir la page de The Flints sur Spotify" onclick="event.stopPropagation()">The Flints</a></p>
-              <p class="song-album">Hyperdrama</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="3XGdHT92GyDWN5XiCO9PdJ">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273940ad8d7580e7baf57851098" alt="Slow Burn" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="3XGdHT92GyDWN5XiCO9PdJ" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">On My Mind</h3>
-                <a href="https://open.spotify.com/track/3XGdHT92GyDWN5XiCO9PdJ" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/6Z4JcgqrqgysyHIPRtDIHo" target="_blank" class="artist-link" title="Ouvrir la page de Baby Rose sur Spotify" onclick="event.stopPropagation()">Baby Rose</a>, <a href="https://open.spotify.com/artist/65dGLGjkw3UbddUg2GKQoZ" target="_blank" class="artist-link" title="Ouvrir la page de BADBADNOTGOOD sur Spotify" onclick="event.stopPropagation()">BADBADNOTGOOD</a></p>
-              <p class="song-album">Slow Burn</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="5lhIY0YgH7JhszpQNUC1dm">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273730e327760fe592ad69bf18e" alt="Hyperdrama" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="5lhIY0YgH7JhszpQNUC1dm" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">The End</h3>
-                <a href="https://open.spotify.com/track/5lhIY0YgH7JhszpQNUC1dm" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/1gR0gsQYfi6joyO1dlp76N" target="_blank" class="artist-link" title="Ouvrir la page de Justice sur Spotify" onclick="event.stopPropagation()">Justice</a>, <a href="https://open.spotify.com/artist/4frXpPxQQZwbCu3eTGnZEw" target="_blank" class="artist-link" title="Ouvrir la page de Thundercat sur Spotify" onclick="event.stopPropagation()">Thundercat</a></p>
-              <p class="song-album">Hyperdrama</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="3HjRISOy6fhuXb73Pf2kN3">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273b7437dd382fa985c48b727d6" alt="exodus the north star" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="3HjRISOy6fhuXb73Pf2kN3" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">you up?</h3>
-                <a href="https://open.spotify.com/track/3HjRISOy6fhuXb73Pf2kN3" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/6tpaMMCs8X6o8j9H5OmWmT" target="_blank" class="artist-link" title="Ouvrir la page de Yaya Bey sur Spotify" onclick="event.stopPropagation()">Yaya Bey</a></p>
-              <p class="song-album">exodus the north star</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="3tLVfEh8kJhMkDaxvOzK1M">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273b6883e5145565b73701b0f7d" alt="Insecure" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="3tLVfEh8kJhMkDaxvOzK1M" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Insecure</h3>
-                <a href="https://open.spotify.com/track/3tLVfEh8kJhMkDaxvOzK1M" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/1uiEZYehlNivdK3iQyAbye" target="_blank" class="artist-link" title="Ouvrir la page de Tom Misch sur Spotify" onclick="event.stopPropagation()">Tom Misch</a></p>
-              <p class="song-album">Insecure</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="5Y7JotQ5AHvJik2c0MYTgS">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b27374b6465052a84a29a8da7925" alt="Lamuka" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="5Y7JotQ5AHvJik2c0MYTgS" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Le courage des oiseaux</h3>
-                <a href="https://open.spotify.com/track/5Y7JotQ5AHvJik2c0MYTgS" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/1aNLeQtzJ0jCjtPF9xRh1i" target="_blank" class="artist-link" title="Ouvrir la page de Mini Ouenzé sur Spotify" onclick="event.stopPropagation()">Mini Ouenzé</a></p>
-              <p class="song-album">Lamuka</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="1Splev28AddACLjvRbs6vJ">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273a559b00002392ed5b4d35bad" alt="Dune Cruiser" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="1Splev28AddACLjvRbs6vJ" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Dune Cruiser</h3>
-                <a href="https://open.spotify.com/track/1Splev28AddACLjvRbs6vJ" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/5EjKjFGvMmVUGCfAyDY2lG" target="_blank" class="artist-link" title="Ouvrir la page de Cloudchord sur Spotify" onclick="event.stopPropagation()">Cloudchord</a>, <a href="https://open.spotify.com/artist/3DtnSKmpjFGUzZcccWfG43" target="_blank" class="artist-link" title="Ouvrir la page de Monster Rally sur Spotify" onclick="event.stopPropagation()">Monster Rally</a></p>
-              <p class="song-album">Dune Cruiser</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="7pbnV1FkBjeE8aGWRiDqRD">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273955d5987174392f6c098e5e9" alt="Hold The Line!" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="7pbnV1FkBjeE8aGWRiDqRD" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Hold The Line!</h3>
-                <a href="https://open.spotify.com/track/7pbnV1FkBjeE8aGWRiDqRD" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/69lEbRQRe29JdyLrewNAvD" target="_blank" class="artist-link" title="Ouvrir la page de Ghostpoet sur Spotify" onclick="event.stopPropagation()">Ghostpoet</a></p>
-              <p class="song-album">Hold The Line!</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="7AvuIMRKdo5RvS6YIzXjsj">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b2734ffa7cc0ea75c1e23e54ccb9" alt="On The Inside" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="7AvuIMRKdo5RvS6YIzXjsj" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Tell Me Why</h3>
-                <a href="https://open.spotify.com/track/7AvuIMRKdo5RvS6YIzXjsj" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/2hwy5DELim1AxB1sHPqn4y" target="_blank" class="artist-link" title="Ouvrir la page de Gotts Street Park sur Spotify" onclick="event.stopPropagation()">Gotts Street Park</a>, <a href="https://open.spotify.com/artist/2DwbPVZ7uyW2B0AgoHuzLn" target="_blank" class="artist-link" title="Ouvrir la page de Olive Jones sur Spotify" onclick="event.stopPropagation()">Olive Jones</a></p>
-              <p class="song-album">On The Inside</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="2JvYSUbSUqawKyfLSF25GJ">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b2739fb3b418c4b27cd3f75fe112" alt="Lescop" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="2JvYSUbSUqawKyfLSF25GJ" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">La Forêt</h3>
-                <a href="https://open.spotify.com/track/2JvYSUbSUqawKyfLSF25GJ" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/2KlDlqEMf0YyYW8rBKUx6W" target="_blank" class="artist-link" title="Ouvrir la page de Lescop sur Spotify" onclick="event.stopPropagation()">Lescop</a></p>
-              <p class="song-album">Lescop</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="4BNDJ8JLYVc5nkoaIeogna">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b27382d8cf453da3df05d48ea115" alt="Speak To Me" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="4BNDJ8JLYVc5nkoaIeogna" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Omission</h3>
-                <a href="https://open.spotify.com/track/4BNDJ8JLYVc5nkoaIeogna" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/2TSuAchdgVzsAa9wDK1IeT" target="_blank" class="artist-link" title="Ouvrir la page de Julian Lage sur Spotify" onclick="event.stopPropagation()">Julian Lage</a></p>
-              <p class="song-album">Speak To Me</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="0iSn4xw5kpFHDdW5UtCgLz">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273d7de90b4628456f13fe629d2" alt="Turn This Mutha Out" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="0iSn4xw5kpFHDdW5UtCgLz" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Say What</h3>
-                <a href="https://open.spotify.com/track/0iSn4xw5kpFHDdW5UtCgLz" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/6ghiUK2ao3KcmmDt2pbNzN" target="_blank" class="artist-link" title="Ouvrir la page de Idris Muhammad sur Spotify" onclick="event.stopPropagation()">Idris Muhammad</a></p>
-              <p class="song-album">Turn This Mutha Out</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="7vTZDxi1XZoTzOzVfToLdM">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273f457384a49a08e9eedfa327a" alt="Regions of Light and Sound of God" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="7vTZDxi1XZoTzOzVfToLdM" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">State Of The Art (A.E.I.O.U.)</h3>
-                <a href="https://open.spotify.com/track/7vTZDxi1XZoTzOzVfToLdM" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/1MhtYlJvUqfd2EgHSQTGK4" target="_blank" class="artist-link" title="Ouvrir la page de Jim James sur Spotify" onclick="event.stopPropagation()">Jim James</a></p>
-              <p class="song-album">Regions of Light and Sound of God</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="09WxJCWFMWAxTHBLLelpDS">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b2732d70105f3c5168daf33d2a6b" alt="The Coming" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="09WxJCWFMWAxTHBLLelpDS" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Woo Hah!! Got You All in Check</h3>
-                <a href="https://open.spotify.com/track/09WxJCWFMWAxTHBLLelpDS" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/1YfEcTuGvBQ8xSD1f53UnK" target="_blank" class="artist-link" title="Ouvrir la page de Busta Rhymes sur Spotify" onclick="event.stopPropagation()">Busta Rhymes</a></p>
-              <p class="song-album">The Coming</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="3Ff2iqsPtk3vtl0LPbTZx6">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b273e33f8ad838f52f6246dd28fa" alt="Rêve parti" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="3Ff2iqsPtk3vtl0LPbTZx6" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Les garçons</h3>
-                <a href="https://open.spotify.com/track/3Ff2iqsPtk3vtl0LPbTZx6" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/2KlDlqEMf0YyYW8rBKUx6W" target="_blank" class="artist-link" title="Ouvrir la page de Lescop sur Spotify" onclick="event.stopPropagation()">Lescop</a></p>
-              <p class="song-album">Rêve parti</p>
-            </div>
-            
-          </div>
-        </div>
-      
-
-        <div class="song-card" data-id="6c0VFhbAhe6Xmcd1fDLyd5">
-          <div class="song-card-inner">
-            <div class="album-art-wrapper">
-              <img class="album-art" src="https://i.scdn.co/image/ab67616d0000b27300cc64002a15650b31ee7453" alt="Let 'S Dance" loading="lazy">
-              <div class="play-overlay">
-                <button class="play-card-btn" data-id="6c0VFhbAhe6Xmcd1fDLyd5" title="Écouter le morceau">
-                  <span class="btn-icon-bubble">
-                    <span class="spotify-play-combo hover-cover-mode">
-                      <svg class="spotify-svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-                      </svg>
-                      <span class="play-badge-overlay">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                      </span>
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-            <div class="song-info">
-              <div class="song-title-row">
-                <h3 class="song-title">Let's Dance</h3>
-                <a href="https://open.spotify.com/track/6c0VFhbAhe6Xmcd1fDLyd5" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
-                </a>
-              </div>
-              <p class="song-artist"><a href="https://open.spotify.com/artist/0PVnBUKxmTIvMsb0o5zHYN" target="_blank" class="artist-link" title="Ouvrir la page de Grandmagneto sur Spotify" onclick="event.stopPropagation()">Grandmagneto</a></p>
-              <p class="song-album">Let 'S Dance</p>
-            </div>
-            
-          </div>
-        </div>
-      
       </div>
-    </main>
-  </div>
 
-  <!-- Floating Dock Audio Player -->
-  <div class="global-player-dock-wrapper">
-    <div class="global-player double-bezel-shell hidden" id="global-player">
-      <div class="player-inner double-bezel-core" id="player-custom-ui">
-        
-        <!-- Track Info -->
-        <div class="player-track-info" id="player-track-info">
-          <div class="player-art-frame">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pochette" class="player-art" id="player-art">
-            <div class="player-equalizer-bars" id="player-equalizer">
-              <span></span><span></span><span></span><span></span>
-            </div>
-          </div>
-          <div class="player-metadata">
-            <div class="player-title" id="player-title">Titre du morceau</div>
-            <div class="player-artist" id="player-artist">Artiste</div>
+      <div class="player-right-controls">
+        <a class="player-spotify" href="#" target="_blank" rel="noopener" id="player-spotify-link" title="Écouter sur Spotify" aria-label="Écouter sur Spotify"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg></a>
+        <div class="volume-container">
+          <span class="vol-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+          <div class="volume-slider" id="volume-slider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" tabindex="0">
+            <div class="volume-fill" id="volume-fill"></div>
           </div>
         </div>
-
-        <!-- Controls -->
-        <div class="player-controls" id="player-controls">
-          <div class="control-buttons">
-            <button class="player-btn" id="player-prev-btn" title="Précédent">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
-            </button>
-            <button class="player-btn play-pause group" id="player-play-btn" title="Lire / Pause">
-              <span class="play-icon-holder" id="player-play-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              </span>
-            </button>
-            <button class="player-btn" id="player-next-btn" title="Suivant">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
-            </button>
-          </div>
-          <div class="progress-container">
-            <span class="time-display" id="time-current">0:00</span>
-            <div class="progress-bar-bg" id="progress-bar-bg">
-              <div class="progress-bar-fill" id="progress-bar-fill">
-                <span class="progress-glow-head"></span>
-              </div>
-            </div>
-            <span class="time-display" id="time-duration">0:30</span>
-          </div>
-        </div>
-
-        <!-- Right Controls -->
-        <div class="player-right-controls" id="player-right-controls">
-          <a href="#" target="_blank" class="spotify-link-icon group" id="player-spotify-link" title="Écouter le morceau sur Spotify">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
-            </svg>
-          </a>
-          <div class="volume-container">
-            <span class="vol-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-            </span>
-            <div class="volume-slider" id="volume-slider">
-              <div class="volume-fill" id="volume-fill"></div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>

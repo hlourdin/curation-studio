@@ -53,6 +53,37 @@ curation-studio/
 
 ---
 
+## 🧪 2 bis. Direction alternative « Lookbook » (branche `new-design`)
+
+> Cette section ne s'applique qu'à la branche `new-design`. Sur `master`, la charte de la section 3 reste seule en vigueur.
+
+Le **site public uniquement** (`site/`) y explore une direction éditoriale de type catalogue de collection saisonnière. Le Studio (`index.html`, `src/style.css`, `src/main.js`) est inchangé.
+
+**Lecture du brief :** les playlists sont nommées comme des collections de mode (`XXV F/W`, `XXVI S/S`). Le site est donc traité en lookbook imprimé plutôt qu'en clone de Spotify.
+
+| | `master` | `new-design` |
+|---|---|---|
+| Fond par défaut | Sombre imposé | Clair (papier), thème système respecté, bascule conservée |
+| Titrage | Syne | Playfair Display (didone) |
+| Texte courant | Plus Jakarta Sans | Archivo |
+| Métadonnées | JetBrains Mono | JetBrains Mono (conservé) |
+| Accent | Émeraude Spotify | Vermillon d'imprimerie |
+| Matière | Glassmorphism, double-bezel | Encre sur papier, filets 1px |
+| Angles | 0px | 0px (règle conservée) |
+| Catalogue | Grille de cartes égales | Planche asymétrique 6 colonnes / index numéroté |
+| Polices | `@import` Google Fonts | Auto-hébergées (240 Ko, 0 requête tierce) |
+
+**Points d'implémentation :**
+- Le sélecteur de vue devient **Planche / Index** : même DOM, deux mises en page radicalement différentes (`.list-view`).
+- La note de curation (7 morceaux sur 242) est traitée en citation d'appareil, Playfair italique avec filet vermillon, et non comme une colonne réservée toujours vide.
+- L'en-tête de collection recadre la pochette en bandeau 16:7 : la composition ne dépend pas de la longueur de la description, souvent absente.
+- Apparition au défilement via `IntersectionObserver` uniquement, désactivée sous `prefers-reduced-motion`. Sans JavaScript, tout le contenu reste visible.
+- Le thème est posé par un script inline dans le `<head>` pour éviter le flash au chargement.
+- Tous les identifiants et classes dont dépend `player.js` sont préservés à l'identique, ainsi que les URLs, l'arborescence et les clés `localStorage`.
+- Toutes les paires de couleurs passent le contraste WCAG AA (4.5:1) dans les deux thèmes.
+
+---
+
 ## 🎨 3. Charte Graphique & Règles Strictes de Design
 
 1. **Stricte Règle 0px (Zero Rounded Corners) :**
