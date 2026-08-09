@@ -18,7 +18,7 @@
         "album": "Deadbeat",
         "image": "https://i.scdn.co/image/ab67616d0000b273208500450dcd0fd294d7bd3b",
         "url": "https://open.spotify.com/track/4whkhyXTrTgHKZzkUvdwoq",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ad/79/9d/ad799de0-4150-35d9-7b54-94fd3e92c09a/mzaf_13576193737588573986.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -34,7 +34,7 @@
         "album": "MONKEY SEE MONKEY DO",
         "image": "https://i.scdn.co/image/ab67616d0000b2735b4491d7062ff178ec8d4e45",
         "url": "https://open.spotify.com/track/3L4JKn0quzxs56myjLjmZG",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/d0/91/63d0911d-e64f-4621-a75b-9670790b773b/mzaf_7031921495504504780.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -50,7 +50,7 @@
         "album": "Surf Rider",
         "image": "https://i.scdn.co/image/ab67616d0000b273d61d589b3ef18d0b8c1f8ad8",
         "url": "https://open.spotify.com/track/2CbMOsx4FlIf9LjFkVPORH",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/85/b1/be/85b1be13-9dce-9d39-d391-611fc9909879/mzaf_18440429235473730644.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -66,7 +66,7 @@
         "album": "Mode",
         "image": "https://i.scdn.co/image/ab67616d0000b273efebfd9085d9704854171317",
         "url": "https://open.spotify.com/track/6kK4Xae57pcIGNcXFs658A",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e8/16/c2/e816c2ba-5a3d-9a0a-2317-342fe965872d/mzaf_17716444075813615489.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -82,7 +82,7 @@
         "album": "LATE METAL",
         "image": "https://i.scdn.co/image/ab67616d0000b273abcb34bbdb65c4212d4ceffa",
         "url": "https://open.spotify.com/track/5haXRR03DCfK2vvutdbArt",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/66/d0/4166d0bd-47a1-c36d-a366-2e2455ab6640/mzaf_10686636659259207528.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -110,7 +110,7 @@
         "album": "Deltron 3030 vs. Real Bad Man",
         "image": "https://i.scdn.co/image/ab67616d0000b27335c34b7e9ec07f25049eed9b",
         "url": "https://open.spotify.com/track/5KW8g43ASVQdxC4OjhxbND",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a4/61/4c/a4614cfe-795d-4f8b-ded2-00b4a081d6fb/mzaf_10240120278412380605.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -126,7 +126,7 @@
         "album": "Montréal",
         "image": "https://i.scdn.co/image/ab67616d0000b273316fecb141b0f92ddf04a336",
         "url": "https://open.spotify.com/track/6rLhSWwkmy4eLgNpTEBxm9",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/25/9e/28/259e28ed-e56c-ed0a-c0c4-dda26cf40db5/mzaf_1724299595767587657.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -3422,7 +3422,8 @@
         "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/65/76/71/657671ec-e33f-3666-2e9e-95c276172a05/mzaf_9905003375280858191.plus.aac.p.m4a",
         "comment": ""
       }
-    ]
+    ],
+    "order": 6
   },
   "curious-xxiv2": {
     "id": "5KxDy3QMbm3S9heyX9mrZi",
@@ -3774,7 +3775,8 @@
         "previewUrl": "",
         "comment": ""
       }
-    ]
+    ],
+    "order": 7
   },
   "curi0us-xxiv1": {
     "id": "4Edt5o2ZLtSegWFO5xjGHj",
@@ -4438,6 +4440,7 @@
         "previewUrl": "",
         "comment": ""
       }
-    ]
+    ],
+    "order": 8
   }
 }
