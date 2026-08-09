@@ -96,12 +96,12 @@ function head({ title, description, base }) {
 function masthead({ base, showCatalogLink }) {
   return `  <header class="masthead">
     <div class="wrap masthead-inner">
-      <a class="wordmark" href="${base}index.html">
+      <a class="wordmark" href="${base || './'}">
         <span class="wordmark-name">Le Son de la Curiosité</span>
         <span class="wordmark-sub">Audio Curation</span>
       </a>
       <nav class="masthead-nav">
-${showCatalogLink ? `        <a class="masthead-link" href="${base}index.html">Playlists</a>\n` : ''}        <button type="button" id="theme-toggle-btn" class="theme-btn" title="Changer de thème" aria-label="Changer de thème">
+${showCatalogLink ? `        <a class="masthead-link" href="${base || './'}">Playlists</a>\n` : ''}        <button type="button" id="theme-toggle-btn" class="theme-btn" title="Changer de thème" aria-label="Changer de thème">
           ${ICON.sun}
           ${ICON.moon}
         </button>
@@ -344,7 +344,7 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
             <h3 class="playlist-title">${text(pl.name)}</h3>
             <span class="playlist-count meta">${countLabel(trackCount, 'titre', 'titres')}</span>
           </div>${desc ? `\n          <p class="playlist-desc">${escapeHTML(desc)}</p>` : ''}
-          <a class="playlist-link" href="playlists/${slug}.html"><span class="visually-hidden">Ouvrir la playlist ${text(pl.name)}</span></a>
+          <a class="playlist-link" href="playlists/${slug}"><span class="visually-hidden">Ouvrir la playlist ${text(pl.name)}</span></a>
         </article>`;
     })
     .join('\n');
@@ -361,7 +361,7 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
         <h1 class="opening-title">Des morceaux choisis, <em>saison après saison</em>.</h1>
         <p class="opening-lede">Chaque playlist réunit les morceaux qui ont compté, commentés quand il y a quelque chose à dire.</p>
         <div class="opening-actions">
-          <a class="btn btn-primary" href="playlists/${featuredSlug}.html">Dernière playlist</a>
+          <a class="btn btn-primary" href="playlists/${featuredSlug}">Dernière playlist</a>
         </div>
       </div>
       <div class="opening-visual">
@@ -376,7 +376,7 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
           <span class="opening-caption-name">${text(featured.name)}</span>
           <span class="meta">${countLabel(featuredCount, 'titre', 'titres')}</span>
         </div>
-        <a class="playlist-link" href="playlists/${featuredSlug}.html"><span class="visually-hidden">Ouvrir la playlist ${text(featured.name)}</span></a>
+        <a class="playlist-link" href="playlists/${featuredSlug}"><span class="visually-hidden">Ouvrir la playlist ${text(featured.name)}</span></a>
       </div>
     </div>
   </section>`
@@ -503,7 +503,7 @@ ${masthead({ base: '../', showCatalogLink: true })}
 
   <main>
     <div class="wrap">
-      <a class="back-link" href="../index.html">${ICON.arrowLeft}<span>Toutes les playlists</span></a>
+      <a class="back-link" href="../">${ICON.arrowLeft}<span>Toutes les playlists</span></a>
     </div>
 
     <section class="playlist-head">

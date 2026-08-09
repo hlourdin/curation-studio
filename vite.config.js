@@ -54,6 +54,9 @@ function serveStaticSitePlugin() {
 
         if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
           target = path.join(target, 'index.html');
+        } else if (!fs.existsSync(target) && !path.extname(target)) {
+          // Reproduit le cleanUrls de Vercel : /playlists/slug -> playlists/slug.html
+          target += '.html';
         }
         if (!fs.existsSync(target) || !fs.statSync(target).isFile()) return next();
 
