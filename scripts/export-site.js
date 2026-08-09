@@ -70,7 +70,7 @@ const ICON = {
 
 /* ==========================================================================
    FRAGMENTS PARTAGÉS
-   `base` vaut '' à la racine et '../' pour les pages de collection.
+   `base` vaut '' à la racine et '../' pour les pages de playlist.
    ========================================================================== */
 
 function head({ title, description, base }) {
@@ -100,7 +100,7 @@ function masthead({ base, showCatalogLink }) {
         <span class="wordmark-sub">Audio Curation</span>
       </a>
       <nav class="masthead-nav">
-${showCatalogLink ? `        <a class="masthead-link" href="${base}index.html">Collections</a>\n` : ''}        <button type="button" id="theme-toggle-btn" class="theme-btn" title="Changer de thème" aria-label="Changer de thème">
+${showCatalogLink ? `        <a class="masthead-link" href="${base}index.html">Playlists</a>\n` : ''}        <button type="button" id="theme-toggle-btn" class="theme-btn" title="Changer de thème" aria-label="Changer de thème">
           ${ICON.sun}
           ${ICON.moon}
         </button>
@@ -140,7 +140,7 @@ function colophon() {
 /* ==========================================================================
    GRILLE LOOKBOOK
    Motif de 6 colonnes en 2-2-2 / 4-2 pour éviter la répétition de cartes
-   identiques. La grande case arrive en deuxième rangée : la collection mise
+   identiques. La grande case arrive en deuxième rangée : la playlist mise
    en avant en ouverture n'est ainsi pas montrée deux fois en grand format.
    La dernière rangée incomplète est étirée : jamais de case vide.
    ========================================================================== */
@@ -214,14 +214,14 @@ export function buildStaticSite() {
     return orderA - orderB;
   });
 
-  console.log(`Génération du site statique pour ${slugs.length} collection(s)...`);
+  console.log(`Génération du site statique pour ${slugs.length} playlist(s)...`);
 
   writeHomepage({ siteDir, slugs, playlistsData });
   slugs.forEach((slug, index) => {
     writePlaylistPage({ playlistsDir, slug, pl: playlistsData[slug], slugs, index });
   });
 
-  // Nettoyage : retirer les pages orphelines dont la collection a été supprimée.
+  // Nettoyage : retirer les pages orphelines dont la playlist a été supprimée.
   const expected = new Set(slugs.map(s => `${s}.html`));
   fs.readdirSync(playlistsDir)
     .filter(f => f.endsWith('.html') && !expected.has(f))
@@ -250,17 +250,17 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
 
       const frame = cover
         ? `<img src="${escapeHTML(cover)}" alt="Pochette de ${text(pl.name)}" loading="${i < 2 ? 'eager' : 'lazy'}" decoding="async">`
-        : `<span class="collection-placeholder">${ICON.note}</span>`;
+        : `<span class="playlist-placeholder">${ICON.note}</span>`;
 
       const desc = typo(pl.description || '').trim();
 
-      return `        <a class="collection reveal" style="--span:${span}; --i:${i % 6}" data-size="${size}" href="playlists/${slug}.html">
-          <span class="collection-index">${pad2(i + 1)}</span>
-          <div class="collection-frame">${frame}</div>
-          <div class="collection-line">
-            <h3 class="collection-title">${text(pl.name)}</h3>
-            <span class="collection-count meta">${countLabel(trackCount, 'titre', 'titres')}</span>
-          </div>${desc ? `\n          <p class="collection-desc">${escapeHTML(desc)}</p>` : ''}
+      return `        <a class="playlist reveal" style="--span:${span}; --i:${i % 6}" data-size="${size}" href="playlists/${slug}.html">
+          <span class="playlist-index">${pad2(i + 1)}</span>
+          <div class="playlist-frame">${frame}</div>
+          <div class="playlist-line">
+            <h3 class="playlist-title">${text(pl.name)}</h3>
+            <span class="playlist-count meta">${countLabel(trackCount, 'titre', 'titres')}</span>
+          </div>${desc ? `\n          <p class="playlist-desc">${escapeHTML(desc)}</p>` : ''}
         </a>`;
     })
     .join('\n');
@@ -275,16 +275,16 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
     <div class="wrap opening-grid">
       <div class="opening-text">
         <h1 class="opening-title">Des morceaux choisis, <em>saison après saison</em>.</h1>
-        <p class="opening-lede">Chaque collection réunit les morceaux qui ont compté, commentés quand il y a quelque chose à dire.</p>
+        <p class="opening-lede">Chaque playlist réunit les morceaux qui ont compté, commentés quand il y a quelque chose à dire.</p>
         <div class="opening-actions">
-          <a class="btn btn-primary" href="playlists/${featuredSlug}.html">Dernière collection</a>
+          <a class="btn btn-primary" href="playlists/${featuredSlug}.html">Dernière playlist</a>
         </div>
       </div>
       <a class="opening-visual" href="playlists/${featuredSlug}.html">
         <div class="opening-frame">${
           featuredCover
             ? `<img src="${escapeHTML(featuredCover)}" alt="Pochette de ${text(featured.name)}" fetchpriority="high" decoding="async">`
-            : `<span class="collection-placeholder">${ICON.note}</span>`
+            : `<span class="playlist-placeholder">${ICON.note}</span>`
         }</div>
         <div class="opening-caption">
           <span class="opening-caption-name">${text(featured.name)}</span>
@@ -296,17 +296,17 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
     : `  <section class="opening">
     <div class="wrap">
       <h1 class="opening-title">Des morceaux choisis, <em>saison après saison</em>.</h1>
-      <p class="opening-lede">Les collections apparaîtront ici dès la première playlist importée depuis le Studio.</p>
+      <p class="opening-lede">Les playlists apparaîtront ici dès le premier import depuis le Studio.</p>
     </div>
   </section>`;
 
   const catalog = slugs.length
-    ? `      <div class="collection-set" id="catalog-grid">
+    ? `      <div class="playlist-set" id="catalog-grid">
 ${cards}
       </div>`
-    : `      <div class="collection-set" id="catalog-grid"></div>
+    : `      <div class="playlist-set" id="catalog-grid"></div>
       <div class="empty-state">
-        <h3 class="empty-title">Aucune collection pour l'instant</h3>
+        <h3 class="empty-title">Aucune playlist pour l'instant</h3>
         <p class="empty-text">Importez une playlist depuis le Studio, puis relancez la génération du site.</p>
       </div>`;
 
@@ -325,12 +325,12 @@ ${masthead({ base: '', showCatalogLink: false })}
   <main>
 ${opening}
 
-    <section class="collections">
+    <section class="playlists">
       <div class="wrap">
         <div class="toolbar">
-          <h2 class="toolbar-title">Collections</h2>
+          <h2 class="toolbar-title">Playlists</h2>
           <div class="toolbar-side">
-            <span class="meta">${countLabel(slugs.length, 'collection', 'collections')}</span>
+            <span class="meta">${countLabel(slugs.length, 'playlist', 'playlists')}</span>
 ${viewToggle()}
           </div>
         </div>
@@ -350,7 +350,7 @@ ${colophon()}
 }
 
 /* --------------------------------------------------------------------------
-   PAGE DE COLLECTION
+   PAGE DE PLAYLIST
    -------------------------------------------------------------------------- */
 
 function writePlaylistPage({ playlistsDir, slug, pl, index }) {
@@ -392,7 +392,7 @@ ${trackCards}
       </div>`
     : `      <div class="track-set" id="tracks-grid"></div>
       <div class="empty-state">
-        <h3 class="empty-title">Cette collection est vide</h3>
+        <h3 class="empty-title">Cette playlist est vide</h3>
         <p class="empty-text">Aucun morceau n'a encore été importé pour cette sélection.</p>
       </div>`;
 
@@ -413,19 +413,19 @@ ${masthead({ base: '../', showCatalogLink: true })}
 
   <main>
     <div class="wrap">
-      <a class="back-link" href="../index.html">${ICON.arrowLeft}<span>Toutes les collections</span></a>
+      <a class="back-link" href="../index.html">${ICON.arrowLeft}<span>Toutes les playlists</span></a>
     </div>
 
-    <section class="collection-head">
+    <section class="playlist-head">
       <div class="wrap">
-        <h1 class="collection-head-title">${text(pl.name)}</h1>
-        <div class="collection-head-frame">${
+        <h1 class="playlist-head-title">${text(pl.name)}</h1>
+        <div class="playlist-head-frame">${
           cover
             ? `<img src="${escapeHTML(cover)}" alt="Pochette de ${text(pl.name)}" fetchpriority="high" decoding="async">`
-            : `<span class="collection-placeholder">${ICON.note}</span>`
+            : `<span class="playlist-placeholder">${ICON.note}</span>`
         }</div>
-        <div class="collection-head-facts">
-${desc ? `          <p class="collection-head-desc">${escapeHTML(desc)}</p>\n` : ''}          <div class="collection-head-actions">
+        <div class="playlist-head-facts">
+${desc ? `          <p class="playlist-head-desc">${escapeHTML(desc)}</p>\n` : ''}          <div class="playlist-head-actions">
             <span class="meta">${countLabel(tracks.length, 'titre', 'titres')}</span>
 ${
   pl.spotifyUrl

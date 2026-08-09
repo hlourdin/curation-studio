@@ -371,7 +371,7 @@ button {
 /* --------------------------------------------------------------------------
    6. OUVERTURE (page d'accueil)
    Composition asymétrique : texte à gauche, pochette de la dernière
-   collection à droite. Tient dans le premier écran.
+   playlist à droite. Tient dans le premier écran.
    -------------------------------------------------------------------------- */
 
 .opening {
@@ -519,50 +519,50 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   8. COLLECTIONS (page d'accueil)
+   8. PLAYLISTS (page d'accueil)
    Même DOM, deux mises en page : planche lookbook et index numéroté.
    -------------------------------------------------------------------------- */
 
-.collections {
+.playlists {
   padding-block: clamp(3rem, 6vw, 5rem);
 }
 
-.collection-set {
+.playlist-set {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: clamp(2rem, 4vw, 3.25rem) clamp(1rem, 2vw, 1.75rem);
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 
-.collection {
+.playlist {
   grid-column: span var(--span, 2);
   display: flex;
   flex-direction: column;
 }
 
-.collection-frame {
+.playlist-frame {
   position: relative;
   overflow: hidden;
   background: var(--paper-raised);
   aspect-ratio: 1 / 1;
 }
 
-.collection[data-size="wide"] .collection-frame {
+.playlist[data-size="wide"] .playlist-frame {
   aspect-ratio: 16 / 10;
 }
 
-.collection-frame img {
+.playlist-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.7s var(--ease);
 }
 
-.collection:hover .collection-frame img {
+.playlist:hover .playlist-frame img {
   transform: scale(1.045);
 }
 
-.collection-placeholder {
+.playlist-placeholder {
   display: grid;
   place-items: center;
   width: 100%;
@@ -570,16 +570,16 @@ button {
   color: var(--ink-faint);
 }
 
-.collection-placeholder svg {
+.playlist-placeholder svg {
   width: 28px;
   height: 28px;
 }
 
-.collection-index {
+.playlist-index {
   display: none;
 }
 
-.collection-line {
+.playlist-line {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -590,11 +590,11 @@ button {
   transition: border-color 0.3s var(--ease);
 }
 
-.collection:hover .collection-line {
+.playlist:hover .playlist-line {
   border-top-color: var(--signal);
 }
 
-.collection-title {
+.playlist-title {
   font-family: var(--font-display);
   font-size: clamp(1.125rem, 1.9vw, 1.5rem);
   font-weight: 500;
@@ -602,11 +602,11 @@ button {
   line-height: 1.15;
 }
 
-.collection[data-size="wide"] .collection-title {
+.playlist[data-size="wide"] .playlist-title {
   font-size: clamp(1.375rem, 2.6vw, 2rem);
 }
 
-.collection-desc {
+.playlist-desc {
   margin-top: 0.5rem;
   font-size: 0.875rem;
   color: var(--ink-soft);
@@ -614,12 +614,12 @@ button {
 }
 
 /* Vue index : le même bloc devient une ligne de catalogue numérotée. */
-.collection-set.list-view {
+.playlist-set.list-view {
   display: block;
   border-top: 1px solid var(--rule);
 }
 
-.collection-set.list-view .collection {
+.playlist-set.list-view .playlist {
   display: grid;
   grid-template-columns: 3.5rem 68px minmax(0, 1fr) auto;
   align-items: center;
@@ -629,12 +629,12 @@ button {
   transition: padding-left 0.3s var(--ease), background-color 0.3s var(--ease);
 }
 
-.collection-set.list-view .collection:hover {
+.playlist-set.list-view .playlist:hover {
   padding-left: 0.75rem;
   background: var(--paper-raised);
 }
 
-.collection-set.list-view .collection-index {
+.playlist-set.list-view .playlist-index {
   display: block;
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -643,37 +643,37 @@ button {
   transition: color 0.25s var(--ease);
 }
 
-.collection-set.list-view .collection:hover .collection-index {
+.playlist-set.list-view .playlist:hover .playlist-index {
   color: var(--signal);
 }
 
-.collection-set.list-view .collection-frame {
+.playlist-set.list-view .playlist-frame {
   aspect-ratio: 1 / 1;
   width: 68px;
 }
 
-.collection-set.list-view .collection-line {
+.playlist-set.list-view .playlist-line {
   margin: 0;
   padding: 0;
   border: none;
   display: block;
 }
 
-.collection-set.list-view .collection-title {
+.playlist-set.list-view .playlist-title {
   font-size: clamp(1.125rem, 2.2vw, 1.625rem);
 }
 
-.collection-set.list-view .collection-desc {
+.playlist-set.list-view .playlist-desc {
   margin-top: 0.2rem;
   font-size: 0.8125rem;
 }
 
-.collection-set.list-view .collection-count {
+.playlist-set.list-view .playlist-count {
   justify-self: end;
 }
 
 /* --------------------------------------------------------------------------
-   9. EN-TÊTE DE COLLECTION (page de playlist)
+   9. EN-TÊTE DE PLAYLIST
    Composition empilée : titre pleine largeur, puis pochette + appareil
    critique. Volontairement différente de l'ouverture d'accueil.
    -------------------------------------------------------------------------- */
@@ -698,12 +698,12 @@ button {
   height: 13px;
 }
 
-.collection-head {
+.playlist-head {
   padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3rem, 6vw, 5rem);
   border-bottom: 1px solid var(--rule);
 }
 
-.collection-head-title {
+.playlist-head-title {
   font-family: var(--font-display);
   font-weight: 500;
   font-size: clamp(2.75rem, 8.5vw, 6.5rem);
@@ -715,7 +715,7 @@ button {
 /* Les descriptions saisies dans le Studio font quelques mots au plus.
    La pochette est donc toujours traitée en bandeau, et la description
    rejoint la bande de faits : aucune zone vide, quelle que soit sa longueur. */
-.collection-head-frame {
+.playlist-head-frame {
   /* Largeur explicite : sans elle, max-height combiné à aspect-ratio
      rétrécirait la boîte au lieu de recadrer l'image. */
   width: 100%;
@@ -728,13 +728,13 @@ button {
   border-top: 1px solid var(--rule);
 }
 
-.collection-head-frame img {
+.playlist-head-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.collection-head-facts {
+.playlist-head-facts {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -745,7 +745,7 @@ button {
   border-top: 1px solid var(--rule);
 }
 
-.collection-head-desc {
+.playlist-head-desc {
   font-family: var(--font-display);
   font-size: clamp(1.125rem, 2.2vw, 1.625rem);
   font-weight: 400;
@@ -754,7 +754,7 @@ button {
   max-width: var(--measure);
 }
 
-.collection-head-actions {
+.playlist-head-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1473,19 +1473,19 @@ button {
     aspect-ratio: 16 / 10;
   }
 
-  .collection-set {
+  .playlist-set {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .collection {
+  .playlist {
     grid-column: auto / span 1;
   }
 
-  .collection[data-size="wide"] .collection-frame {
+  .playlist[data-size="wide"] .playlist-frame {
     aspect-ratio: 1 / 1;
   }
 
-  .collection-head-frame {
+  .playlist-head-frame {
     aspect-ratio: 16 / 9;
   }
 }
@@ -1523,21 +1523,21 @@ button {
     width: 48px;
   }
 
-  .collection-set.list-view .collection {
+  .playlist-set.list-view .playlist {
     grid-template-columns: 2rem 56px minmax(0, 1fr);
   }
 
-  .collection-set.list-view .collection-frame {
+  .playlist-set.list-view .playlist-frame {
     width: 56px;
   }
 
-  .collection-set.list-view .collection-count {
+  .playlist-set.list-view .playlist-count {
     display: none;
   }
 }
 
 @media (max-width: 560px) {
-  .collection-set {
+  .playlist-set {
     grid-template-columns: 1fr;
   }
 
@@ -1577,7 +1577,7 @@ button {
     transform: none;
   }
 
-  .collection-frame img,
+  .playlist-frame img,
   .track-frame img,
   .opening-frame img {
     transform: none !important;

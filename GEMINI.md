@@ -57,9 +57,11 @@ curation-studio/
 
 > Cette section ne s'applique qu'à la branche `new-design`. Sur `master`, la charte de la section 3 reste seule en vigueur.
 
-La direction éditoriale de type catalogue de collection saisonnière couvre désormais **les deux surfaces** : le site public (`site/`) et le Studio (`index.html`, `src/style.css`).
+La direction éditoriale de type catalogue saisonnier couvre désormais **les deux surfaces** : le site public (`site/`) et le Studio (`index.html`, `src/style.css`).
 
 **Lecture du brief :** les playlists sont nommées comme des collections de mode (`XXV F/W`, `XXVI S/S`). Le site est donc traité en lookbook imprimé plutôt qu'en clone de Spotify.
+
+**Vocabulaire :** la métaphore reste dans le traitement visuel, mais l'interface dit **playlist**, jamais « collection » : le terme est plus direct pour le lecteur. Les classes CSS suivent (`.playlist-set`, `.playlist-head`, etc.).
 
 | | `master` | `new-design` |
 |---|---|---|
@@ -76,7 +78,7 @@ La direction éditoriale de type catalogue de collection saisonnière couvre dé
 **Points d'implémentation :**
 - Le sélecteur de vue devient **Planche / Index** : même DOM, deux mises en page radicalement différentes (`.list-view`).
 - La note de curation (7 morceaux sur 242) est traitée en citation d'appareil, Playfair italique avec filet vermillon, et non comme une colonne réservée toujours vide.
-- L'en-tête de collection recadre la pochette en bandeau 16:7 : la composition ne dépend pas de la longueur de la description, souvent absente.
+- L'en-tête de playlist recadre la pochette en bandeau 16:7 : la composition ne dépend pas de la longueur de la description, souvent absente.
 - Apparition au défilement via `IntersectionObserver` uniquement, désactivée sous `prefers-reduced-motion`. Sans JavaScript, tout le contenu reste visible.
 - Le thème est posé par un script inline dans le `<head>` pour éviter le flash au chargement.
 - Tous les identifiants et classes dont dépend `player.js` sont préservés à l'identique, ainsi que les URLs, l'arborescence et les clés `localStorage`.
