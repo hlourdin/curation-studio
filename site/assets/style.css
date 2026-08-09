@@ -421,6 +421,7 @@ button {
 }
 
 .opening-frame {
+  position: relative;
   overflow: hidden;
   background: var(--paper-raised);
   aspect-ratio: 1 / 1;
@@ -538,6 +539,95 @@ button {
   grid-column: span var(--span, 2);
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/* Lien en superposition : toute la vignette reste cliquable, tout en
+   laissant poser un vrai <button> par-dessus (imbriquer un bouton dans
+   un <a> serait invalide). */
+.playlist-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Écoute directe de la playlist depuis sa pochette. Volontairement
+   discret : encre au repos, l'accent n'apparaît qu'au survol du bouton. */
+.playlist-play-btn {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--ink);
+  color: var(--paper);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease),
+    background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.playlist:hover .playlist-play-btn,
+.playlist:focus-within .playlist-play-btn,
+.opening-visual:hover .playlist-play-btn,
+.opening-visual:focus-within .playlist-play-btn,
+.playlist-play-btn.is-playing,
+.playlist-play-btn.is-loading {
+  opacity: 1;
+  transform: none;
+}
+
+.playlist-play-btn:hover,
+.playlist-play-btn.is-playing {
+  background: var(--signal-bright);
+  color: var(--on-signal);
+}
+
+.playlist-play-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.playlist-pause-icon {
+  display: none;
+}
+
+.playlist-play-btn.is-playing .playlist-play-icon {
+  display: none;
+}
+
+.playlist-play-btn.is-playing .playlist-pause-icon {
+  display: grid;
+}
+
+/* Chargement du fichier de la playlist : l'icône s'estompe et pulse. */
+.playlist-play-btn.is-loading span {
+  animation: pulse 900ms var(--ease) infinite alternate;
+}
+
+.playlist-play-btn.is-failed {
+  background: var(--paper-raised);
+  color: var(--ink-faint);
+}
+
+@keyframes pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.3;
+  }
+}
+
+/* Sans survol possible, le bouton reste visible. */
+@media (hover: none) {
+  .playlist-play-btn {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .playlist-frame {
@@ -650,6 +740,16 @@ button {
 .playlist-set.list-view .playlist-frame {
   aspect-ratio: 1 / 1;
   width: 68px;
+}
+
+.playlist-set.list-view .playlist-play-btn {
+  width: 26px;
+  height: 26px;
+}
+
+.playlist-set.list-view .playlist-play-btn svg {
+  width: 10px;
+  height: 10px;
 }
 
 .playlist-set.list-view .playlist-line {

@@ -88,7 +88,61 @@
   const volumeSlider = document.getElementById('volume-slider');
   const volumeFill = document.getElementById('volume-fill');
 
-  const tracks = window.__PLAYLIST_TRACKS__ || [];
+  // File de lecture courante. Sur une page de playlist elle est fournie en
+  // ligne ; sur la page d'accueil elle est vide jusqu'au premier clic sur un
+  // bouton d'écoute, qui charge le fichier de la playlist concernée.
+  let tracks = window.__PLAYLIST_TRACKS__ || [];
+  let loadedPlaylistSlug = window.__PLAYLIST_SLUG__ || null;
+
+  const playlistCache = new Map();
+  const dataBase = window.__PLAYLIST_SLUG__ ? '../data/' : 'data/';
+
+  async function loadPlaylistTracks(slug) {
+    if (playlistCache.has(slug)) return playlistCache.get(slug);
+    const res = await fetch(`${dataBase}${encodeURIComponent(slug)}.json`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const list = Array.isArray(data.tracks) ? data.tracks : [];
+    playlistCache.set(slug, list);
+    return list;
+  }
+
+  // Lance une playlist entière depuis sa pochette, sans quitter la page.
+  async function playPlaylist(slug, btn) {
+    if (loadedPlaylistSlug === slug && currentPlayingTrackId) {
+      playTrackById(currentPlayingTrackId);
+      return;
+    }
+
+    // L'état de chargement ne couvre que la récupération des morceaux.
+    // La lecture elle-même n'est pas attendue : selon le navigateur, la
+    // promesse de play() peut ne jamais se résoudre, ce qui figerait le bouton.
+    btn.classList.add('is-loading');
+    let list;
+    try {
+      list = await loadPlaylistTracks(slug);
+    } catch (e) {
+      console.warn("Impossible de charger cette playlist :", e);
+      btn.classList.add('is-failed');
+      setTimeout(() => btn.classList.remove('is-failed'), 2000);
+      return;
+    } finally {
+      btn.classList.remove('is-loading');
+    }
+
+    if (!list.length) return;
+    tracks = list;
+    loadedPlaylistSlug = slug;
+    currentPlayingTrackId = null;
+    playTrackById(list[0].id);
+  }
+
+  function syncPlaylistButtons(playing) {
+    document.querySelectorAll('.playlist-play-btn').forEach(b => {
+      const isThis = b.getAttribute('data-slug') === loadedPlaylistSlug && playing;
+      b.classList.toggle('is-playing', isThis);
+    });
+  }
 
   function getCardById(id) {
     return Array.from(document.querySelectorAll('.song-card'))
@@ -237,6 +291,8 @@
   function updateUI(playing, trackObj) {
     const track = trackObj || tracks.find(t => t.id === currentPlayingTrackId);
 
+    syncPlaylistButtons(playing);
+
     // Update Cards
     document.querySelectorAll('.song-card').forEach(card => {
       const cardId = card.getAttribute('data-id');
@@ -300,6 +356,15 @@
 
   // Bind Clicks
   document.addEventListener('click', (e) => {
+    const playlistBtn = e.target.closest('.playlist-play-btn');
+    if (playlistBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const slug = playlistBtn.getAttribute('data-slug');
+      if (slug) playPlaylist(slug, playlistBtn);
+      return;
+    }
+
     const playBtn = e.target.closest('.play-card-btn');
     if (playBtn) {
       const id = playBtn.getAttribute('data-id');

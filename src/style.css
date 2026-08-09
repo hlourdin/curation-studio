@@ -1223,6 +1223,73 @@ button {
   color: var(--ink-faint);
 }
 
+/* Écoute directe de la playlist depuis sa pochette. Volontairement discret :
+   encre au repos, l'accent n'apparaît qu'au survol du bouton. Même traitement
+   que sur le site public. */
+.playlist-play-btn {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--ink);
+  color: var(--paper);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease),
+    background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.catalog-card:hover .playlist-play-btn,
+.catalog-card:focus-within .playlist-play-btn,
+.playlist-play-btn.is-playing {
+  opacity: 1;
+  transform: none;
+}
+
+.playlist-play-btn:hover,
+.playlist-play-btn.is-playing {
+  background: var(--signal-bright);
+  color: var(--on-signal);
+}
+
+.playlist-play-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.playlist-pause-icon {
+  display: none;
+}
+
+.playlist-play-btn.is-playing .playlist-play-icon {
+  display: none;
+}
+
+.playlist-play-btn.is-playing .playlist-pause-icon {
+  display: grid;
+}
+
+@media (hover: none) {
+  .playlist-play-btn {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.catalog-grid.list-view .playlist-play-btn {
+  width: 26px;
+  height: 26px;
+}
+
+.catalog-grid.list-view .playlist-play-btn svg {
+  width: 10px;
+  height: 10px;
+}
+
 .catalog-card-body {
   display: flex;
   flex-direction: column;

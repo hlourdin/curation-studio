@@ -1075,7 +1075,23 @@ function updateCardPlayButton(cardElement, playing) {
   }
 }
 
+// Reflète l'état de lecture sur les boutons d'écoute des cartes du catalogue.
+function syncCatalogPlayButtons() {
+  document.querySelectorAll('.playlist-play-btn').forEach(btn => {
+    const pl = playlists[btn.getAttribute('data-slug')];
+    const isThis = !!(
+      isPlaying &&
+      currentPlayingTrack &&
+      pl &&
+      Array.isArray(pl.tracks) &&
+      pl.tracks.some(t => t.id === currentPlayingTrack.id)
+    );
+    btn.classList.toggle('is-playing', isThis);
+  });
+}
+
 function updateGlobalPlayerUI() {
+  syncCatalogPlayButtons();
   const equalizer = document.getElementById('player-equalizer');
   if (isPlaying) {
     playerPlayIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.5"/><rect x="14" y="4" width="4" height="16" rx="1.5"/></svg>`;
@@ -1443,9 +1459,18 @@ function renderCatalogGrid() {
     const name = pl ? pl.name : slug;
     const coverUrl = getPlaylistCoverImage(pl);
 
-    const coverHTML = coverUrl
-      ? `<div class="catalog-card-cover-wrapper"><img src="${coverUrl}" alt="${escapeHTML(name)}" class="catalog-card-cover-img" loading="lazy"></div>`
-      : `<div class="catalog-card-cover-wrapper"><div class="catalog-card-cover-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div></div>`;
+    const playBtnHTML = trackCount
+      ? `<button type="button" class="playlist-play-btn" data-slug="${slug}" title="Écouter cette playlist" aria-label="Écouter la playlist ${escapeHTML(name)}">
+            <span class="playlist-play-icon"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></span>
+            <span class="playlist-pause-icon"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></span>
+          </button>`
+      : '';
+
+    const coverInner = coverUrl
+      ? `<img src="${coverUrl}" alt="${escapeHTML(name)}" class="catalog-card-cover-img" loading="lazy">`
+      : `<div class="catalog-card-cover-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div>`;
+
+    const coverHTML = `<div class="catalog-card-cover-wrapper">${coverInner}${playBtnHTML}</div>`;
 
     return `
       <div class="catalog-card">
@@ -1479,6 +1504,25 @@ function renderCatalogGrid() {
       </div>
     `;
   }).join('');
+
+  // Écoute directe d'une playlist depuis sa pochette, sans quitter le catalogue.
+  grid.querySelectorAll('.playlist-play-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const pl = playlists[btn.getAttribute('data-slug')];
+      if (!pl || !Array.isArray(pl.tracks) || pl.tracks.length === 0) return;
+
+      // Déjà en cours sur cette playlist : le bouton fait pause / reprise.
+      if (currentPlayingTrack && pl.tracks.some(t => t.id === currentPlayingTrack.id)) {
+        handlePlayClick(currentPlayingTrack);
+        return;
+      }
+
+      playlistTracks = pl.tracks;
+      handlePlayClick(pl.tracks[0]);
+    };
+  });
 
   // Binder les événements sur les boutons des cartes
   grid.querySelectorAll('.open-playlist-btn').forEach(btn => {

@@ -60,6 +60,7 @@ const ICON = {
   arrowLeft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
   external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>',
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>',
   prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>',
   next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>',
   volume: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>',
@@ -120,6 +121,63 @@ function viewToggle() {
             <span>Index</span>
           </button>
         </div>`;
+}
+
+// Bouton d'écoute posé sur une pochette de playlist. Il charge la playlist
+// dans le lecteur de la page sans quitter l'écran courant.
+function playlistPlayButton(slug, name) {
+  return `<button type="button" class="playlist-play-btn" data-slug="${escapeHTML(slug)}" title="Écouter cette playlist" aria-label="Écouter la playlist ${text(name)}">
+              <span class="playlist-play-icon">${ICON.play}</span>
+              <span class="playlist-pause-icon">${ICON.pause}</span>
+            </button>`;
+}
+
+// Lecteur fixe, présent sur les deux types de pages : la page d'accueil en a
+// besoin pour lire une playlist sans quitter le catalogue.
+function playerDock() {
+  return `  <div class="global-player hidden" id="global-player">
+    <div class="player-inner">
+      <div class="player-track-info" id="player-track-info">
+        <div class="player-art-frame">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="player-art" id="player-art">
+          <div class="player-equalizer-bars" id="player-equalizer" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="player-metadata">
+          <div class="player-title" id="player-title">Aucun titre</div>
+          <div class="player-artist" id="player-artist">Sélectionnez un morceau</div>
+        </div>
+      </div>
+
+      <div class="player-controls">
+        <div class="control-buttons">
+          <button type="button" class="player-btn" id="player-prev-btn" title="Titre précédent" aria-label="Titre précédent">${ICON.prev}</button>
+          <button type="button" class="player-btn play-pause" id="player-play-btn" title="Lecture ou pause" aria-label="Lecture ou pause">
+            <span class="play-icon-holder" id="player-play-icon">${ICON.play}</span>
+          </button>
+          <button type="button" class="player-btn" id="player-next-btn" title="Titre suivant" aria-label="Titre suivant">${ICON.next}</button>
+        </div>
+        <div class="progress-container">
+          <span class="time-display" id="time-current">0:00</span>
+          <div class="progress-bar-bg" id="progress-bar-bg" role="slider" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+            <div class="progress-bar-fill" id="progress-bar-fill"><span class="progress-glow-head"></span></div>
+          </div>
+          <span class="time-display" id="time-duration">0:30</span>
+        </div>
+      </div>
+
+      <div class="player-right-controls">
+        <a class="player-spotify" href="#" target="_blank" rel="noopener" id="player-spotify-link" title="Écouter sur Spotify" aria-label="Écouter sur Spotify">${ICON.spotify}</a>
+        <div class="volume-container">
+          <span class="vol-icon" aria-hidden="true">${ICON.volume}</span>
+          <div class="volume-slider" id="volume-slider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" tabindex="0">
+            <div class="volume-fill" id="volume-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
 }
 
 function colophon() {
@@ -221,13 +279,32 @@ export function buildStaticSite() {
     writePlaylistPage({ playlistsDir, slug, pl: playlistsData[slug], slugs, index });
   });
 
-  // Nettoyage : retirer les pages orphelines dont la playlist a été supprimée.
-  const expected = new Set(slugs.map(s => `${s}.html`));
+  // Un fichier de morceaux par playlist. La page d'accueil les charge à la
+  // demande au clic sur le bouton d'écoute : inutile d'embarquer les 250
+  // morceaux du catalogue dans le HTML de l'accueil.
+  const dataDir = path.join(siteDir, 'data');
+  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+  slugs.forEach(slug => {
+    const pl = playlistsData[slug];
+    const payload = { name: pl.name, tracks: Array.isArray(pl.tracks) ? pl.tracks : [] };
+    fs.writeFileSync(path.join(dataDir, `${slug}.json`), JSON.stringify(payload), 'utf8');
+  });
+
+  // Nettoyage : retirer les fichiers orphelins dont la playlist a été supprimée.
+  const expectedPages = new Set(slugs.map(s => `${s}.html`));
   fs.readdirSync(playlistsDir)
-    .filter(f => f.endsWith('.html') && !expected.has(f))
+    .filter(f => f.endsWith('.html') && !expectedPages.has(f))
     .forEach(f => {
       fs.unlinkSync(path.join(playlistsDir, f));
       console.log(`  page orpheline supprimée : playlists/${f}`);
+    });
+
+  const expectedData = new Set(slugs.map(s => `${s}.json`));
+  fs.readdirSync(dataDir)
+    .filter(f => f.endsWith('.json') && !expectedData.has(f))
+    .forEach(f => {
+      fs.unlinkSync(path.join(dataDir, f));
+      console.log(`  données orphelines supprimées : data/${f}`);
     });
 
   console.log("Génération terminée. Le répertoire 'site/' est prêt pour Vercel.");
@@ -254,14 +331,21 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
 
       const desc = typo(pl.description || '').trim();
 
-      return `        <a class="playlist reveal" style="--span:${span}; --i:${i % 6}" data-size="${size}" href="playlists/${slug}.html">
+      // Le lien couvre toute la vignette en superposition, ce qui permet
+      // d'y poser un vrai <button> sans imbriquer d'élément interactif
+      // dans un <a>.
+      return `        <article class="playlist reveal" style="--span:${span}; --i:${i % 6}" data-size="${size}">
           <span class="playlist-index">${pad2(i + 1)}</span>
-          <div class="playlist-frame">${frame}</div>
+          <div class="playlist-frame">
+            ${frame}
+            ${trackCount ? playlistPlayButton(slug, pl.name) : ''}
+          </div>
           <div class="playlist-line">
             <h3 class="playlist-title">${text(pl.name)}</h3>
             <span class="playlist-count meta">${countLabel(trackCount, 'titre', 'titres')}</span>
           </div>${desc ? `\n          <p class="playlist-desc">${escapeHTML(desc)}</p>` : ''}
-        </a>`;
+          <a class="playlist-link" href="playlists/${slug}.html"><span class="visually-hidden">Ouvrir la playlist ${text(pl.name)}</span></a>
+        </article>`;
     })
     .join('\n');
 
@@ -280,17 +364,20 @@ function writeHomepage({ siteDir, slugs, playlistsData }) {
           <a class="btn btn-primary" href="playlists/${featuredSlug}.html">Dernière playlist</a>
         </div>
       </div>
-      <a class="opening-visual" href="playlists/${featuredSlug}.html">
+      <div class="opening-visual">
         <div class="opening-frame">${
           featuredCover
             ? `<img src="${escapeHTML(featuredCover)}" alt="Pochette de ${text(featured.name)}" fetchpriority="high" decoding="async">`
             : `<span class="playlist-placeholder">${ICON.note}</span>`
-        }</div>
+        }
+          ${featuredCount ? playlistPlayButton(featuredSlug, featured.name) : ''}
+        </div>
         <div class="opening-caption">
           <span class="opening-caption-name">${text(featured.name)}</span>
           <span class="meta">${countLabel(featuredCount, 'titre', 'titres')}</span>
         </div>
-      </a>
+        <a class="playlist-link" href="playlists/${featuredSlug}.html"><span class="visually-hidden">Ouvrir la playlist ${text(featured.name)}</span></a>
+      </div>
     </div>
   </section>`
     : `  <section class="opening">
@@ -340,6 +427,8 @@ ${catalog}
   </main>
 
 ${colophon()}
+
+${playerDock()}
 
   <script src="assets/player.js"></script>
 </body>
@@ -406,6 +495,7 @@ ${head({
   })}
   <script>
     window.__PLAYLIST_TRACKS__ = ${JSON.stringify(tracks).replace(/</g, '\\u003c')};
+    window.__PLAYLIST_SLUG__ = ${JSON.stringify(slug)};
   </script>
 </head>
 <body>
@@ -452,49 +542,7 @@ ${tracklist}
 
 ${colophon()}
 
-  <div class="global-player hidden" id="global-player">
-    <div class="player-inner">
-      <div class="player-track-info" id="player-track-info">
-        <div class="player-art-frame">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="player-art" id="player-art">
-          <div class="player-equalizer-bars" id="player-equalizer" aria-hidden="true">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </div>
-        <div class="player-metadata">
-          <div class="player-title" id="player-title">Aucun titre</div>
-          <div class="player-artist" id="player-artist">Sélectionnez un morceau</div>
-        </div>
-      </div>
-
-      <div class="player-controls">
-        <div class="control-buttons">
-          <button type="button" class="player-btn" id="player-prev-btn" title="Titre précédent" aria-label="Titre précédent">${ICON.prev}</button>
-          <button type="button" class="player-btn play-pause" id="player-play-btn" title="Lecture ou pause" aria-label="Lecture ou pause">
-            <span class="play-icon-holder" id="player-play-icon">${ICON.play}</span>
-          </button>
-          <button type="button" class="player-btn" id="player-next-btn" title="Titre suivant" aria-label="Titre suivant">${ICON.next}</button>
-        </div>
-        <div class="progress-container">
-          <span class="time-display" id="time-current">0:00</span>
-          <div class="progress-bar-bg" id="progress-bar-bg" role="slider" aria-label="Progression" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-            <div class="progress-bar-fill" id="progress-bar-fill"><span class="progress-glow-head"></span></div>
-          </div>
-          <span class="time-display" id="time-duration">0:30</span>
-        </div>
-      </div>
-
-      <div class="player-right-controls">
-        <a class="player-spotify" href="#" target="_blank" rel="noopener" id="player-spotify-link" title="Écouter sur Spotify" aria-label="Écouter sur Spotify">${ICON.spotify}</a>
-        <div class="volume-container">
-          <span class="vol-icon" aria-hidden="true">${ICON.volume}</span>
-          <div class="volume-slider" id="volume-slider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" tabindex="0">
-            <div class="volume-fill" id="volume-fill"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+${playerDock()}
 
   <script src="../assets/player.js"></script>
 </body>
