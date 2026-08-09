@@ -1,39 +1,28 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- SEO Meta Tags -->
-  <title>Le Son de la Curiosité — Curated Audio Discoveries</title>
-  <meta name="description" content="Une collection de mes plus belles découvertes musicales sous forme de vitrine interactive haut de gamme avec intégration Spotify.">
-  <meta name="robots" content="index, follow">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="Le Son de la Curiosité — Vitrine Musicale High-End">
-  <meta property="og:description" content="Carnet audio interactif d'exception & vitrine de découvertes Spotify.">
-  <meta property="og:type" content="website">
-  
-  <!-- Typography & Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Stylesheets -->
+
+  <title>Studio · Le Son de la Curiosité</title>
+  <meta name="description" content="Studio de curation : importez vos playlists Spotify, annotez les morceaux et générez le site public.">
+  <meta name="robots" content="noindex, nofollow">
+
   <link rel="stylesheet" href="/src/style.css">
-  
-  <!-- Icons -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'%3E%3Ccircle cx='12' cy='12' r='10' fill-opacity='0.15'/%3E%3Cpath d='M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z'/%3E%3C/svg%3E">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d9391c'%3E%3Cpath d='M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z'/%3E%3C/svg%3E">
+
+  <script>
+    // Thème posé avant le premier rendu pour éviter le flash au chargement.
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem('melomanie_theme'); } catch (e) {}
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
-
-  <!-- Ambient Film Grain & Noise Overlay -->
-  <div class="noise-overlay" aria-hidden="true"></div>
-
-  <!-- Ambient Glow Orbs -->
-  <div class="bg-glow-orb orb-primary" aria-hidden="true"></div>
-  <div class="bg-glow-orb orb-secondary" aria-hidden="true"></div>
-  <div class="bg-glow-orb orb-tertiary" aria-hidden="true"></div>
 
   <!-- Écran de connexion Spotify -->
   <div class="login-screen" id="login-screen">
@@ -42,10 +31,10 @@
         <div class="login-header">
           <div class="brand-badge-pill">
             <span class="pulse-dot"></span>
-            <span>SPOTIFY DISCOVERIES ARCHIVE</span>
+            <span>Studio de curation</span>
           </div>
           <h1>Le Son de la Curiosité</h1>
-          <p>Générez et personnalisez des vitrines musicales d'exception à partir de vos playlists Spotify.</p>
+          <p>Importez vos playlists Spotify, annotez les morceaux qui le méritent, puis générez le site public.</p>
         </div>
         <button class="spotify-login-btn group" id="spotify-login-btn">
           <span>Se connecter avec Spotify</span>
@@ -114,18 +103,15 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </span>
               </button>
-              <a href="./site/index.html" target="_blank" class="nav-action-pill site-link-btn" title="Voir la page d'accueil locale du site (site/index.html)">
+              <a href="./site/index.html" target="_blank" class="nav-action-pill site-link-btn" title="Voir le site généré (site/index.html)" aria-label="Voir le site généré">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                <span class="pill-label">Voir le site</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;margin-left:2px;"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
               </a>
               <button id="export-site-btn" class="nav-action-pill highlight" title="Générer le site statique Vercel dans le dossier site/">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                 <span class="pill-label">Générer Site</span>
               </button>
-              <button id="export-json-btn" class="nav-action-pill" title="Télécharger les playlists et commentaires sous forme de fichier JSON">
+              <button id="export-json-btn" class="nav-action-pill" title="Télécharger les playlists et notes au format JSON" aria-label="Télécharger le JSON">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                <span class="pill-label">JSON</span>
               </button>
               <button id="logout-btn" class="logout-btn" title="Se déconnecter">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>

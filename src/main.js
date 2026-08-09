@@ -63,12 +63,14 @@ let currentVolume = 0.8;
 
 // Initialisation du Thème (Clair / Sombre)
 function setupTheme() {
-  const savedTheme = localStorage.getItem('melomanie_theme') || 'dark';
-  applyTheme(savedTheme);
+  // Le script inline de index.html a déjà posé le thème avant le rendu
+  // (préférence enregistrée, sinon préférence système). On se contente de
+  // synchroniser les pictos, puis de basculer au clic.
+  applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
 
   if (themeToggleBtn) {
     themeToggleBtn.onclick = () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       applyTheme(newTheme);
       localStorage.setItem('melomanie_theme', newTheme);
@@ -661,10 +663,15 @@ function enterEditPlaylistDescriptionMode() {
 function renderPlaylistDescription() {
   if (!playlistDescriptionContainer) return;
   const currentPlaylist = playlists[activePlaylistSlug];
-  const descText = currentPlaylist ? (currentPlaylist.description || "Aucune description fournie par Spotify. Cliquer pour en ajouter une.") : "Aucune description.";
-  
+  const realDesc = currentPlaylist ? (currentPlaylist.description || '').trim() : '';
+
+  // Sans description, on affiche une invite discrète plutôt qu'une phrase
+  // d'excuse composée comme un chapô.
+  const descText = realDesc || "Ajouter une description";
+  const placeholderClass = realDesc ? '' : ' is-placeholder';
+
   playlistDescriptionContainer.innerHTML = `
-    <p class="hero-description" id="playlist-description" title="Cliquer pour modifier la description de cette playlist">
+    <p class="hero-description${placeholderClass}" id="playlist-description" title="Cliquer pour modifier la description de cette playlist">
       ${descText}
     </p>
   `;
@@ -1430,7 +1437,7 @@ function renderCatalogGrid() {
   grid.innerHTML = sortedSlugs.map((slug, idx) => {
     const pl = playlists[slug];
     const trackCount = pl && pl.tracks ? pl.tracks.length : 0;
-    const desc = pl && pl.description ? pl.description : "Aucune description fournie.";
+    const desc = pl && pl.description ? pl.description.trim() : '';
     const isFirst = idx === 0;
     const isLast = idx === sortedSlugs.length - 1;
     const name = pl ? pl.name : slug;
@@ -1449,7 +1456,7 @@ function renderCatalogGrid() {
               <h2 class="catalog-card-title">${escapeHTML(name)}</h2>
               <span class="catalog-card-badge">${trackCount} morceaux</span>
             </div>
-            <p class="catalog-card-desc">${escapeHTML(desc)}</p>
+            ${desc ? `<p class="catalog-card-desc">${escapeHTML(desc)}</p>` : ''}
           </div>
           <div class="catalog-card-footer">
             <div class="catalog-card-actions">

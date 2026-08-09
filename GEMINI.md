@@ -57,7 +57,7 @@ curation-studio/
 
 > Cette section ne s'applique qu'à la branche `new-design`. Sur `master`, la charte de la section 3 reste seule en vigueur.
 
-Le **site public uniquement** (`site/`) y explore une direction éditoriale de type catalogue de collection saisonnière. Le Studio (`index.html`, `src/style.css`, `src/main.js`) est inchangé.
+La direction éditoriale de type catalogue de collection saisonnière couvre désormais **les deux surfaces** : le site public (`site/`) et le Studio (`index.html`, `src/style.css`).
 
 **Lecture du brief :** les playlists sont nommées comme des collections de mode (`XXV F/W`, `XXVI S/S`). Le site est donc traité en lookbook imprimé plutôt qu'en clone de Spotify.
 
@@ -81,6 +81,15 @@ Le **site public uniquement** (`site/`) y explore une direction éditoriale de t
 - Le thème est posé par un script inline dans le `<head>` pour éviter le flash au chargement.
 - Tous les identifiants et classes dont dépend `player.js` sont préservés à l'identique, ainsi que les URLs, l'arborescence et les clés `localStorage`.
 - Toutes les paires de couleurs passent le contraste WCAG AA (4.5:1) dans les deux thèmes.
+
+**Studio :**
+- `src/style.css` et `site/assets/style.css` partagent les mêmes jetons, aux mêmes valeurs. **Toute évolution d'un jeton doit être répercutée dans les deux fichiers.**
+- Les deux feuilles pointent vers les mêmes fichiers de polices (`site/assets/fonts/`) : une seule source, aucune duplication.
+- La note de curation s'affiche dans le Studio exactement comme sur le site publié : ce qu'on écrit est ce qu'on verra.
+- Densité plus élevée et mouvement plus discret que sur le site public : c'est une surface de travail.
+- Le vermillon plein est réservé à l'action principale « Générer Site ». Les boutons « Ouvrir » des cartes de catalogue sont en fantôme et ne se remplissent qu'au survol.
+- Le fond ambiant (grain, halos) et les enveloppes à double biseau ne sont plus dessinés. Les classes `double-bezel-*` restent dans le balisage généré par `main.js` mais sont neutralisées en CSS : aucune modification des gabarits JS n'a été nécessaire.
+- Sans description, l'en-tête de playlist affiche une invite discrète « + Ajouter une description » plutôt qu'une phrase d'excuse composée comme un chapô.
 
 ---
 
