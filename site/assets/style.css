@@ -350,6 +350,12 @@ body {
   border: 1px solid var(--border-outer);
 }
 
+.toolbar-left-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .track-count-badge {
   font-family: var(--font-mono);
   font-size: 0.75rem;

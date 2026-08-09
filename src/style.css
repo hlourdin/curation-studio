@@ -810,6 +810,12 @@ select.playlist-select option {
   border: 1px solid var(--border-outer);
 }
 
+.toolbar-left-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .track-count-badge {
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -817,6 +823,44 @@ select.playlist-select option {
   color: var(--text-sub);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.reimport-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--bg-shell);
+  border: 1px solid var(--border-inner);
+  color: var(--text-main);
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0 !important;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.reimport-btn:hover {
+  background: var(--accent-spotify-glow, rgba(30, 215, 96, 0.12));
+  border-color: var(--accent-spotify, #1ed760);
+  color: var(--accent-spotify, #1ed760);
+}
+
+.reimport-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reimport-btn .reimport-icon {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.3s ease;
+}
+
+.reimport-btn:hover .reimport-icon {
+  transform: rotate(180deg);
 }
 
 .view-toggle-group {

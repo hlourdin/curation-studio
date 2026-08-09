@@ -159,11 +159,15 @@ function setupApp(token) {
     };
   }
 
-  // Événements d'importation
+  // Événements d'importation & ré-importation
   importBtn.onclick = () => handleImport(token);
   playlistInput.onkeydown = (e) => {
     if (e.key === 'Enter') handleImport(token);
   };
+  const reimportBtn = document.getElementById('reimport-playlist-btn');
+  if (reimportBtn) {
+    reimportBtn.onclick = () => handleReimport(token);
+  }
 
   // Événement déconnexion
   logoutBtn.onclick = () => {
@@ -386,6 +390,107 @@ async function handleImport(token) {
     importBtn.disabled = false;
     loader.classList.add('hidden');
     btnText.textContent = 'Importer';
+  }
+}
+
+// Permet de ré-importer la playlist active tout en conservant scrupuleusement les commentaires
+async function handleReimport(token) {
+  if (!activePlaylistSlug || !playlists[activePlaylistSlug]) {
+    alert("Aucune playlist sélectionnée à ré-importer.");
+    return;
+  }
+
+  const currentPlaylist = playlists[activePlaylistSlug];
+  const playlistId = currentPlaylist.id || extractPlaylistId(currentPlaylist.spotifyUrl);
+
+  if (!playlistId) {
+    alert("Impossible de trouver l'ID Spotify de cette playlist.");
+    return;
+  }
+
+  const reimportBtn = document.getElementById('reimport-playlist-btn');
+  const loader = reimportBtn ? reimportBtn.querySelector('.btn-loader') : null;
+  const icon = reimportBtn ? reimportBtn.querySelector('.reimport-icon') : null;
+  const label = reimportBtn ? reimportBtn.querySelector('.reimport-btn-label') : null;
+
+  try {
+    if (reimportBtn) {
+      reimportBtn.disabled = true;
+      if (loader) loader.classList.remove('hidden');
+      if (icon) icon.classList.add('hidden');
+      if (label) label.textContent = 'Ré-import...';
+    }
+
+    let activeToken = token;
+    if (!activeToken) {
+      activeToken = await getValidAccessToken();
+    }
+
+    if (!activeToken) {
+      alert("Veuillez vous connecter à Spotify pour ré-importer cette playlist.");
+      return;
+    }
+
+    const playlistData = await fetchSpotifyPlaylist(playlistId, activeToken);
+    const slug = activePlaylistSlug;
+
+    // Fusionner les commentaires existants (association par ID et fallback par Titre-Artiste)
+    const commentMap = new Map();
+    if (Array.isArray(currentPlaylist.tracks)) {
+      currentPlaylist.tracks.forEach(track => {
+        if (track.comment) {
+          if (track.id) commentMap.set(track.id, track.comment);
+          const altKey = `${(track.title || '').toLowerCase().trim()}-${(track.artist || '').toLowerCase().trim()}`;
+          commentMap.set(altKey, track.comment);
+        }
+      });
+    }
+
+    playlistData.tracks.forEach(track => {
+      if (commentMap.has(track.id)) {
+        track.comment = commentMap.get(track.id);
+      } else {
+        const altKey = `${(track.title || '').toLowerCase().trim()}-${(track.artist || '').toLowerCase().trim()}`;
+        if (commentMap.has(altKey)) {
+          track.comment = commentMap.get(altKey);
+        }
+      }
+    });
+
+    // Conserver l'ordre et la description si elle avait été personnalisée
+    playlistData.order = typeof currentPlaylist.order === 'number' ? currentPlaylist.order : 999;
+    if (!playlistData.description && currentPlaylist.description) {
+      playlistData.description = currentPlaylist.description;
+    }
+
+    playlists[slug] = playlistData;
+    savePlaylistsData();
+
+    // Régénérer le site statique
+    try {
+      await fetch('/api/export-site', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(playlists)
+      });
+    } catch (exportErr) {
+      console.warn("Régénération du site statique :", exportErr);
+    }
+
+    populatePlaylistSelector();
+    loadPlaylist(slug);
+
+    alert(`✨ Playlist "${playlistData.name}" ré-importée avec succès ! Vos commentaires ont été conservés.`);
+  } catch (e) {
+    console.error("Erreur lors de la ré-importation :", e);
+    alert(e.message || "Une erreur est survenue lors de la ré-importation.");
+  } finally {
+    if (reimportBtn) {
+      reimportBtn.disabled = false;
+      if (loader) loader.classList.add('hidden');
+      if (icon) icon.classList.remove('hidden');
+      if (label) label.textContent = 'Ré-importer';
+    }
   }
 }
 
@@ -691,19 +796,74 @@ function handlePlayClick(track) {
   }
 }
 
-// Récupère une URL audio lisible en direct (preview direct Spotify ou secours iTunes instantané)
+// Nettoie et normalise une chaîne pour la comparaison
+function normalizeStrForMatch(str) {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Vérifie qu'un résultat iTunes correspond véritablement au morceau Spotify demandé
+function verifyiTunesMatch(track, candidate) {
+  if (!candidate || !candidate.previewUrl) return false;
+
+  const spotifyTitle = normalizeStrForMatch(track.title);
+  const primaryArtist = normalizeStrForMatch(
+    Array.isArray(track.artists) && track.artists.length > 0
+      ? track.artists[0].name
+      : (track.artist || '')
+  );
+
+  const candTitle = normalizeStrForMatch(candidate.trackName);
+  const candArtist = normalizeStrForMatch(candidate.artistName);
+
+  if (!spotifyTitle || !primaryArtist) return false;
+
+  // Nettoyage des titres (retrait des éléments entre parenthèses ou crochets comme feat., remix, live)
+  const cleanSpotifyTitle = spotifyTitle.replace(/\(.*?\)|\[.*?\]|-.*$/g, '').trim();
+  const cleanCandTitle = candTitle.replace(/\(.*?\)|\[.*?\]|-.*$/g, '').trim();
+
+  const titleMatches = (
+    candTitle.includes(cleanSpotifyTitle) ||
+    spotifyTitle.includes(cleanCandTitle) ||
+    (cleanSpotifyTitle.length >= 3 && cleanCandTitle.includes(cleanSpotifyTitle)) ||
+    (cleanCandTitle.length >= 3 && cleanSpotifyTitle.includes(cleanCandTitle))
+  );
+
+  if (!titleMatches) return false;
+
+  const artistFirstWord = primaryArtist.split(' ')[0];
+  const artistMatches = (
+    candArtist.includes(primaryArtist) ||
+    primaryArtist.includes(candArtist) ||
+    (artistFirstWord.length >= 3 && candArtist.includes(artistFirstWord))
+  );
+
+  return artistMatches;
+}
+
+// Récupère une URL audio lisible en direct (preview direct Spotify ou secours iTunes instantané vérifié)
 async function getTrackAudioUrl(track) {
-  if (track.previewUrl) return track.previewUrl;
+  if (track.previewUrl && track.previewUrl.trim() !== '') return track.previewUrl;
 
   try {
     const artistName = Array.isArray(track.artists) && track.artists.length > 0 ? track.artists[0].name : (track.artist || '');
-    const query = `${artistName} ${track.title}`;
-    const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=1`);
+    const cleanTitle = (track.title || '').replace(/\(.*?\)|\[.*?\]/g, '').trim();
+    const query = `${artistName} ${cleanTitle}`;
+    const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=5`);
     if (res.ok) {
       const data = await res.json();
-      if (data.results && data.results.length > 0 && data.results[0].previewUrl) {
-        track.previewUrl = data.results[0].previewUrl;
-        return track.previewUrl;
+      if (data.results && data.results.length > 0) {
+        const match = data.results.find(candidate => verifyiTunesMatch(track, candidate));
+        if (match && match.previewUrl) {
+          track.previewUrl = match.previewUrl;
+          return track.previewUrl;
+        }
       }
     }
   } catch (err) {
@@ -739,10 +899,11 @@ async function selectAndPlayTrack(track) {
   // Récupérer le flux audio direct (avec fallback instantané si preview Spotify absente)
   const audioUrl = await getTrackAudioUrl(track);
 
+  if (playerCustomUI) playerCustomUI.classList.remove('hidden');
+  if (spotifyEmbedContainer) spotifyEmbedContainer.classList.add('hidden');
+
   if (audioUrl) {
     isPlaying = true;
-    if (spotifyEmbedContainer) spotifyEmbedContainer.classList.add('hidden');
-    if (playerCustomUI) playerCustomUI.classList.remove('hidden');
 
     if (audio) {
       audio.pause();
@@ -773,25 +934,18 @@ async function selectAndPlayTrack(track) {
 
     updateGlobalPlayerUI();
   } else {
-    // Si vraiment aucune source audio directe n'est disponible
+    // Si aucune source audio 30s n'est disponible, on reste sur la page avec le statut indisponible
     if (audio) {
       audio.pause();
-      isPlaying = false;
     }
-    
-    if (playerCustomUI) playerCustomUI.classList.add('hidden');
-    if (spotifyEmbedContainer) {
-      spotifyEmbedContainer.classList.remove('hidden');
-      if (spotifyEmbedIframe) {
-        spotifyEmbedIframe.src = `https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0&autoplay=1`;
-      }
-    }
+    audio = null;
+    isPlaying = false;
 
-    const newCard = document.getElementById(`card-${track.id}`);
-    if (newCard) {
-      newCard.classList.add('playing');
-      updateCardPlayButton(newCard, true);
-    }
+    if (progressBarFill) progressBarFill.style.width = '0%';
+    if (timeCurrent) timeCurrent.textContent = "--:--";
+    if (timeDuration) timeDuration.textContent = "Indisponible";
+
+    updateGlobalPlayerUI();
   }
 }
 

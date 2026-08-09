@@ -519,16 +519,69 @@ const STATIC_PLAYER_JS = `(function () {
     return \`\${m}:\${s < 10 ? '0' : ''}\${s}\`;
   }
 
+  function normalizeStrForMatch(str) {
+    if (!str) return '';
+    return str
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\w\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function verifyiTunesMatch(track, candidate) {
+    if (!candidate || !candidate.previewUrl) return false;
+
+    const spotifyTitle = normalizeStrForMatch(track.title);
+    const primaryArtist = normalizeStrForMatch(
+      Array.isArray(track.artists) && track.artists.length > 0
+        ? track.artists[0].name
+        : (track.artist || '')
+    );
+
+    const candTitle = normalizeStrForMatch(candidate.trackName);
+    const candArtist = normalizeStrForMatch(candidate.artistName);
+
+    if (!spotifyTitle || !primaryArtist) return false;
+
+    const cleanSpotifyTitle = spotifyTitle.replace(/\(.*?\)|\[.*?\]|-.*$/g, '').trim();
+    const cleanCandTitle = candTitle.replace(/\(.*?\)|\[.*?\]|-.*$/g, '').trim();
+
+    const titleMatches = (
+      candTitle.includes(cleanSpotifyTitle) ||
+      spotifyTitle.includes(cleanCandTitle) ||
+      (cleanSpotifyTitle.length >= 3 && cleanCandTitle.includes(cleanSpotifyTitle)) ||
+      (cleanCandTitle.length >= 3 && cleanSpotifyTitle.includes(cleanCandTitle))
+    );
+
+    if (!titleMatches) return false;
+
+    const artistFirstWord = primaryArtist.split(' ')[0];
+    const artistMatches = (
+      candArtist.includes(primaryArtist) ||
+      primaryArtist.includes(candArtist) ||
+      (artistFirstWord.length >= 3 && candArtist.includes(artistFirstWord))
+    );
+
+    return artistMatches;
+  }
+
   async function getTrackAudioUrl(track) {
     if (track.previewUrl && track.previewUrl.trim() !== "") {
       return track.previewUrl;
     }
     try {
-      const query = encodeURIComponent(\`\${track.artist} \${track.title}\`);
-      const res = await fetch(\`https://itunes.apple.com/search?term=\${query}&entity=song&limit=1\`);
+      const artistName = Array.isArray(track.artists) && track.artists.length > 0 ? track.artists[0].name : (track.artist || '');
+      const cleanTitle = (track.title || '').replace(/\(.*?\)|\[.*?\]/g, '').trim();
+      const query = encodeURIComponent(\`\${artistName} \${cleanTitle}\`);
+      const res = await fetch(\`https://itunes.apple.com/search?term=\${query}&entity=song&limit=5\`);
       const data = await res.json();
-      if (data.results && data.results.length > 0 && data.results[0].previewUrl) {
-        return data.results[0].previewUrl;
+      if (data.results && data.results.length > 0) {
+        const match = data.results.find(candidate => verifyiTunesMatch(track, candidate));
+        if (match && match.previewUrl) {
+          return match.previewUrl;
+        }
       }
     } catch (e) {
       console.warn(e);

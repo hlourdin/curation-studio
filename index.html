@@ -167,7 +167,14 @@
 
           <!-- Tracklist Toolbar (Cards / List Selector) -->
           <div class="view-toggle-toolbar">
-            <span class="track-count-badge" id="track-count-label">0 morceau</span>
+            <div class="toolbar-left-group">
+              <span class="track-count-badge" id="track-count-label">0 morceau</span>
+              <button id="reimport-playlist-btn" class="reimport-btn group" title="Ré-importer la playlist depuis Spotify en conservant vos commentaires">
+                <span class="btn-loader hidden"></span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="reimport-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                <span class="reimport-btn-label">Ré-importer</span>
+              </button>
+            </div>
             <div class="view-toggle-group">
               <button class="view-toggle-btn active" id="view-mode-grid" data-view="grid" title="Vue Grille de Cartes">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -272,11 +279,6 @@
             </div>
           </div>
 
-        </div>
-
-        <!-- Lecteur Spotify Intégré Fallback (Lecture Directe sur la Page) -->
-        <div class="player-inner double-bezel-core spotify-embed-container hidden" id="spotify-embed-container">
-          <iframe id="spotify-embed-iframe" src="" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius: 0;"></iframe>
         </div>
       </div>
     </div>
