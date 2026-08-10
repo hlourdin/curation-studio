@@ -163,7 +163,7 @@ async function init() {
   // 2. Adapter l'affichage selon le statut d'authentification
   if (token) {
     showLoginScreen(false);
-    setupApp(token);
+    setupApp();
   } else {
     showLoginScreen(true);
   }
@@ -183,7 +183,7 @@ function showLoginScreen(show) {
 }
 
 // Configure l'application une fois connecté
-function setupApp(token) {
+function setupApp() {
   // Charger les données (fusion entre LocalStorage et fichiers de démo par défaut)
   loadPlaylistsData();
 
@@ -197,13 +197,13 @@ function setupApp(token) {
   }
 
   // Événements d'importation & ré-importation
-  importBtn.onclick = () => handleImport(token);
+  importBtn.onclick = () => handleImport();
   playlistInput.onkeydown = (e) => {
-    if (e.key === 'Enter') handleImport(token);
+    if (e.key === 'Enter') handleImport();
   };
   const reimportBtn = document.getElementById('reimport-playlist-btn');
   if (reimportBtn) {
-    reimportBtn.onclick = () => handleReimport(token);
+    reimportBtn.onclick = () => handleReimport();
   }
 
   // Événement déconnexion
@@ -368,7 +368,26 @@ function populatePlaylistSelector() {
 }
 
 // Permet d'importer une nouvelle playlist Spotify
-async function handleImport(token) {
+// Récupère un jeton valide au moment de l'appel. Les jetons Spotify durent
+// une heure : celui obtenu au chargement de la page est périmé dès la
+// deuxième heure de session. getValidAccessToken() le rafraîchit au besoin.
+async function requireSpotifyToken() {
+  const token = await getValidAccessToken();
+  if (!token) {
+    // Le rafraîchissement a échoué : la session est morte et getValidAccessToken
+    // a déjà vidé le stockage. On ramène l'écran de connexion, sans quoi
+    // l'utilisateur resterait bloqué sur une application inopérante.
+    showNotificationModal({
+      title: '🔒 Session Spotify expirée',
+      message: "Votre session Spotify n'est plus valide. Reconnectez-vous pour continuer.",
+      showPreviewBtn: false
+    });
+    showLoginScreen(true);
+  }
+  return token;
+}
+
+async function handleImport() {
   const inputValue = playlistInput.value.trim();
   if (!inputValue) {
     alert("Veuillez entrer une URL ou un ID de playlist Spotify.");
@@ -390,8 +409,11 @@ async function handleImport(token) {
     loader.classList.remove('hidden');
     btnText.textContent = 'Import...';
 
+    const token = await requireSpotifyToken();
+    if (!token) return;
+
     const playlistData = await fetchSpotifyPlaylist(playlistId, token);
-    
+
     // Générer un slug unique
     const slug = slugify(playlistData.name);
 
@@ -443,7 +465,7 @@ async function handleImport(token) {
 }
 
 // Permet de ré-importer la playlist active tout en conservant scrupuleusement les commentaires
-async function handleReimport(token) {
+async function handleReimport() {
   if (!activePlaylistSlug || !playlists[activePlaylistSlug]) {
     showNotificationModal({
       title: '⚠️ Attention',
@@ -478,19 +500,8 @@ async function handleReimport(token) {
       if (label) label.textContent = 'Ré-import...';
     }
 
-    let activeToken = token;
-    if (!activeToken) {
-      activeToken = await getValidAccessToken();
-    }
-
-    if (!activeToken) {
-      showNotificationModal({
-        title: '🔒 Connexion Spotify Requise',
-        message: "Veuillez vous connecter à Spotify pour ré-importer cette playlist.",
-        showPreviewBtn: false
-      });
-      return;
-    }
+    const activeToken = await requireSpotifyToken();
+    if (!activeToken) return;
 
     const playlistData = await fetchSpotifyPlaylist(playlistId, activeToken);
     const slug = activePlaylistSlug;
