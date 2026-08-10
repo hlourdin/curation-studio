@@ -1484,7 +1484,7 @@ function renderCatalogGrid() {
     const coverHTML = `<div class="catalog-card-cover-wrapper">${coverInner}${playBtnHTML}</div>`;
 
     return `
-      <div class="catalog-card">
+      <div class="catalog-card" data-slug="${slug}">
         ${coverHTML}
         <div class="catalog-card-body">
           <div>
@@ -1515,6 +1515,16 @@ function renderCatalogGrid() {
       </div>
     `;
   }).join('');
+
+  // Toute la carte ouvre la playlist, comme sur le site public. Les boutons
+  // qu'elle contient (écouter, monter, descendre, supprimer) gardent la main.
+  grid.querySelectorAll('.catalog-card').forEach(card => {
+    card.onclick = (e) => {
+      if (e.target.closest('button, a')) return;
+      const slug = card.getAttribute('data-slug');
+      if (slug) showSinglePlaylistView(slug);
+    };
+  });
 
   // Écoute directe d'une playlist depuis sa pochette, sans quitter le catalogue.
   grid.querySelectorAll('.playlist-play-btn').forEach(btn => {
