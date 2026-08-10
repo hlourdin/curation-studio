@@ -2,5 +2,19 @@
   "buildCommand": "npm run export-site",
   "outputDirectory": "site",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.lacurio.site" }],
+      "destination": "https://lacurio.site/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "curation-studio-seven.vercel.app" }],
+      "destination": "https://lacurio.site/:path*",
+      "permanent": false
+    }
+  ]
 }
