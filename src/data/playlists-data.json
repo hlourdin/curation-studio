@@ -1,8 +1,8 @@
 {
   "curious-xxv-fw": {
     "id": "0pUNm9mZPLPEOSaz7qWzba",
-    "name": "Curious 25 Fall/Winter",
-    "description": "Fall Winter 2025",
+    "name": "CuriOus XXV F/W",
+    "description": "",
     "spotifyUrl": "https://open.spotify.com/playlist/0pUNm9mZPLPEOSaz7qWzba",
     "tracks": [
       {
@@ -19,7 +19,7 @@
         "image": "https://i.scdn.co/image/ab67616d0000b273208500450dcd0fd294d7bd3b",
         "url": "https://open.spotify.com/track/4whkhyXTrTgHKZzkUvdwoq",
         "previewUrl": "",
-        "comment": "Premier titre du nouvel album de Tame Impala. coup de coeur."
+        "comment": ""
       },
       {
         "id": "3L4JKn0quzxs56myjLjmZG",
@@ -182,7 +182,7 @@
         "album": "Division",
         "image": "https://i.scdn.co/image/ab67616d0000b273a9e38bb17c89e444c2858c3b",
         "url": "https://open.spotify.com/track/3OtsHYj3gznIYBU6QdqGFU",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ad/c3/1c/adc31ca1-6c63-3bec-7a0f-0fde6ceb0a73/mzaf_1320303778831780958.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -938,7 +938,7 @@
         "comment": ""
       }
     ],
-    "order": 3
+    "order": 1
   },
   "curi0us-xxvi-ss": {
     "id": "5GECe994XFv5VYMh8gV3rO",
@@ -960,7 +960,7 @@
         "image": "https://i.scdn.co/image/ab67616d0000b2733dd56c5be43d228391d18433",
         "url": "https://open.spotify.com/track/4z4LDY0Ga5WKKdCq12s1lP",
         "previewUrl": "",
-        "comment": "LE RETOUR !!!"
+        "comment": ""
       },
       {
         "id": "2W0QSwaGd46gP1eI6fPkSv",
@@ -975,7 +975,7 @@
         "album": "Family",
         "image": "https://i.scdn.co/image/ab67616d0000b27386c5a0093ffcec2784c4c13b",
         "url": "https://open.spotify.com/track/2W0QSwaGd46gP1eI6fPkSv",
-        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e2/34/34/e2343492-7207-6f59-8494-1f1fec361fcf/mzaf_6152250528439448399.plus.aac.p.m4a",
+        "previewUrl": "",
         "comment": ""
       },
       {
@@ -1040,7 +1040,7 @@
         "image": "https://i.scdn.co/image/ab67616d0000b2731ad2222e54d3ac803411d043",
         "url": "https://open.spotify.com/track/5ZdROPiIPO3BOCICFoxL6s",
         "previewUrl": "",
-        "comment": "Reprise de Daniel Ceasar pour la version suédoise de The Voice. Très jolie sensibilité."
+        "comment": ""
       },
       {
         "id": "27G7zPf0o44GGX2YlcobUf",
@@ -1084,7 +1084,7 @@
         "image": "https://i.scdn.co/image/ab67616d0000b2731549f8f49dd0ee38bf0aa56a",
         "url": "https://open.spotify.com/track/4rcFYVFFgx8z6pXMtNeker",
         "previewUrl": "",
-        "comment": "Le morceau du printemps feel good pour moi !"
+        "comment": ""
       },
       {
         "id": "03czEOGf1RDg2FPcl30XCn",
@@ -1384,7 +1384,7 @@
         "image": "https://i.scdn.co/image/ab67616d0000b273808c63c3f5d584ea63bc3a62",
         "url": "https://open.spotify.com/track/5V7PUAfCy02UxXauMnN9T8",
         "previewUrl": "",
-        "comment": "Ma bande son voiture de l'été. Mayer hawthorne toujours aussi fort."
+        "comment": ""
       },
       {
         "id": "25yl3A22f7gtJ5p5jfpuNn",
@@ -1484,7 +1484,7 @@
         "image": "https://i.scdn.co/image/ab67616d0000b2732789507c4178e0022a5811ee",
         "url": "https://open.spotify.com/track/5nSFQHQT7B7c4fFl3o2t0R",
         "previewUrl": "",
-        "comment": "Nouvel album des soeurs Ibeyi."
+        "comment": ""
       },
       {
         "id": "0X3Csp5UBxXNqfnzkngOvN",
@@ -1540,7 +1540,7 @@
         "image": "https://i.scdn.co/image/ab67616d0000b2731dae27fdac54ac9fb199cd6e",
         "url": "https://open.spotify.com/track/47CXk0Q9bAMbraj2WZHLQu",
         "previewUrl": "",
-        "comment": "Cool feat. en attendant le nouvel album de Gotts Street Park pour la fin de l'année."
+        "comment": ""
       },
       {
         "id": "7JHFdL1Tt1JcCpt3pPY2Ok",
@@ -1889,9 +1889,41 @@
         "url": "https://open.spotify.com/track/5hhDCoDbSm32nDyNoWg266",
         "previewUrl": "",
         "comment": ""
+      },
+      {
+        "id": "5SjL7cp1L5nhXzBH88tG4R",
+        "title": "Love for the Sake of Love - A Tom Moulton Mix",
+        "artist": "Claudja Barry",
+        "artists": [
+          {
+            "name": "Claudja Barry",
+            "url": "https://open.spotify.com/artist/2nLByDrVFGu0xpVbHcDpzy"
+          }
+        ],
+        "album": "Sweet Dynamite (USA Version)",
+        "image": "https://i.scdn.co/image/ab67616d0000b273c75db2866baece6c82442a55",
+        "url": "https://open.spotify.com/track/5SjL7cp1L5nhXzBH88tG4R",
+        "previewUrl": "",
+        "comment": "Le son samplé par Montell Jordan pour son sirupeux \"Get it on Tonite\""
+      },
+      {
+        "id": "4ZNjYG7CW4ogsOtIB36h1j",
+        "title": "Ride Lonesome",
+        "artist": "Beck",
+        "artists": [
+          {
+            "name": "Beck",
+            "url": "https://open.spotify.com/artist/3vbKDsSS70ZX9D2OcvbZmS"
+          }
+        ],
+        "album": "Ride Lonesome",
+        "image": "https://i.scdn.co/image/ab67616d0000b27347ed18a337189ea89e743c1d",
+        "url": "https://open.spotify.com/track/4ZNjYG7CW4ogsOtIB36h1j",
+        "previewUrl": "",
+        "comment": "Dernier morceau partagé pour annoncer son nouvel album. Beck est-décidément un fucking genious."
       }
     ],
-    "order": 1
+    "order": 2
   },
   "bossa-nova-acustico": {
     "id": "3XIabO894FhJVEQgv6PVKa",
@@ -2408,11 +2440,11 @@
         "comment": ""
       }
     ],
-    "order": 2
+    "order": 3
   },
   "curious-xxv1": {
     "id": "4Xd995ucNYxlyodCriJEXp",
-    "name": "Curious 25 Q1",
+    "name": "CURiOus XXV.1",
     "description": "",
     "spotifyUrl": "https://open.spotify.com/playlist/4Xd995ucNYxlyodCriJEXp",
     "tracks": [
@@ -2565,11 +2597,11 @@
         "comment": ""
       }
     ],
-    "order": 5
+    "order": 4
   },
   "curious-xxiv4": {
     "id": "7CVJkRWkwqqMhfdINh9v3W",
-    "name": "Curious 24 Q4",
+    "name": "CuriOus XXIV.4",
     "description": "Playlist Q4 2024",
     "spotifyUrl": "https://open.spotify.com/playlist/7CVJkRWkwqqMhfdINh9v3W",
     "tracks": [
@@ -2586,7 +2618,7 @@
         "album": "Romance",
         "image": "https://i.scdn.co/image/ab67616d0000b273f69e28716be1331924f25f2e",
         "url": "https://open.spotify.com/track/09ttHg3ZNVgDlYBZa1ZBw0",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/41/6f/06/416f06d2-fc8d-add1-7c4a-162798c338fb/mzaf_439660816361103893.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -2606,7 +2638,7 @@
         "album": "Dance, No One's Watching",
         "image": "https://i.scdn.co/image/ab67616d0000b2738a7edc33a554e38cffbbb527",
         "url": "https://open.spotify.com/track/0g8prUwwlED3F3y0ZNe8p0",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c9/5b/93/c95b93fd-4ccd-1d04-91a2-71739dade579/mzaf_864208642988241576.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -2622,7 +2654,7 @@
         "album": "Burn To Shine",
         "image": "https://i.scdn.co/image/ab67616d0000b273f6d55874f45c9b9108f5e3fb",
         "url": "https://open.spotify.com/track/4cIwg5VY8Lo1NYwq7llOth",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/9a/46/d4/9a46d403-c910-fd73-03c5-02943ea77573/mzaf_10931056362167209486.plus.aac.p.m4a",
         "comment": "Je retombe sur ce vieux morceau  qui fait toujours  le même effet  feel good."
       },
       {
@@ -2642,7 +2674,7 @@
         "album": "Nothing Much",
         "image": "https://i.scdn.co/image/ab67616d0000b2733def41d6f8fd1d2c65e3eebb",
         "url": "https://open.spotify.com/track/3e8p14OhUmrHbugk5aSg8f",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/71/69/1e/71691eca-5f6e-89aa-1fc7-fa6e97afac5f/mzaf_13821133866202960509.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -2662,7 +2694,7 @@
         "album": "Gumbri",
         "image": "https://i.scdn.co/image/ab67616d0000b2738c968ebc7dace340aed6fcab",
         "url": "https://open.spotify.com/track/4SFshffVIy0gST6zqa1U1o",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/60/90/b1/6090b1b5-dcdd-1285-95ab-6f9ccdd6f867/mzaf_7297417391838500336.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -2770,7 +2802,7 @@
         "album": "Charlotte Day Wilson: Live at Maida Vale",
         "image": "https://i.scdn.co/image/ab67616d0000b273d25d9840bb96ebc948c29c83",
         "url": "https://open.spotify.com/track/2hvad4tsEL1nSyvlDeIJYu",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6d/38/da/6d38da16-2d66-1fb7-7c55-401fea92b058/mzaf_15186711279105681249.plus.aac.p.m4a",
         "comment": "Découvert via le featuring de Bad Bad Not Good. Le morceau orginal en piano voix. dénudé, beau."
       },
       {
@@ -2786,7 +2818,7 @@
         "album": "Teardrops",
         "image": "https://i.scdn.co/image/ab67616d0000b2733feee87ba987459cd681b071",
         "url": "https://open.spotify.com/track/3GdogCZTpPHBODiiEJbqQm",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/97/7f/c2/977fc29f-9c52-30c7-e4bd-7c5405c48511/mzaf_11140427629371382125.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -2910,7 +2942,7 @@
         "album": "SABLE,",
         "image": "https://i.scdn.co/image/ab67616d0000b2734a46b7946ef3c666649f55a1",
         "url": "https://open.spotify.com/track/05qoJ1JUl7LJxB6kp24DSP",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f8/47/4c/f8474c84-3c2c-8af0-dafd-754a329ac30c/mzaf_16796567237676995439.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -2942,7 +2974,7 @@
         "album": "STARFACE",
         "image": "https://i.scdn.co/image/ab67616d0000b2732e975b1e2113c800d86e02fd",
         "url": "https://open.spotify.com/track/7wPfz8NroZMZE9yQ0QKRV1",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d9/f9/20/d9f920db-439e-f4b8-649b-24b7a50dd55d/mzaf_14302864242255795393.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -2962,7 +2994,7 @@
         "album": "Nom Nom Nom / Cat Burglar",
         "image": "https://i.scdn.co/image/ab67616d0000b273e9fdee2785991133a78024dd",
         "url": "https://open.spotify.com/track/6ERT8hKy0fBbTLebsjnDu5",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview124/v4/e1/66/cc/e166cced-14cf-5d0d-63d3-8291ced5df16/mzaf_15599732100462851858.plus.aac.p.m4a",
         "comment": "Sleadford Mods !!"
       },
       {
@@ -3082,15 +3114,15 @@
         "album": "Surf Rider",
         "image": "https://i.scdn.co/image/ab67616d0000b273d61d589b3ef18d0b8c1f8ad8",
         "url": "https://open.spotify.com/track/2CbMOsx4FlIf9LjFkVPORH",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/b8/a4/14/b8a41448-5df5-4c13-9f2b-cdf4042978b1/mzaf_16363035432339317369.plus.aac.p.m4a",
         "comment": "Découvert via une vidéo de danse. Le morceau  et les danseurs me reste collé en tête. https://vimeo.com/1059680912"
       }
     ],
-    "order": 6
+    "order": 5
   },
   "curious-xxiv3": {
     "id": "37EI4C1haMJjX7psJYCcG7",
-    "name": "Curious 24 Q3",
+    "name": "CURiOus XXIV.3",
     "description": "",
     "spotifyUrl": "https://open.spotify.com/playlist/37EI4C1haMJjX7psJYCcG7",
     "tracks": [
@@ -3371,7 +3403,7 @@
         "album": "OCEANO NOX",
         "image": "https://i.scdn.co/image/ab67616d0000b2735e66044a6febdada23acd43c",
         "url": "https://open.spotify.com/track/7mRYAphmzBkGqE82Q196Ip",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/69/a0/e6/69a0e6f4-a6a6-675b-cd1d-9fb98290477e/mzaf_4825858648911840522.plus.aac.p.m4a",
         "comment": "La claque. \" si tu savais la haine qui coule dans mes veines\""
       },
       {
@@ -3387,7 +3419,7 @@
         "album": "Imperial Pressure",
         "image": "https://i.scdn.co/image/ab67616d0000b2730932edaab6137f9b716cbbd2",
         "url": "https://open.spotify.com/track/0ROSzkZ171w7A7qsK9SNT8",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/88/52/64/8852646d-5698-66d2-3965-cf2225fec1aa/mzaf_13626872935829531864.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -3403,7 +3435,7 @@
         "album": "Taurus",
         "image": "https://i.scdn.co/image/ab67616d0000b27382c83e3501272b00d25f1e9c",
         "url": "https://open.spotify.com/track/4pxLyxszFwZ4ZJfsnIgYjz",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5a/36/e5/5a36e54d-5fae-1df3-874d-542e22e1e654/mzaf_9619786758086791316.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -3419,15 +3451,14 @@
         "album": "5",
         "image": "https://i.scdn.co/image/ab67616d0000b2736a12b209185b576cf836efe3",
         "url": "https://open.spotify.com/track/4zwq3QUKgMNk0NSLl7fpbP",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/65/76/71/657671ec-e33f-3666-2e9e-95c276172a05/mzaf_9905003375280858191.plus.aac.p.m4a",
         "comment": ""
       }
-    ],
-    "order": 7
+    ]
   },
   "curious-xxiv2": {
     "id": "5KxDy3QMbm3S9heyX9mrZi",
-    "name": "Curious 24 Q2",
+    "name": "CURiOus-XXIV.2",
     "description": "Q2 2024",
     "spotifyUrl": "https://open.spotify.com/playlist/5KxDy3QMbm3S9heyX9mrZi",
     "tracks": [
@@ -3536,7 +3567,7 @@
         "album": "Slow Burn",
         "image": "https://i.scdn.co/image/ab67616d0000b273940ad8d7580e7baf57851098",
         "url": "https://open.spotify.com/track/3XGdHT92GyDWN5XiCO9PdJ",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c6/23/bb/c623bb5e-e8fd-ae67-20ef-c0c97a55e9c5/mzaf_12067700115457864917.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -3775,12 +3806,11 @@
         "previewUrl": "",
         "comment": ""
       }
-    ],
-    "order": 8
+    ]
   },
   "curi0us-xxiv1": {
     "id": "4Edt5o2ZLtSegWFO5xjGHj",
-    "name": "Curious 24 Q1",
+    "name": "CURi0us-XXIV.1",
     "description": "",
     "spotifyUrl": "https://open.spotify.com/playlist/4Edt5o2ZLtSegWFO5xjGHj",
     "tracks": [
@@ -4440,12 +4470,11 @@
         "previewUrl": "",
         "comment": ""
       }
-    ],
-    "order": 9
+    ]
   },
   "curious-xxv2": {
     "id": "2ilGsYRXknAxPSIqRxtyRU",
-    "name": "Curious 25 Q2",
+    "name": "CuriOus XXV.2",
     "description": "",
     "spotifyUrl": "https://open.spotify.com/playlist/2ilGsYRXknAxPSIqRxtyRU",
     "tracks": [
@@ -4470,7 +4499,7 @@
         "album": "Houria",
         "image": "https://i.scdn.co/image/ab67616d0000b273f63fdd3a81ee4eb5d4d5c307",
         "url": "https://open.spotify.com/track/0w2kP8nvthAbEJS5SILzmx",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b7/8f/31/b78f31f8-2a0e-4a9b-83ad-ca0f1fa7ae60/mzaf_15756571818461291654.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -4490,7 +4519,7 @@
         "album": "Okey",
         "image": "https://i.scdn.co/image/ab67616d0000b273f6277e3a20b8265965416ec5",
         "url": "https://open.spotify.com/track/6XXA1yrwCNTMU9e7jOFAn4",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/02/9a/d1/029ad102-8096-9d24-b4da-b4c1f31d9f6f/mzaf_5856007348146300629.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -4522,7 +4551,7 @@
         "album": "Jeanne",
         "image": "https://i.scdn.co/image/ab67616d0000b273a06dc12a4132a9f95a473344",
         "url": "https://open.spotify.com/track/4yDdTyQlQB8sQLnhT2aIRC",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/79/9d/c3/799dc3bd-5b54-1880-3e19-728d52653608/mzaf_8073457163086506335.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -4710,7 +4739,7 @@
         "album": "CODEBREAKER",
         "image": "https://i.scdn.co/image/ab67616d0000b27354999349e875d15ed9190a86",
         "url": "https://open.spotify.com/track/3d9jq3vGspQO2k7SF2JJ4j",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/17/0d/63/170d630d-19a3-4893-481f-966eec3e9b6f/mzaf_12108236315863884543.plus.aac.p.m4a",
         "comment": ""
       },
       {
@@ -4726,7 +4755,7 @@
         "album": "Solstice Equinox",
         "image": "https://i.scdn.co/image/ab67616d0000b273515ece430000a076eee1595b",
         "url": "https://open.spotify.com/track/5HhT4tYO8uCNn11AX75gNz",
-        "previewUrl": "",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3c/2c/29/3c2c29c1-c8b1-d520-b77e-b3d1ea54e167/mzaf_8315963105637194452.plus.aac.p.m4a",
         "comment": ""
       },
       {
