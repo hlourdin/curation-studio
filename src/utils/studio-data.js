@@ -1,8 +1,23 @@
 import { supabase } from './supabase.js';
 
+const WRITE_TIMEOUT_MS = 15_000;
+
 function requireClient() {
   if (!supabase) throw new Error('SUPABASE_NOT_CONFIGURED');
   return supabase;
+}
+
+async function withWriteTimeout(operation, errorCode) {
+  let timeoutId;
+  const timeout = new Promise((_, reject) => {
+    timeoutId = window.setTimeout(() => reject(new Error(errorCode)), WRITE_TIMEOUT_MS);
+  });
+
+  try {
+    return await Promise.race([Promise.resolve(operation), timeout]);
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
 }
 
 function playlistFromRow(row) {
@@ -63,11 +78,14 @@ export async function saveTrackComment(track, comment) {
   const client = requireClient();
   if (!track._dbId || !track._revision) throw new Error('TRACK_NOT_PERSISTED');
 
-  const { data, error } = await client.rpc('save_playlist_item_comment', {
-    item_id: track._dbId,
-    expected_revision: track._revision,
-    new_comment: comment
-  });
+  const { data, error } = await withWriteTimeout(
+    client.rpc('save_playlist_item_comment', {
+      item_id: track._dbId,
+      expected_revision: track._revision,
+      new_comment: comment
+    }),
+    'COMMENT_SAVE_TIMEOUT'
+  );
 
   if (error) {
     const conflict = error.code === '40001' || error.message?.includes('EDIT_CONFLICT');

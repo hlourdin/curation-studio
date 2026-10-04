@@ -1151,10 +1151,18 @@ function enterEditCommentMode(track, wrapper) {
     } catch (error) {
       console.error('Sauvegarde du commentaire :', error);
       saveBtn.disabled = false;
-      saveBtn.textContent = error.message === 'EDIT_CONFLICT' ? 'Conflit - recharger' : 'Réessayer';
+      const isConflict = error.message === 'EDIT_CONFLICT';
+      const isTimeout = error.message === 'COMMENT_SAVE_TIMEOUT';
+      saveBtn.textContent = isConflict ? 'Conflit - recharger' : 'Réessayer';
       showNotificationModal({
-        title: error.message === 'EDIT_CONFLICT' ? 'Conflit de modification' : 'Échec de sauvegarde',
-        message: 'Votre commentaire est conservé dans ce navigateur et n’a pas été écrasé.',
+        title: isConflict
+          ? 'Conflit de modification'
+          : isTimeout
+            ? 'Enregistrement trop long'
+            : 'Échec de sauvegarde',
+        message: isTimeout
+          ? 'La réponse du serveur tarde. Votre commentaire reste conservé dans ce navigateur. Rechargez la page pour vérifier s’il a été enregistré avant de réessayer.'
+          : 'Votre commentaire est conservé dans ce navigateur et n’a pas été écrasé.',
         showPreviewBtn: false
       });
     }
