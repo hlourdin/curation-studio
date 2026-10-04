@@ -17,9 +17,10 @@ One ordered list. IDs remain stable if priorities change. `P0` is needed for the
 | V2-011 | P1 | todo | Improve the editorial workspace | Search finds playlists/tracks/artists; metadata and featured-selection editing persist; shared preview rendering matches public output |
 | V2-012 | P1 | todo | Improve public discovery and listening | Mobile/keyboard flows work; search excludes drafts; preview failures and rapid track changes have correct states; share links/metadata resolve |
 | V2-013 | P1 | todo | Cut over after owner trial | Owner accepts v2; final content delta reconciled; restore and rollback rehearsed; production routing changed deliberately; existing playlist URLs remain valid |
-| V2-014 | P2 | deferred | Decide portable ZIP export | Keep it with shared rendering or retire it based on actual need |
-| V2-015 | P2 | deferred | Playback across page navigation | Establish whether uninterrupted listening justifies a navigation architecture change |
-| V2-016 | P2 | deferred | Automated external backups | Add only after export/restore works and a free destination/retention policy is agreed |
+| V2-014 | P2 | deferred | Automated Spotify playlist sync | Optional per-playlist auto-sync via cron (Vercel or Supabase); requires refresh token storage; detects new tracks; preserves comments; notifications on changes; defer to v2.1+ after core stability |
+| V2-015 | P2 | deferred | Decide portable ZIP export | Keep it with shared rendering or retire it based on actual need |
+| V2-016 | P2 | deferred | Playback across page navigation | Establish whether uninterrupted listening justifies a navigation architecture change |
+| V2-017 | P2 | deferred | Automated external backups | Add only after export/restore works and a free destination/retention policy is agreed |
 
 ## Delivery order
 

@@ -17,15 +17,31 @@
 
 ## 💡 Idées en cours
 
+### Clarifications du 2026-10-04
+
+**Auth Google = Backoffice uniquement**
+- ✅ L'authentification Google ne concerne que l'interface de curation (Studio/backoffice)
+- ✅ Un seul utilisateur (propriétaire) pour le moment
+- ✅ Le site public reste accessible sans authentification
+- Simplifie l'architecture : pas de gestion multi-users, pas de rôles complexes
+
+**Synchronisation automatique des playlists Spotify**
+- ❓ Possibilité d'utiliser des cron jobs pour auto-update quand nouveaux titres ajoutés sur Spotify
+- 🎯 Options identifiées :
+  - **Vercel Cron** (1 job gratuit sur Hobby) - recommandé pour démarrer
+  - **Supabase pg_cron** (plusieurs jobs possibles) - si besoin de plus
+- 🔑 Nécessite : stocker refresh token Spotify (Authorization Code Flow au lieu de PKCE actuel)
+- 📋 Flow : Cron → Check Spotify API → Detect changes → Merge + preserve comments → Log
+- ✨ Features possibles : checkbox "auto-sync" par playlist, notification email des changements
+- 📅 Timing : v2 initiale = update manuelle, v2.1 = ajout cron après stabilisation
+
 ### Prochaines réflexions à développer
 
-*[Ajoutez vos idées ici au fil de l'eau]*
-
-**Exemple :**
 - [ ] Préciser le flow exact de publication (bouton → snapshot → build → confirmation)
 - [ ] Définir la structure exacte des tables (champs, index, contraintes)
 - [ ] Détailler le mécanisme de résolution de conflits d'édition
 - [ ] Spécifier le format d'export/restore JSON
+- [ ] Décider si cron sync Spotify en v2.0 ou v2.1
 
 ---
 
@@ -49,6 +65,13 @@
 - Orientation Supabase confirmée
 - Création de cet espace de travail pour itérations mobiles
 - Plan général en place, passage en phase d'affinage avant implémentation
+
+### 2026-10-04 (10h)
+- Clarification : Auth Google = backoffice only, utilisateur unique (propriétaire)
+- Exploration : Sync automatique playlists Spotify via cron
+- Options : Vercel Cron (1 gratuit) ou Supabase pg_cron (plusieurs)
+- Décision : refresh token nécessaire (Authorization Code Flow vs PKCE actuel)
+- Recommandation : v2.0 = update manuelle, v2.1 = ajout cron optionnel
 
 ---
 
