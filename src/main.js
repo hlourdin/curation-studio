@@ -1121,6 +1121,7 @@ function enterEditCommentMode(track, wrapper) {
 
   // Annuler
   wrapper.querySelector('.cancel-btn').onclick = () => {
+    window.localStorage.removeItem(recoveryKey);
     renderCommentField(track, wrapper);
   };
 
