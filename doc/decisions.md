@@ -37,12 +37,12 @@ Small append-only record of consequential choices. Update a status when supersed
 
 ## D005 — Vercel plus Supabase
 
-- Date: 2026-09-27
-- Status: proposed
+- Date: 2026-09-27, confirmed 2026-10-04
+- Status: accepted
 - Decision: reuse Vercel hosting; add Supabase Free for Postgres, authentication, and the data API.
 - Reason: one new managed service provides most of the missing online capabilities.
-- Alternative: Cloudflare Workers/D1 with an authentication layer. Consider if database inactivity pauses are unacceptable.
-- Consequence: Supabase's free inactivity and backup limitations require a resume/export procedure. Keep SQL migrations and versioned exports portable.
+- Alternative considered: Cloudflare Workers/D1 with an authentication layer. Supabase's managed auth and combined services preferred.
+- Consequence: Supabase's free inactivity and backup limitations require a resume/export procedure. Dashboard reactivation after 7 days of inactivity is acceptable. Keep SQL migrations and versioned exports portable.
 - Evidence and limits: [architecture](architecture.md#free-tier-tradeoffs).
 
 ## D006 — Studio identity separate from Spotify
