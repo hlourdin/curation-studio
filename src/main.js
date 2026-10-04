@@ -286,6 +286,14 @@ async function setupApp() {
     spotifyConnectBtn.onclick = () => redirectToSpotifyAuth();
     updateSpotifyConnectionButton();
   }
+  const importV1Btn = document.getElementById('import-v1-catalog-btn');
+  if (importV1Btn) {
+    importV1Btn.onclick = () => importV1Catalogue();
+    importV1Btn.classList.toggle(
+      'hidden',
+      !isSupabaseConfigured || Object.keys(playlists).length > 0
+    );
+  }
 
   // Événement déconnexion
   logoutBtn.onclick = async () => {
@@ -378,6 +386,47 @@ async function setupApp() {
     loadPlaylist(activePlaylistSlug);
   } else {
     showEmptyState(true);
+  }
+}
+
+async function importV1Catalogue() {
+  const button = document.getElementById('import-v1-catalog-btn');
+  if (!button || !supabase) return;
+  button.disabled = true;
+  button.textContent = 'Import en cours…';
+
+  try {
+    const {
+      data: { session }
+    } = await supabase.auth.getSession();
+    if (!session) throw new Error('AUTH_REQUIRED');
+
+    const response = await fetch('/api/import-v1', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'IMPORT_FAILED');
+
+    playlists = await loadStudioPlaylists();
+    initActivePlaylistSlug();
+    populatePlaylistSelector();
+    button.classList.add('hidden');
+    if (activePlaylistSlug) loadPlaylist(activePlaylistSlug);
+    showNotificationModal({
+      title: 'Catalogue v1 importé',
+      message: `${result.playlistCount} playlists, ${result.trackCount} titres et ${result.commentCount} commentaires ont été migrés.`,
+      showPreviewBtn: false
+    });
+  } catch (error) {
+    console.error('Import initial v1 :', error);
+    button.disabled = false;
+    button.textContent = 'Réessayer l’import v1';
+    showNotificationModal({
+      title: 'Import impossible',
+      message: `Le catalogue n’a pas été importé (${escapeHTML(error.message)}).`,
+      showPreviewBtn: false
+    });
   }
 }
 
