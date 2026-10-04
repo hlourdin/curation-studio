@@ -26,14 +26,20 @@
 - Simplifie l'architecture : pas de gestion multi-users, pas de rôles complexes
 
 **Synchronisation automatique des playlists Spotify**
-- ❓ Possibilité d'utiliser des cron jobs pour auto-update quand nouveaux titres ajoutés sur Spotify
-- 🎯 Options identifiées :
-  - **Vercel Cron** (1 job gratuit sur Hobby) - recommandé pour démarrer
-  - **Supabase pg_cron** (plusieurs jobs possibles) - si besoin de plus
-- 🔑 Nécessite : stocker refresh token Spotify (Authorization Code Flow au lieu de PKCE actuel)
-- 📋 Flow : Cron → Check Spotify API → Detect changes → Merge + preserve comments → Log
-- ✨ Features possibles : checkbox "auto-sync" par playlist, notification email des changements
-- 📅 Timing : v2 initiale = update manuelle, v2.1 = ajout cron après stabilisation
+- ✅ **Usage clarifié** : Ajout titres Spotify quasi-quotidien, travail Studio 2-3x/jour max
+- 🎯 **Stratégie retenue** :
+  - **v2.0 (P0)** : Refresh manuel via bouton "Ré-importer" (PKCE comme v1)
+  - **v2.1+ (P2)** : Cron automatique tous les matins (ex: 8h) avec refresh token
+- 🔧 Options techniques identifiées :
+  - **Vercel Cron** (1 job gratuit sur Hobby) - recommandé
+  - **Supabase pg_cron** (plusieurs jobs possibles) - alternative
+- 🔑 **Requis pour auto-sync** :
+  - Stocker refresh token Spotify (Authorization Code Flow)
+  - Table `spotify_credentials` avec token chiffré
+  - Champs `auto_sync`, `last_synced_at`, `spotify_snapshot_id` dans `playlists`
+- 📋 **Flow cible v2.1** : Cron 8h → Fetch Spotify → Detect changes → Merge → Notif email → Vous commentez direct
+- ✨ **Features** : Checkbox "auto-sync" par playlist, notification "X nouveaux titres"
+- 🎯 **Bénéfice** : Titres déjà en BDD à l'ouverture du Studio, focus 100% sur la curation
 
 ### Prochaines réflexions à développer
 
@@ -72,6 +78,14 @@
 - Options : Vercel Cron (1 gratuit) ou Supabase pg_cron (plusieurs)
 - Décision : refresh token nécessaire (Authorization Code Flow vs PKCE actuel)
 - Recommandation : v2.0 = update manuelle, v2.1 = ajout cron optionnel
+
+### 2026-10-04 (11h)
+- **Usage clarifié** : Ajout titres Spotify quasi-quotidien, travail Studio 2-3x/jour
+- **Décision confirmée** : 
+  - v2.0 = Refresh manuel via bouton (PKCE suffit) ✅
+  - v2.1+ = Cron automatique tous les matins (ex: 8h) avec refresh token
+- **Séquence cible** : Cron sync le matin → titres déjà en BDD → vous commentez direct
+- **Gain** : Plus besoin de cliquer "Ré-importer", focus sur la curation
 
 ---
 
