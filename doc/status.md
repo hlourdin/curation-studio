@@ -7,7 +7,7 @@ Updated: 2026-10-04.
 - Phase: v2 implementation foundation.
 - Active development branch: `codex/v2-online-studio`, based on `master` at `be6c045`.
 - Stable code: `master`; current local Studio and static public site remain v1.
-- Online v2: not implemented or deployed; no database or auth project provisioned.
+- Online v2: repository implementation exists; deployment and provider validation are blocked until personal Supabase, Google, Spotify, and Vercel credentials are supplied.
 - New infrastructure spend: none incurred by this work.
 - Production hosting settings and active browser-only content: not yet inspected.
 
@@ -29,10 +29,13 @@ Updated: 2026-10-04.
 - Corrected Spotify OAuth documentation: PKCE already yields refresh tokens; scheduled sync requires server-side token custody.
 - Consolidated current Supabase, Neon, Vercel Marketplace, Blob, and Cron constraints.
 - Started implementation while preserving v1 on `master`.
+- Added Supabase migrations/RLS, Google backoffice authentication, revision-aware saves, migration and recovery scripts, safe Spotify sync, encrypted server token custody, daily cron, immutable release builds, and Vercel publication/status functions.
+- Added seven automated tests; v2 build, v1 static export, migration dry-run, JavaScript syntax checks, and dependency audit pass.
+- Manually validated the local fallback UI, catalogue, playlists, themes, and separate Spotify connection.
 
 ## Next
 
-V2-002: confirm personal ownership of required projects (Google OAuth, Vercel, Supabase) and create isolated v2 hosting/database instances. Finalize the exact database schema and data migration approach. First implementation target: log in on an isolated URL, save one comment to the database, and read it from another device.
+Provision the personal Supabase and two isolated Vercel projects using [the setup guide](setup-v2.md). Apply the migration, enroll the owner, and run the live access, multi-device, Spotify, publication, restore, and rollback acceptance checks.
 
 ## Open decisions
 
@@ -46,4 +49,4 @@ Use the [backlog](backlog.md) for work, [decisions](decisions.md) for rationale,
 
 ## Validation and limitations
 
-This session changes documentation and the active Git branch only. File/link consistency and Git state are checked; no application tests, live Spotify authentication, database access tests, migration, or deployment have been run.
+The repository implementation is locally verified. No live Supabase migration, Google/Spotify OAuth exchange, hosted migration, Vercel deployment, owner trial, or production cutover has been run because this environment has no provider credentials. Production v1 remains unchanged.
