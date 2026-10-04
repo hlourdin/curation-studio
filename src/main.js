@@ -1,7 +1,7 @@
 import {
   redirectToSpotifyAuth,
   getAccessToken,
-  logout,
+  logout as logoutSpotify,
   getValidAccessToken,
   extractPlaylistId,
   fetchSpotifyPlaylist
@@ -10,6 +10,22 @@ import {
 import defaultConfig from './data/config.json';
 import defaultPlaylistsData from './data/playlists-data.json';
 import { exportStudioSiteZIP } from './utils/exporter.js';
+import {
+  getAuthorizedSession,
+  isSupabaseConfigured,
+  signInWithGoogle,
+  signOutStudio,
+  supabase
+} from './utils/supabase.js';
+import {
+  archivePlaylist,
+  createPublicRelease,
+  loadStudioPlaylists,
+  savePlaylistDescription,
+  savePlaylistOrder,
+  saveTrackComment,
+  syncSpotifyPlaylist
+} from './utils/studio-data.js';
 
 // Variables d'état global
 let playlists = {};
@@ -23,7 +39,9 @@ let currentViewMode = localStorage.getItem('melomanie_track_view_mode') || 'grid
 // DOM Cache - Écrans
 const loginScreen = document.getElementById('login-screen');
 const appScreen = document.getElementById('app-screen');
-const spotifyLoginBtn = document.getElementById('spotify-login-btn');
+const googleLoginBtn = document.getElementById('google-login-btn');
+const spotifyConnectBtn = document.getElementById('spotify-connect-btn');
+const allowLocalFallback = import.meta.env.VITE_STUDIO_LOCAL_FALLBACK === 'true';
 
 // DOM Cache - Contôles Playlist & Navbar
 const playlistSelect = document.getElementById('playlist-select');
@@ -133,49 +151,75 @@ function showNotificationModal({ title, message, showPreviewBtn = false }) {
 
 // Initialisation de l'application
 async function init() {
-  // Gérer le thème dès le départ
   setupTheme();
 
-  // 1. Gérer l'authentification Spotify (redirection de retour)
+  // Le callback Spotify est distinct de l'authentification Google du Studio.
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
+  const isSpotifyCallback = Boolean(
+    code && window.localStorage.getItem('spotify_code_verifier')
+  );
 
-  let token = null;
-
-  if (code) {
-    // Si on a un code de retour de Spotify, on l'échange contre un token
+  if (isSpotifyCallback) {
     try {
       showGlobalLoading(true, "Authentification avec Spotify...");
-      token = await getAccessToken(code);
-      // Nettoyer l'URL sans recharger la page
+      await getAccessToken(code);
       window.history.replaceState({}, document.title, window.location.pathname);
     } catch (e) {
       console.error(e);
-      alert("Erreur lors de la connexion à Spotify. Veuillez réessayer.");
+      showNotificationModal({
+        title: 'Connexion Spotify impossible',
+        message: 'La connexion Spotify a échoué. Réessayez depuis le Studio.',
+        showPreviewBtn: false
+      });
     } finally {
       showGlobalLoading(false);
     }
-  } else {
-    // Sinon on vérifie si on a déjà un token d'accès valide
-    token = await getValidAccessToken();
   }
 
-  // 2. Adapter l'affichage selon le statut d'authentification
-  if (token) {
+  if (!isSupabaseConfigured && allowLocalFallback) {
     showLoginScreen(false);
-    setupApp();
-  } else {
-    showLoginScreen(true);
+    await setupApp();
+    return;
+  }
+
+  if (!isSupabaseConfigured) {
+    showLoginScreen(true, 'Configuration Supabase manquante.');
+    return;
+  }
+
+  try {
+    const auth = await getAuthorizedSession();
+    if (auth.authorized) {
+      showLoginScreen(false);
+      await setupApp();
+    } else {
+      showLoginScreen(
+        true,
+        auth.reason === 'not_curator'
+          ? 'Ce compte Google n’est pas autorisé à accéder au Studio.'
+          : ''
+      );
+    }
+  } catch (error) {
+    console.error('Initialisation du Studio :', error);
+    showLoginScreen(true, 'Impossible de vérifier votre accès au Studio.');
   }
 }
 
 // Affiche ou masque l'écran de connexion
-function showLoginScreen(show) {
+function showLoginScreen(show, message = '') {
   if (show) {
     loginScreen.classList.remove('hidden');
     appScreen.classList.add('hidden');
-    // Événement bouton de connexion
-    spotifyLoginBtn.onclick = () => redirectToSpotifyAuth();
+    const footer = loginScreen.querySelector('.login-footer p');
+    if (message && footer) footer.textContent = message;
+    if (googleLoginBtn) {
+      googleLoginBtn.disabled = !isSupabaseConfigured;
+      googleLoginBtn.onclick = () => signInWithGoogle().catch(error => {
+        console.error('Connexion Google :', error);
+      });
+    }
   } else {
     loginScreen.classList.add('hidden');
     appScreen.classList.remove('hidden');
@@ -183,9 +227,8 @@ function showLoginScreen(show) {
 }
 
 // Configure l'application une fois connecté
-function setupApp() {
-  // Charger les données (fusion entre LocalStorage et fichiers de démo par défaut)
-  loadPlaylistsData();
+async function setupApp() {
+  await loadPlaylistsData();
 
   // Clic sur le logo de l'en-tête pour ouvrir le catalogue global
   const logoLink = document.getElementById('logo-link');
@@ -205,11 +248,16 @@ function setupApp() {
   if (reimportBtn) {
     reimportBtn.onclick = () => handleReimport();
   }
+  if (spotifyConnectBtn) {
+    spotifyConnectBtn.onclick = () => redirectToSpotifyAuth();
+    updateSpotifyConnectionButton();
+  }
 
   // Événement déconnexion
-  logoutBtn.onclick = () => {
+  logoutBtn.onclick = async () => {
     if (isPlaying) pauseTrack();
-    logout();
+    logoutSpotify();
+    await signOutStudio();
     showLoginScreen(true);
   };
 
@@ -219,6 +267,31 @@ function setupApp() {
     exportSiteBtn.onclick = async () => {
       try {
         exportSiteBtn.disabled = true;
+        if (isSupabaseConfigured) {
+          const release = await createPublicRelease();
+          const {
+            data: { session }
+          } = await supabase.auth.getSession();
+          const publishResponse = await fetch('/api/publish', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({ releaseId: release.id })
+          });
+          const publishResult = await publishResponse.json();
+          if (!publishResponse.ok) {
+            throw new Error(publishResult.error || 'PUBLISH_FAILED');
+          }
+          showNotificationModal({
+            title: 'Publication lancée',
+            message: `La release <strong>${release.id}</strong> est liée au déploiement <strong>${publishResult.deploymentId}</strong>.`,
+            showPreviewBtn: false
+          });
+          return;
+        }
+
         const res = await fetch('/api/export-site', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -274,7 +347,13 @@ function setupApp() {
 }
 
 // Charge les playlists depuis LocalStorage ou le fichier JSON par défaut
-function loadPlaylistsData() {
+async function loadPlaylistsData() {
+  if (isSupabaseConfigured) {
+    playlists = await loadStudioPlaylists();
+    initActivePlaylistSlug();
+    return;
+  }
+
   const localData = window.localStorage.getItem('melomanie_playlists');
   
   if (localData) {
@@ -325,7 +404,9 @@ function initActivePlaylistSlug() {
 
 // Sauvegarde l'état actuel dans le LocalStorage
 function savePlaylistsData() {
-  window.localStorage.setItem('melomanie_playlists', JSON.stringify(playlists));
+  if (!isSupabaseConfigured) {
+    window.localStorage.setItem('melomanie_playlists', JSON.stringify(playlists));
+  }
   if (activePlaylistSlug) {
     window.localStorage.setItem('melomanie_active_slug', activePlaylistSlug);
   } else {
@@ -371,19 +452,24 @@ function populatePlaylistSelector() {
 // Récupère un jeton valide au moment de l'appel. Les jetons Spotify durent
 // une heure : celui obtenu au chargement de la page est périmé dès la
 // deuxième heure de session. getValidAccessToken() le rafraîchit au besoin.
+async function updateSpotifyConnectionButton() {
+  if (!spotifyConnectBtn) return;
+  const token = await getValidAccessToken();
+  const label = spotifyConnectBtn.querySelector('.pill-label');
+  spotifyConnectBtn.classList.toggle('highlight', Boolean(token));
+  if (label) label.textContent = token ? 'Spotify connecté' : 'Connecter Spotify';
+}
+
 async function requireSpotifyToken() {
   const token = await getValidAccessToken();
   if (!token) {
-    // Le rafraîchissement a échoué : la session est morte et getValidAccessToken
-    // a déjà vidé le stockage. On ramène l'écran de connexion, sans quoi
-    // l'utilisateur resterait bloqué sur une application inopérante.
     showNotificationModal({
-      title: '🔒 Session Spotify expirée',
-      message: "Votre session Spotify n'est plus valide. Reconnectez-vous pour continuer.",
+      title: 'Spotify doit être connecté',
+      message: 'Connectez Spotify depuis la barre d’actions pour importer ou actualiser une playlist.',
       showPreviewBtn: false
     });
-    showLoginScreen(true);
   }
+  await updateSpotifyConnectionButton();
   return token;
 }
 
@@ -415,10 +501,11 @@ async function handleImport() {
     const playlistData = await fetchSpotifyPlaylist(playlistId, token);
 
     // Générer un slug unique
-    const slug = slugify(playlistData.name);
+    let slug = slugify(playlistData.name);
 
-    // Si on a déjà des données locales avec des commentaires pour cette playlist, on tente de les fusionner
-    if (playlists[slug]) {
+    // Le mode local conserve le comportement v1. En mode hébergé, la fonction
+    // SQL transactionnelle préserve les commentaires et marque les retraits.
+    if (!isSupabaseConfigured && playlists[slug]) {
       const commentMap = new Map();
       playlists[slug].tracks.forEach(track => {
         if (track.comment) {
@@ -433,8 +520,13 @@ async function handleImport() {
       });
     }
 
-    // Ajouter ou remplacer la playlist
-    playlists[slug] = playlistData;
+    if (isSupabaseConfigured) {
+      const saved = await syncSpotifyPlaylist(playlistData, slug);
+      slug = saved.slug;
+      playlists = await loadStudioPlaylists();
+    } else {
+      playlists[slug] = playlistData;
+    }
     activePlaylistSlug = slug;
 
     // Enregistrer
@@ -535,18 +627,25 @@ async function handleReimport() {
       playlistData.description = currentPlaylist.description;
     }
 
-    playlists[slug] = playlistData;
+    if (isSupabaseConfigured) {
+      await syncSpotifyPlaylist(playlistData, slug);
+      playlists = await loadStudioPlaylists();
+    } else {
+      playlists[slug] = playlistData;
+    }
     savePlaylistsData();
 
-    // Régénérer le site statique
-    try {
-      await fetch('/api/export-site', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(playlists)
-      });
-    } catch (exportErr) {
-      console.warn("Régénération du site statique :", exportErr);
+    // La génération locale v1 reste disponible uniquement en fallback local.
+    if (!isSupabaseConfigured) {
+      try {
+        await fetch('/api/export-site', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(playlists)
+        });
+      } catch (exportErr) {
+        console.warn("Régénération du site statique :", exportErr);
+      }
     }
 
     populatePlaylistSelector();
@@ -661,12 +760,32 @@ function enterEditPlaylistDescriptionMode() {
   };
 
   const saveBtn = playlistDescriptionContainer.querySelector('.save-btn');
-  saveBtn.onclick = (e) => {
+  saveBtn.onclick = async (e) => {
     e.stopPropagation();
     const newDesc = textarea.value.trim();
-    currentPlaylist.description = newDesc;
-    savePlaylistsData();
-    renderPlaylistDescription();
+    const recoveryKey = `melomanie_recovery_description_${activePlaylistSlug}`;
+    window.localStorage.setItem(recoveryKey, newDesc);
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Enregistrement…';
+    try {
+      if (isSupabaseConfigured) {
+        const saved = await savePlaylistDescription(currentPlaylist, newDesc);
+        currentPlaylist._revision = saved.revision;
+      }
+      currentPlaylist.description = newDesc;
+      savePlaylistsData();
+      window.localStorage.removeItem(recoveryKey);
+      renderPlaylistDescription();
+    } catch (error) {
+      console.error('Sauvegarde de la description :', error);
+      saveBtn.disabled = false;
+      saveBtn.textContent = error.message === 'EDIT_CONFLICT' ? 'Conflit - recharger' : 'Réessayer';
+      showNotificationModal({
+        title: error.message === 'EDIT_CONFLICT' ? 'Conflit de modification' : 'Échec de sauvegarde',
+        message: 'Votre texte reste conservé dans ce navigateur. Rechargez les données avant de réessayer.',
+        showPreviewBtn: false
+      });
+    }
   };
 }
 
@@ -847,22 +966,42 @@ function enterEditCommentMode(track, wrapper) {
   };
 
   // Sauvegarder
-  wrapper.querySelector('.save-btn').onclick = () => {
+  wrapper.querySelector('.save-btn').onclick = async () => {
     const val = textarea.value.trim();
-    track.comment = val;
-    
-    // Mettre à jour l'objet playlists global
-    const currentPlaylist = playlists[activePlaylistSlug];
-    const trackIndex = currentPlaylist.tracks.findIndex(t => t.id === track.id);
-    if (trackIndex > -1) {
-      currentPlaylist.tracks[trackIndex].comment = val;
-    }
-    
-    // Sauvegarder dans LocalStorage
-    savePlaylistsData();
+    const saveBtn = wrapper.querySelector('.save-btn');
+    const recoveryKey = `melomanie_recovery_comment_${track._dbId || track.id}`;
+    window.localStorage.setItem(recoveryKey, val);
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Enregistrement…';
 
-    // Re-rendre le commentaire
-    renderCommentField(track, wrapper);
+    try {
+      if (isSupabaseConfigured) {
+        const saved = await saveTrackComment(track, val);
+        track._revision = saved.revision;
+      }
+
+      track.comment = val;
+      const currentPlaylist = playlists[activePlaylistSlug];
+      const trackIndex = currentPlaylist.tracks.findIndex(candidate =>
+        track._dbId
+          ? candidate._dbId === track._dbId
+          : candidate.id === track.id
+      );
+      if (trackIndex > -1) currentPlaylist.tracks[trackIndex].comment = val;
+
+      savePlaylistsData();
+      window.localStorage.removeItem(recoveryKey);
+      renderCommentField(track, wrapper);
+    } catch (error) {
+      console.error('Sauvegarde du commentaire :', error);
+      saveBtn.disabled = false;
+      saveBtn.textContent = error.message === 'EDIT_CONFLICT' ? 'Conflit - recharger' : 'Réessayer';
+      showNotificationModal({
+        title: error.message === 'EDIT_CONFLICT' ? 'Conflit de modification' : 'Échec de sauvegarde',
+        message: 'Votre commentaire est conservé dans ce navigateur et n’a pas été écrasé.',
+        showPreviewBtn: false
+      });
+    }
   };
 }
 
@@ -1393,20 +1532,25 @@ async function saveReorder() {
     }
   });
 
+  if (isSupabaseConfigured) {
+    await savePlaylistOrder(tempReorderSlugs.map(slug => playlists[slug]));
+    playlists = await loadStudioPlaylists();
+  }
   savePlaylistsData();
   populatePlaylistSelector();
   const reorderModal = document.getElementById('reorder-modal');
   if (reorderModal) reorderModal.classList.add('hidden');
 
-  // Mise à jour synchrone du site statique
-  try {
-    await fetch('/api/export-site', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(playlists)
-    });
-  } catch (e) {
-    console.warn("Mise à jour SSG locale :", e);
+  if (!isSupabaseConfigured) {
+    try {
+      await fetch('/api/export-site', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(playlists)
+      });
+    } catch (e) {
+      console.warn("Mise à jour SSG locale :", e);
+    }
   }
 }
 
@@ -1578,26 +1722,32 @@ async function moveCatalogPlaylistOrder(index, direction) {
     }
   });
 
+  if (isSupabaseConfigured) {
+    await savePlaylistOrder(sortedSlugs.map(slug => playlists[slug]));
+    playlists = await loadStudioPlaylists();
+  }
   savePlaylistsData();
   populatePlaylistSelector();
   renderCatalogGrid();
 
-  // Synchro SSG locale
-  try {
-    await fetch('/api/export-site', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(playlists)
-    });
-  } catch (e) {
-    console.warn("Mise à jour SSG :", e);
+  if (!isSupabaseConfigured) {
+    try {
+      await fetch('/api/export-site', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(playlists)
+      });
+    } catch (e) {
+      console.warn("Mise à jour SSG :", e);
+    }
   }
 }
 
-function deleteCatalogPlaylist(slug) {
+async function deleteCatalogPlaylist(slug) {
   const pl = playlists[slug];
   if (!pl) return;
   if (confirm(`Voulez-vous vraiment supprimer la playlist "${pl.name}" ?`)) {
+    if (isSupabaseConfigured) await archivePlaylist(pl);
     delete playlists[slug];
     savePlaylistsData();
     const sortedSlugs = getSortedPlaylistSlugs(playlists);

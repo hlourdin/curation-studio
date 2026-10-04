@@ -6,15 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:v2": "node scripts/build-v2.js",
     "preview": "vite preview",
     "fetch": "node scripts/fetch-playlist.js",
-    "export-site": "node scripts/export-site.js"
+    "export-site": "node scripts/export-site.js",
+    "curator:enroll": "node scripts/enroll-curator.js",
+    "migrate:v1": "node scripts/migrate-v1.js",
+    "backup:export": "node scripts/export-backup.js",
+    "backup:restore": "node scripts/restore-backup.js",
+    "test": "node --test"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "vite": "^5.4.14"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "dotenv": "^16.4.5",
     "jszip": "^3.10.1"
   }

@@ -249,16 +249,43 @@ function artistsHTML(track) {
    GÉNÉRATION
    ========================================================================== */
 
-export function buildStaticSite() {
-  const siteDir = path.join(rootDir, 'site');
+function normalizeReleasePayload(input) {
+  if (!input || typeof input !== 'object') throw new Error('INVALID_RELEASE_PAYLOAD');
+
+  const forbidden = /token|secret|owner_id|user_id/i;
+  const inspect = value => {
+    if (!value || typeof value !== 'object') return;
+    for (const [key, nested] of Object.entries(value)) {
+      if (forbidden.test(key)) throw new Error(`PRIVATE_FIELD_IN_RELEASE:${key}`);
+      inspect(nested);
+    }
+  };
+  inspect(input);
+
+  if (Array.isArray(input.playlists)) {
+    return Object.fromEntries(
+      input.playlists.map(playlist => {
+        if (!playlist.slug) throw new Error('RELEASE_PLAYLIST_SLUG_REQUIRED');
+        return [playlist.slug, playlist];
+      })
+    );
+  }
+
+  return input;
+}
+
+export function buildStaticSite(options = {}) {
+  const siteDir = options.outDir || path.join(rootDir, 'site');
   const playlistsDir = path.join(siteDir, 'playlists');
 
   if (!fs.existsSync(siteDir)) fs.mkdirSync(siteDir, { recursive: true });
   if (!fs.existsSync(playlistsDir)) fs.mkdirSync(playlistsDir, { recursive: true });
 
   const dataPath = path.join(rootDir, 'src', 'data', 'playlists-data.json');
-  let playlistsData = {};
-  if (fs.existsSync(dataPath)) {
+  let playlistsData = options.playlistsData
+    ? normalizeReleasePayload(options.playlistsData)
+    : {};
+  if (!options.playlistsData && fs.existsSync(dataPath)) {
     try {
       playlistsData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     } catch (e) {
@@ -307,7 +334,15 @@ export function buildStaticSite() {
       console.log(`  données orphelines supprimées : data/${f}`);
     });
 
+  const sourceAssets = options.assetDir || path.join(rootDir, 'site', 'assets');
+  const outputAssets = path.join(siteDir, 'assets');
+  if (path.resolve(sourceAssets) !== path.resolve(outputAssets)) {
+    if (!fs.existsSync(sourceAssets)) throw new Error(`ASSET_DIR_MISSING:${sourceAssets}`);
+    fs.cpSync(sourceAssets, outputAssets, { recursive: true, force: true });
+  }
+
   console.log("Génération terminée. Le répertoire 'site/' est prêt pour Vercel.");
+  return { siteDir, slugs };
 }
 
 /* --------------------------------------------------------------------------
