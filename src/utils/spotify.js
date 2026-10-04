@@ -1,5 +1,5 @@
-const CLIENT_ID = 'c02cddea8b654e68b14633346c93cc78';
-const REDIRECT_URI = 'https://127.0.0.1:5173'; // Doit correspondre exactement à la config Spotify Dashboard
+const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID || 'c02cddea8b654e68b14633346c93cc78';
+const REDIRECT_URI = import.meta.env.VITE_SPOTIFY_REDIRECT_URI || window.location.origin;
 const SCOPES = 'playlist-read-private playlist-read-collaborative';
 
 // Génère une chaîne aléatoire pour le Code Verifier
@@ -22,6 +22,7 @@ async function generateCodeChallenge(codeVerifier) {
 
 // Redirige l'utilisateur vers la page de connexion Spotify
 export async function redirectToSpotifyAuth() {
+  if (!CLIENT_ID) throw new Error('SPOTIFY_CLIENT_ID_MISSING');
   const codeVerifier = generateRandomString(64);
   const codeChallenge = await generateCodeChallenge(codeVerifier);
 
@@ -116,6 +117,10 @@ export function logout() {
   window.localStorage.removeItem('spotify_code_verifier');
 }
 
+export function getStoredSpotifyRefreshToken() {
+  return window.localStorage.getItem('spotify_refresh_token');
+}
+
 // Vérifie si l'utilisateur est connecté et rafraîchit le token si nécessaire
 export async function getValidAccessToken() {
   const token = window.localStorage.getItem('spotify_access_token');
@@ -191,7 +196,8 @@ export async function fetchSpotifyPlaylist(playlistId, token) {
       tracksItems = tracksItems.concat(nextData.items);
       nextUrl = nextData.next;
     } else {
-      break;
+      const errorBody = await nextRes.text();
+      throw new Error(`IMPORT_INCOMPLETE: pagination Spotify interrompue (${nextRes.status}) ${errorBody}`);
     }
   }
 
@@ -226,6 +232,8 @@ export async function fetchSpotifyPlaylist(playlistId, token) {
     id: playlistId,
     name: playlistInfo.name,
     description: playlistInfo.description || '',
+    snapshotId: playlistInfo.snapshot_id || null,
+    coverImage: playlistInfo.images?.[0]?.url || '',
     spotifyUrl: playlistInfo.external_urls?.spotify || `https://open.spotify.com/playlist/${playlistId}`,
     tracks: formattedTracks
   };

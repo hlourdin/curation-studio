@@ -1,5 +1,7 @@
 # 🎧 Mélomanie : Partage de Découvertes Musicales
 
+> **Documentation actuelle :** voir [`doc/README.md`](doc/README.md) et le [statut du projet](doc/status.md). La v2 prépare un Studio en ligne avec connexion et base de données sur la branche `codex/v2-online-studio`. Le guide ci-dessous est historique et décrit des commandes/configurations de la v1 qui doivent encore être harmonisées ; consulter `AGENTS.md` pour le fonctionnement actuel. La gestion du projet utilise des fichiers Markdown simples, sans GSD.
+
 Ce projet vous permet de générer automatiquement un site web statique premium pour présenter vos sélections semestrielles de découvertes musicales à partir de vos playlists Spotify.
 
 L'interface est moderne (style Spotify sombre, glassmorphism, animations fluides) et intègre un **mini-lecteur audio** pour écouter des extraits de 30 secondes directement sur la page, ainsi qu'un espace pour afficher vos **commentaires personnalisés** sur chaque morceau.

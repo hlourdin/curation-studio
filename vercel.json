@@ -1,20 +1,12 @@
 {
-  "buildCommand": "npm run export-site",
-  "outputDirectory": "site",
+  "buildCommand": "npm run build:v2",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
+  "crons": [
     {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.lacurio.site" }],
-      "destination": "https://lacurio.site/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "curation-studio-seven.vercel.app" }],
-      "destination": "https://lacurio.site/:path*",
-      "permanent": false
+      "path": "/api/cron/sync-playlists",
+      "schedule": "0 8 * * *"
     }
   ]
 }

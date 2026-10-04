@@ -36,8 +36,8 @@
           <h1>Le Son de la Curiosité</h1>
           <p>Importez vos playlists Spotify, annotez les morceaux qui le méritent, puis générez le site public.</p>
         </div>
-        <button class="spotify-login-btn group" id="spotify-login-btn">
-          <span>Se connecter avec Spotify</span>
+        <button class="spotify-login-btn group" id="google-login-btn">
+          <span>Se connecter avec Google</span>
           <span class="btn-icon-bubble">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
@@ -45,7 +45,7 @@
           </span>
         </button>
         <div class="login-footer">
-          <p>Authentification sécurisée via OAuth 2.0 PKCE. Vos identifiants ne quittent jamais votre navigateur.</p>
+          <p>Backoffice privé. Seul le compte Google personnel autorisé peut accéder aux brouillons.</p>
         </div>
       </div>
     </div>
@@ -95,6 +95,12 @@
 
             <!-- Actions Secondaires, Switcher Thème & Déconnexion -->
             <div class="nav-actions-group">
+              <button id="spotify-connect-btn" class="nav-action-pill" title="Connecter Spotify pour importer ou actualiser des playlists">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/>
+                </svg>
+                <span class="pill-label">Connecter Spotify</span>
+              </button>
               <button id="theme-toggle-btn" class="nav-action-pill theme-toggle-btn" title="Basculer entre Mode Sombre et Mode Clair">
                 <span class="theme-icon-sun">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
@@ -160,6 +166,9 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="reimport-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
                 <span class="reimport-btn-label">Ré-importer</span>
               </button>
+              <button id="auto-sync-playlist-btn" class="reimport-btn group hidden" title="Activer ou désactiver la synchronisation Spotify quotidienne">
+                <span class="auto-sync-btn-label">Sync auto : non</span>
+              </button>
             </div>
             <div class="view-toggle-group">
               <button class="view-toggle-btn active" id="view-mode-grid" data-view="grid" title="Vue Grille de Cartes">
@@ -186,6 +195,9 @@
               </div>
               <h3 class="empty-state-title" id="empty-title">Aucune playlist importée</h3>
               <p class="empty-state-desc" id="empty-desc">Collez un lien de playlist Spotify ci-dessus pour commencer votre exploration.</p>
+              <button id="import-v1-catalog-btn" class="nav-action-pill highlight hidden">
+                Importer le catalogue v1
+              </button>
             </div>
           </div>
         </div>
