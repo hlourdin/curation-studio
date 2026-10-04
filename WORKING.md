@@ -26,10 +26,13 @@
 - Simplifie l'architecture : pas de gestion multi-users, pas de rôles complexes
 
 **Synchronisation automatique des playlists Spotify**
-- ✅ **Usage clarifié** : Ajout titres Spotify quasi-quotidien, travail Studio 2-3x/jour max
+- ✅ **Usage clarifié** : 
+  - Ajout titres Spotify : quasi-quotidien
+  - Travail Studio : 2-3x par **SEMAINE**
+  - **Implication** : Plusieurs jours de nouveaux titres accumulés entre chaque session
 - 🎯 **Stratégie retenue** :
   - **v2.0 (P0)** : Refresh manuel via bouton "Ré-importer" (PKCE comme v1)
-  - **v2.1+ (P2)** : Cron automatique tous les matins (ex: 8h) avec refresh token
+  - **v2.1+ (P2)** : Cron automatique tous les matins (ex: 8h) avec refresh token → **très pertinent** vu l'accumulation
 - 🔧 Options techniques identifiées :
   - **Vercel Cron** (1 job gratuit sur Hobby) - recommandé
   - **Supabase pg_cron** (plusieurs jobs possibles) - alternative
@@ -37,9 +40,9 @@
   - Stocker refresh token Spotify (Authorization Code Flow)
   - Table `spotify_credentials` avec token chiffré
   - Champs `auto_sync`, `last_synced_at`, `spotify_snapshot_id` dans `playlists`
-- 📋 **Flow cible v2.1** : Cron 8h → Fetch Spotify → Detect changes → Merge → Notif email → Vous commentez direct
-- ✨ **Features** : Checkbox "auto-sync" par playlist, notification "X nouveaux titres"
-- 🎯 **Bénéfice** : Titres déjà en BDD à l'ouverture du Studio, focus 100% sur la curation
+- 📋 **Flow cible v2.1** : Cron 8h quotidien → Fetch Spotify → Detect changes → Merge → Notif email hebdo → Session curation avec tous les titres de la semaine prêts
+- ✨ **Features** : Checkbox "auto-sync" par playlist, notification hebdo "X nouveaux titres cette semaine"
+- 🎯 **Bénéfice** : Lundi+Mardi+Mercredi+Jeudi titres → Vendredi ouverture Studio → tout déjà là, focus 100% sur la curation sans friction
 
 ### Prochaines réflexions à développer
 
@@ -80,12 +83,15 @@
 - Recommandation : v2.0 = update manuelle, v2.1 = ajout cron optionnel
 
 ### 2026-10-04 (11h)
-- **Usage clarifié** : Ajout titres Spotify quasi-quotidien, travail Studio 2-3x/jour
+- **Usage clarifié** : 
+  - Ajout titres Spotify : quasi-quotidien
+  - Travail Studio : 2-3x par **SEMAINE** (correction)
+- **Implication** : Plusieurs jours de titres accumulés entre chaque session Studio
 - **Décision confirmée** : 
   - v2.0 = Refresh manuel via bouton (PKCE suffit) ✅
-  - v2.1+ = Cron automatique tous les matins (ex: 8h) avec refresh token
-- **Séquence cible** : Cron sync le matin → titres déjà en BDD → vous commentez direct
-- **Gain** : Plus besoin de cliquer "Ré-importer", focus sur la curation
+  - v2.1+ = Cron automatique tous les matins (ex: 8h) avec refresh token → **encore plus pertinent**
+- **Séquence cible** : Cron sync quotidien → titres accumulés déjà en BDD → session hebdo focus 100% curation
+- **Gain** : Plus besoin de cliquer "Ré-importer", tous les titres de la semaine déjà là
 
 ---
 
