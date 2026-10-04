@@ -272,6 +272,46 @@ begin
 end;
 $$;
 
+create or replace function public.reorder_playlists(
+  ordered_playlist_ids uuid[]
+)
+returns setof public.playlists
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  owned_count integer;
+begin
+  if not public.is_curator() then
+    raise exception using errcode = '42501', message = 'CURATOR_REQUIRED';
+  end if;
+
+  select count(*) into owned_count
+  from public.playlists
+  where owner_id = auth.uid()
+    and not archived
+    and id = any(ordered_playlist_ids);
+
+  if owned_count <> coalesce(array_length(ordered_playlist_ids, 1), 0) then
+    raise exception using errcode = '22023', message = 'INVALID_PLAYLIST_ORDER';
+  end if;
+
+  update public.playlists p
+  set display_order = ordering.position,
+      revision = p.revision + 1
+  from unnest(ordered_playlist_ids) with ordinality as ordering(id, position)
+  where p.id = ordering.id
+    and p.owner_id = auth.uid();
+
+  return query
+  select *
+  from public.playlists
+  where owner_id = auth.uid() and not archived
+  order by display_order;
+end;
+$$;
+
 create or replace function public.create_public_release()
 returns public.releases
 language plpgsql
@@ -573,5 +613,6 @@ grant execute on function public.sync_spotify_playlist_as_owner(uuid, jsonb) to 
 
 grant execute on function public.save_playlist_item_comment(uuid, bigint, text) to authenticated;
 grant execute on function public.save_playlist_description(uuid, bigint, text) to authenticated;
+grant execute on function public.reorder_playlists(uuid[]) to authenticated;
 grant execute on function public.create_public_release() to authenticated;
 grant execute on function public.sync_spotify_playlist(jsonb) to authenticated;

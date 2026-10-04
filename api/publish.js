@@ -1,3 +1,5 @@
+import crypto from 'node:crypto';
+import { recordActivity } from './_lib/activity.js';
 import { requireCurator, sendError } from './_lib/supabase.js';
 import { createReleaseDeployment } from './_lib/vercel.js';
 
@@ -9,6 +11,8 @@ export default async function handler(req, res) {
 
   try {
     const { supabase, user } = await requireCurator(req);
+    const startedAt = Date.now();
+    const correlationId = crypto.randomUUID();
     const { releaseId } = req.body || {};
     if (!releaseId) return res.status(400).json({ error: 'RELEASE_ID_REQUIRED' });
 
@@ -59,6 +63,17 @@ export default async function handler(req, res) {
       .eq('id', releaseId)
       .eq('owner_id', user.id);
     if (updateError) throw updateError;
+
+    await recordActivity(supabase, {
+      ownerId: user.id,
+      operation: 'publish',
+      entityType: 'release',
+      entityId: releaseId,
+      outcome: 'started',
+      correlationId,
+      durationMs: Date.now() - startedAt,
+      metadata: { deploymentId: deployment.id }
+    });
 
     return res.status(202).json({
       releaseId,

@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { recordActivity } from '../_lib/activity.js';
 import { decryptToken, encryptToken } from '../_lib/token-crypto.js';
 import { fetchCompleteSpotifyPlaylist, refreshSpotifyAccessToken } from '../_lib/spotify.js';
 import { getServiceClient, sendError } from '../_lib/supabase.js';
@@ -33,6 +34,8 @@ export default async function handler(req, res) {
     const results = [];
 
     for (const playlist of playlists || []) {
+      const startedAt = Date.now();
+      const correlationId = crypto.randomUUID();
       const runningRecently =
         playlist.last_sync_status === 'running' &&
         Date.now() - new Date(playlist.updated_at).getTime() < 30 * 60 * 1000;
@@ -100,6 +103,16 @@ export default async function handler(req, res) {
           outcome: 'succeeded',
           trackCount: payload.tracks.length
         });
+        await recordActivity(supabase, {
+          ownerId: playlist.owner_id,
+          operation: 'spotify_sync',
+          entityType: 'playlist',
+          entityId: playlist.id,
+          outcome: 'succeeded',
+          correlationId,
+          durationMs: Date.now() - startedAt,
+          metadata: { trackCount: payload.tracks.length }
+        });
       } catch (syncError) {
         const code = String(syncError.message || 'SPOTIFY_SYNC_FAILED').slice(0, 120);
         await supabase.from('playlists').update({
@@ -107,6 +120,16 @@ export default async function handler(req, res) {
           last_sync_error_code: code
         }).eq('id', playlist.id);
         results.push({ playlistId: playlist.id, outcome: 'failed', errorCode: code });
+        await recordActivity(supabase, {
+          ownerId: playlist.owner_id,
+          operation: 'spotify_sync',
+          entityType: 'playlist',
+          entityId: playlist.id,
+          outcome: 'failed',
+          correlationId,
+          durationMs: Date.now() - startedAt,
+          errorCode: code
+        });
       }
     }
 

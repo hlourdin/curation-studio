@@ -2,6 +2,7 @@ import {
   redirectToSpotifyAuth,
   getAccessToken,
   logout as logoutSpotify,
+  getStoredSpotifyRefreshToken,
   getValidAccessToken,
   extractPlaylistId,
   fetchSpotifyPlaylist
@@ -24,6 +25,7 @@ import {
   savePlaylistDescription,
   savePlaylistOrder,
   saveTrackComment,
+  setPlaylistAutoSync,
   syncSpotifyPlaylist
 } from './utils/studio-data.js';
 
@@ -164,6 +166,11 @@ async function init() {
     try {
       showGlobalLoading(true, "Authentification avec Spotify...");
       await getAccessToken(code);
+      if (isSupabaseConfigured) {
+        await persistSpotifyConnection().catch(error => {
+          console.warn('Stockage serveur Spotify indisponible :', error);
+        });
+      }
       window.history.replaceState({}, document.title, window.location.pathname);
     } catch (e) {
       console.error(e);
@@ -207,6 +214,28 @@ async function init() {
   }
 }
 
+async function persistSpotifyConnection() {
+  const refreshToken = getStoredSpotifyRefreshToken();
+  if (!refreshToken || !supabase) return;
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
+  if (!session) return;
+
+  const response = await fetch('/api/spotify/connection', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`
+    },
+    body: JSON.stringify({
+      refreshToken,
+      scopes: ['playlist-read-private', 'playlist-read-collaborative']
+    })
+  });
+  if (!response.ok) throw new Error('SPOTIFY_CONNECTION_PERSIST_FAILED');
+}
+
 // Affiche ou masque l'écran de connexion
 function showLoginScreen(show, message = '') {
   if (show) {
@@ -248,6 +277,11 @@ async function setupApp() {
   if (reimportBtn) {
     reimportBtn.onclick = () => handleReimport();
   }
+  const autoSyncBtn = document.getElementById('auto-sync-playlist-btn');
+  if (autoSyncBtn) {
+    autoSyncBtn.onclick = () => toggleActivePlaylistAutoSync();
+    autoSyncBtn.classList.toggle('hidden', !isSupabaseConfigured);
+  }
   if (spotifyConnectBtn) {
     spotifyConnectBtn.onclick = () => redirectToSpotifyAuth();
     updateSpotifyConnectionButton();
@@ -286,9 +320,10 @@ async function setupApp() {
           }
           showNotificationModal({
             title: 'Publication lancée',
-            message: `La release <strong>${release.id}</strong> est liée au déploiement <strong>${publishResult.deploymentId}</strong>.`,
+            message: `La release <strong>${release.id}</strong> est en cours de déploiement. La version publique actuelle reste disponible.`,
             showPreviewBtn: false
           });
+          waitForPublication(release.id, session.access_token);
           return;
         }
 
@@ -344,6 +379,44 @@ async function setupApp() {
   } else {
     showEmptyState(true);
   }
+}
+
+async function waitForPublication(releaseId, accessToken) {
+  for (let attempt = 0; attempt < 60; attempt += 1) {
+    await new Promise(resolve => window.setTimeout(resolve, 5000));
+    try {
+      const response = await fetch(
+        `/api/publish-status?releaseId=${encodeURIComponent(releaseId)}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
+      if (!response.ok) continue;
+      const result = await response.json();
+      if (result.status === 'live') {
+        showNotificationModal({
+          title: 'Site publié',
+          message: 'La nouvelle release est en ligne. La publication a été confirmée par Vercel.',
+          showPreviewBtn: false
+        });
+        return;
+      }
+      if (result.status === 'failed') {
+        showNotificationModal({
+          title: 'Publication échouée',
+          message: `La version publique précédente est conservée. Code : <strong>${escapeHTML(result.error_code || 'PUBLISH_FAILED')}</strong>.`,
+          showPreviewBtn: false
+        });
+        return;
+      }
+    } catch (error) {
+      console.warn('Suivi de publication :', error);
+    }
+  }
+
+  showNotificationModal({
+    title: 'Publication toujours en cours',
+    message: 'Le déploiement prend plus de temps que prévu. Son état pourra être vérifié plus tard sans relancer une nouvelle release.',
+    showPreviewBtn: false
+  });
 }
 
 // Charge les playlists depuis LocalStorage ou le fichier JSON par défaut
@@ -711,6 +784,7 @@ function loadPlaylist(slug) {
     const count = playlistTracks.length;
     trackCountLabel.textContent = `${count} morceau${count > 1 ? 'x' : ''}`;
   }
+  renderAutoSyncState(data);
 
   // Si on lit un morceau qui ne fait pas partie de cette playlist, on cache le lecteur
   if (currentPlayingTrack && !playlistTracks.some(t => t.id === currentPlayingTrack.id)) {
@@ -719,6 +793,39 @@ function loadPlaylist(slug) {
 
   // Rendre les cartes de morceaux
   renderTracks(playlistTracks);
+}
+
+function renderAutoSyncState(playlist) {
+  const button = document.getElementById('auto-sync-playlist-btn');
+  if (!button || !isSupabaseConfigured) return;
+  const label = button.querySelector('.auto-sync-btn-label');
+  if (label) label.textContent = playlist._autoSync ? 'Sync auto : oui' : 'Sync auto : non';
+  button.classList.toggle('active', Boolean(playlist._autoSync));
+  button.title = playlist._lastSyncStatus
+    ? `Dernier état : ${playlist._lastSyncStatus}`
+    : 'Activer ou désactiver la synchronisation Spotify quotidienne';
+}
+
+async function toggleActivePlaylistAutoSync() {
+  const playlist = playlists[activePlaylistSlug];
+  if (!playlist) return;
+  const button = document.getElementById('auto-sync-playlist-btn');
+  if (button) button.disabled = true;
+  try {
+    const saved = await setPlaylistAutoSync(playlist, !playlist._autoSync);
+    playlist._autoSync = saved.auto_sync;
+    playlist._revision = saved.revision;
+    renderAutoSyncState(playlist);
+  } catch (error) {
+    console.error('Synchronisation automatique :', error);
+    showNotificationModal({
+      title: 'Modification impossible',
+      message: 'Le réglage de synchronisation automatique n’a pas pu être enregistré.',
+      showPreviewBtn: false
+    });
+  } finally {
+    if (button) button.disabled = false;
+  }
 }
 
 // Initialise l'éditeur de description de playlist

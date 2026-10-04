@@ -71,19 +71,21 @@ for (const playlist of backup.playlists) {
   if (error) throw error;
   const row = Array.isArray(restored) ? restored[0] : restored;
 
-  await supabase.from('playlists').update({
+  const { error: playlistUpdateError } = await supabase.from('playlists').update({
     editorial_name: playlist.editorial_name,
     editorial_description: playlist.editorial_description,
     featured: playlist.featured,
     publish_state: playlist.publish_state,
     archived: playlist.archived
   }).eq('id', row.id);
+  if (playlistUpdateError) throw playlistUpdateError;
 
   for (const item of playlist.playlist_items || []) {
-    await supabase.from('playlist_items').update({
+    const { error: itemUpdateError } = await supabase.from('playlist_items').update({
       comment: item.comment,
       removed_from_source: item.removed_from_source
     }).eq('playlist_id', row.id).eq('occurrence_key', item.occurrence_key);
+    if (itemUpdateError) throw itemUpdateError;
   }
 }
 

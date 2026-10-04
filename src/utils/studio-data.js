@@ -35,7 +35,9 @@ function playlistFromRow(row) {
     _dbId: row.id,
     _revision: row.revision,
     _spotifySnapshotId: row.spotify_snapshot_id,
-    _lastSyncedAt: row.last_synced_at
+    _lastSyncedAt: row.last_synced_at,
+    _autoSync: row.auto_sync,
+    _lastSyncStatus: row.last_sync_status
   };
 }
 
@@ -99,20 +101,13 @@ export async function savePlaylistDescription(playlist, description) {
 
 export async function savePlaylistOrder(sortedPlaylists) {
   const client = requireClient();
-  const updates = sortedPlaylists.map((playlist, index) =>
-    client
-      .from('playlists')
-      .update({ display_order: index + 1, revision: playlist._revision + 1 })
-      .eq('id', playlist._dbId)
-      .eq('revision', playlist._revision)
-      .select('id, revision')
-      .single()
-  );
-
-  const results = await Promise.all(updates);
-  const failure = results.find(result => result.error);
-  if (failure) throw failure.error;
-  return results.map(result => result.data);
+  const ids = sortedPlaylists.map(playlist => playlist._dbId);
+  if (ids.some(id => !id)) throw new Error('PLAYLIST_NOT_PERSISTED');
+  const { data, error } = await client.rpc('reorder_playlists', {
+    ordered_playlist_ids: ids
+  });
+  if (error) throw error;
+  return data;
 }
 
 export async function archivePlaylist(playlist) {
@@ -125,6 +120,19 @@ export async function archivePlaylist(playlist) {
     .select('id')
     .single();
 
+  if (error) throw error;
+  return data;
+}
+
+export async function setPlaylistAutoSync(playlist, enabled) {
+  const client = requireClient();
+  const { data, error } = await client
+    .from('playlists')
+    .update({ auto_sync: enabled, revision: playlist._revision + 1 })
+    .eq('id', playlist._dbId)
+    .eq('revision', playlist._revision)
+    .select('id, revision, auto_sync')
+    .single();
   if (error) throw error;
   return data;
 }

@@ -117,6 +117,10 @@ export function logout() {
   window.localStorage.removeItem('spotify_code_verifier');
 }
 
+export function getStoredSpotifyRefreshToken() {
+  return window.localStorage.getItem('spotify_refresh_token');
+}
+
 // Vérifie si l'utilisateur est connecté et rafraîchit le token si nécessaire
 export async function getValidAccessToken() {
   const token = window.localStorage.getItem('spotify_access_token');

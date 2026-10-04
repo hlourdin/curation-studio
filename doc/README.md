@@ -16,6 +16,7 @@ For the consolidated recap of accepted decisions, recommendations, and open fram
 | [Spotify authentication](spotify-auth-comparison.md) | Browser PKCE, server token custody, and scheduled sync | Spotify auth or sync behavior changes |
 | [Database comparison](database-comparison.md) | Historical rationale for the accepted Supabase decision | Provider limits materially change |
 | [Vercel storage](vercel-storage-comparison.md) | Why Blob is not the application database | Storage requirements change |
+| [v2 setup](setup-v2.md) | Reproducible Supabase, Vercel, Google, Spotify, migration, and acceptance steps | Provisioning or callbacks change |
 
 Keep each fact in its owning document and link to it elsewhere. Status summarizes; backlog tracks work; decisions explain why. Use `proposed`, `accepted`, and `superseded` for decisions. Use `todo`, `in progress`, `blocked`, `done`, and `deferred` for backlog items. Mark work done only with recorded evidence. Add another document only when an existing one has become difficult to use.
 
