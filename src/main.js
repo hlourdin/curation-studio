@@ -1098,9 +1098,11 @@ function renderCommentField(track, wrapper) {
 
 // Passe en mode d'édition de commentaire
 function enterEditCommentMode(track, wrapper) {
+  const recoveryKey = `melomanie_recovery_comment_${track._dbId || track.id}`;
+  const recoveredComment = window.localStorage.getItem(recoveryKey);
   wrapper.innerHTML = `
     <div class="comment-editor-wrapper">
-      <textarea class="song-comment-textarea" placeholder="Que pensez-vous de ce morceau ? (Vos impressions, souvenirs, critique...)">${track.comment || ''}</textarea>
+      <textarea class="song-comment-textarea" placeholder="Que pensez-vous de ce morceau ? (Vos impressions, souvenirs, critique...)"></textarea>
       <div class="editor-actions">
         <button class="editor-btn cancel-btn">Annuler</button>
         <button class="editor-btn save-btn">Enregistrer</button>
@@ -1110,6 +1112,7 @@ function enterEditCommentMode(track, wrapper) {
 
   // Focus sur la zone de texte
   const textarea = wrapper.querySelector('.song-comment-textarea');
+  textarea.value = recoveredComment ?? track.comment ?? '';
   textarea.focus();
   
   // Placer le curseur à la fin du texte
@@ -1125,7 +1128,6 @@ function enterEditCommentMode(track, wrapper) {
   wrapper.querySelector('.save-btn').onclick = async () => {
     const val = textarea.value.trim();
     const saveBtn = wrapper.querySelector('.save-btn');
-    const recoveryKey = `melomanie_recovery_comment_${track._dbId || track.id}`;
     window.localStorage.setItem(recoveryKey, val);
     saveBtn.disabled = true;
     saveBtn.textContent = 'Enregistrement…';
