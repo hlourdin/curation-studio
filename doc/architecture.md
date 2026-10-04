@@ -1,6 +1,6 @@
 # Architecture
 
-Updated: 2026-09-27. The online architecture below is proposed, not provisioned. Accepted constraints are recorded in [decisions](decisions.md).
+Updated: 2026-10-04. The Vercel + Supabase stack is accepted in D005 but not yet provisioned. Publication details remain proposed. Accepted constraints are recorded in [decisions](decisions.md).
 
 ## Current system
 
@@ -13,7 +13,7 @@ An online Studio cannot rely on the current development middleware or durable wr
 | Need | Proposal | Reason |
 |---|---|---|
 | Online Studio | Existing Vite/JavaScript frontend on Vercel Hobby | Reuse the code and existing hosting familiarity |
-| Login | Personal Google account, proposed through Supabase Auth | Google is chosen to separate personal curation from work; the managed auth service is still proposed |
+| Login | Personal Google account through Supabase Auth | Google separates personal curation from work; Supabase is accepted in D005 |
 | Editorial storage | Supabase Free Postgres and row-level security | Database, authentication, and data API in one managed service |
 | Privileged operations | A few Vercel functions | Authorize publishing and keep deployment secrets out of the browser |
 | Public site | Generated static pages on Vercel | Public reading/listening does not require the editing database at runtime |

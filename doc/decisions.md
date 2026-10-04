@@ -78,4 +78,4 @@ Small append-only record of consequential choices. Update a status when supersed
 - Supersedes: [D006](#d006--studio-identity-separate-from-spotify). Its separation between Studio identity and Spotify remains part of this decision.
 - Reason: the owner uses the same GitHub handle for work and personal projects and wants personal curation access separated from work.
 - Consequence: request only identity/email/basic profile scopes; show Google's account chooser; explicitly provision the authorized personal identity and enforce its stable user ID in database policies and privileged functions. Other accounts receive no editorial access. GitHub repository access grants no Studio permissions.
-- Scope: login and ownership choice only. The managed auth/database service remains proposed under D005; no cloud resources have been configured.
+- Scope: login and ownership choice only. Supabase Auth and Postgres are accepted under D005 but have not yet been provisioned.

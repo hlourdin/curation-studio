@@ -4,7 +4,7 @@ Updated: 2026-10-04.
 
 ## Current state
 
-- Phase: v2 architecture and documentation.
+- Phase: v2 implementation foundation.
 - Active development branch: `codex/v2-online-studio`, based on `master` at `be6c045`.
 - Stable code: `master`; current local Studio and static public site remain v1.
 - Online v2: not implemented or deployed; no database or auth project provisioned.
@@ -26,7 +26,9 @@ Updated: 2026-10-04.
 **Session 2026-10-04:**
 - Confirmed Supabase as the selected architecture (D005 now accepted).
 - Created [`WORKING.md`](../WORKING.md) as a mobile-friendly space to capture ideas and refine the plan iteratively.
-- Oriented toward plan refinement before implementation begins.
+- Corrected Spotify OAuth documentation: PKCE already yields refresh tokens; scheduled sync requires server-side token custody.
+- Consolidated current Supabase, Neon, Vercel Marketplace, Blob, and Cron constraints.
+- Started implementation while preserving v1 on `master`.
 
 ## Next
 

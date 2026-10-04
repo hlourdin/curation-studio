@@ -29,7 +29,7 @@ Google authentication must be accompanied by server/database authorization. A su
 
 The accepted decisions are recorded in [the decision log](doc/decisions.md), particularly D001–D004 and D009. D006 retains the historical GitHub choice and is marked superseded.
 
-## 3. Recommended architecture — not yet accepted in full
+## 3. Selected foundation and proposed publication architecture
 
 | Component | Current recommendation | Why |
 |---|---|---|
@@ -40,7 +40,7 @@ The accepted decisions are recorded in [the decision log](doc/decisions.md), par
 | Public delivery | Static pages generated from an immutable release snapshot | Visitors can browse without a live dependency on the editing database |
 | Logging | Structured console events plus bounded private activity history | Useful diagnostics without another paid service |
 
-These are proposals D005, D007, and D008. Google as the login provider is accepted; Supabase as the service implementing it is still proposed.
+D005 accepts Vercel + Supabase and Google as the login provider. D007 (immutable static releases) and D008 (diagnostic contract) remain proposed until their implementation details are validated.
 
 The provider research recorded on 2026-09-27 identified two relevant Supabase Free limitations: projects can pause after low activity, and automatic backups are not included. We need to decide whether occasional dashboard resumption is acceptable and define export/restore. Current limits and sources are documented in [architecture](doc/architecture.md#free-tier-tradeoffs) and should be rechecked before provisioning.
 
@@ -96,7 +96,7 @@ The exact trial workflow, final merge rules, switch procedure, and rollback rehe
 
 | Question | Current direction | When to resolve |
 |---|---|---|
-| Which hosting/database/auth service do we select? | Vercel + Supabase recommended; evaluate inactivity tolerance | Before creating cloud resources |
+| How do we provision the selected stack safely? | Vercel + Supabase accepted; verify current free limits and personal ownership | Before creating cloud resources |
 | Where are the personally owned projects and isolated v2 URL? | Inspect ownership, free-plan eligibility, and existing production settings | Before provisioning/deployment |
 | How is the authorized personal identity enrolled and recovered? | Explicit owner authorization, minimal scopes, account chooser; no public editorial access | Before implementing auth |
 | What exactly is a comment attached to? | A playlist entry, with stable identity and preserved removed-track notes | Before schema and migration |
@@ -130,10 +130,10 @@ The first hosted increment is complete when the owner can sign in, edit migrated
 As of this recap:
 
 - `codex/v2-online-studio` is the active branch, based on `master` at `be6c045`.
-- The documentation structure, accepted decisions, proposed architecture, logging contract, and backlog exist.
+- The documentation structure, accepted stack, proposed publication architecture, logging contract, and backlog exist.
 - v2 application features are not implemented or deployed. No database or Google OAuth project has been configured by this work.
 - No infrastructure spending has been incurred by this work.
-- Documentation changes remain local and uncommitted.
+- Documentation is versioned on the v2 branch; comparison notes require harmonization before being treated as canonical.
 - The baseline catalogue inspected on 2026-09-27 contained 9 playlists, 260 track entries, and 9 nonempty comments. Active browser storage has not been inventoried.
 
 | File | Role |
@@ -146,4 +146,4 @@ As of this recap:
 | [`doc/logging.md`](doc/logging.md) | Proposed logging and troubleshooting contract |
 | [`AGENTS.md`](AGENTS.md) | Agent instructions; `GEMINI.md` is its symlink |
 
-Next framing conversation: decide whether the proposed Supabase free-tier tradeoffs fit this project's usage, then settle personal project ownership and the minimum data/save/recovery contract before implementing the first hosted increment.
+Next action: provision the personally owned, isolated Vercel and Supabase projects, then implement the minimum data/save/recovery contract.

@@ -13,6 +13,9 @@ For the consolidated recap of accepted decisions, recommendations, and open fram
 | [Backlog](backlog.md) | Prioritized work with stable IDs and completion criteria | Work is added, started, completed, or reprioritized |
 | [Decisions](decisions.md) | Dated decisions, their reasons, and superseded choices | We agree on a consequential choice |
 | [Logging](logging.md) | Small diagnostic and activity logging contract | An operation or failure needs new visibility |
+| [Spotify authentication](spotify-auth-comparison.md) | Browser PKCE, server token custody, and scheduled sync | Spotify auth or sync behavior changes |
+| [Database comparison](database-comparison.md) | Historical rationale for the accepted Supabase decision | Provider limits materially change |
+| [Vercel storage](vercel-storage-comparison.md) | Why Blob is not the application database | Storage requirements change |
 
 Keep each fact in its owning document and link to it elsewhere. Status summarizes; backlog tracks work; decisions explain why. Use `proposed`, `accepted`, and `superseded` for decisions. Use `todo`, `in progress`, `blocked`, `done`, and `deferred` for backlog items. Mark work done only with recorded evidence. Add another document only when an existing one has become difficult to use.
 

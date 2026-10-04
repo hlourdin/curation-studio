@@ -1,11 +1,11 @@
 # Spotify Authentication Comparison
 
-Quick reference for choosing between PKCE and Authorization Code Flow for the Studio.
+Reference for separating the browser connection flow from server-side token custody.
 
 ## TL;DR Decision
 
-- **v2.0** : Use PKCE (like v1) for manual refresh button
-- **v2.1+** : Migrate to Authorization Code Flow for automated daily cron sync
+- **v2.0**: keep PKCE (as in v1) and the manual refresh button; the browser stores and refreshes its own tokens.
+- **v2.1+**: keep PKCE as a valid connection flow, but transfer the resulting refresh token to secure server-side custody so a daily cron can run without a browser.
 
 ## PKCE (Proof Key for Code Exchange)
 
@@ -14,57 +14,55 @@ Quick reference for choosing between PKCE and Authorization Code Flow for the St
 **How it works** :
 1. User clicks "Connect Spotify" in browser
 2. Spotify redirects back with authorization code
-3. Browser exchanges code for access token (1 hour validity)
-4. No refresh token provided
-5. After expiry → user must reconnect manually
+3. Browser exchanges the code for an access token (about one hour) and a refresh token
+4. Browser renews the access token with the refresh token and `client_id`
+5. Reauthorization is needed if the refresh token is absent, revoked, expired, or rejected
 
 **Pros** :
-- ✅ More secure (no long-lived token stored)
+- ✅ No client secret in the browser
 - ✅ Simpler implementation
 - ✅ No server-side secret management
 - ✅ Perfect for client-side apps
 
 **Cons** :
-- ❌ Cannot refresh automatically
-- ❌ User must reconnect every hour if working continuously
-- ❌ **Cron jobs cannot use it** (no way to auto-refresh)
+- ⚠️ v1 stores the refresh token in browser local storage
+- ❌ A cron cannot use a token that exists only in a browser
+- ❌ Background sync therefore needs a server-side token vault and expiry/revocation handling
 
 **Use case** : Manual "Re-import" button in Studio
 
-## Authorization Code Flow (with Refresh Token)
+## Server-side token custody
 
-**What it is** : Server-based OAuth flow with long-lived refresh capability
+**What it is**: secure server-side storage and refresh. The initial connection may remain PKCE or use a confidential-server Authorization Code exchange.
 
 **How it works** :
-1. User clicks "Connect Spotify" in browser (one-time setup)
-2. Spotify redirects back with authorization code
-3. **Server** exchanges code for TWO tokens:
-   - Access token (1 hour) → for API calls
-   - Refresh token (indefinite) → stored securely server-side
-4. When access token expires → server automatically gets new one using refresh token
-5. User never needs to reconnect (unless they revoke access)
+1. User clicks "Connect Spotify"
+2. Spotify returns an authorization code
+3. The exchange returns an access token and refresh token
+4. The refresh token is stored outside the browser, encrypted or protected by a server-side vault
+5. A server job renews access as needed; reauthorization remains possible after expiry or revocation
 
 **Pros** :
 - ✅ **Cron jobs can refresh automatically**
 - ✅ Seamless background syncing
-- ✅ User connects once, works forever
+- ✅ User normally reconnects only after revocation or token expiry
 - ✅ Perfect for server-side automation
 
 **Cons** :
 - ⚠️ Requires storing refresh token securely (encrypted in DB)
-- ⚠️ Needs client secret (must stay server-side)
+- ⚠️ A confidential-server exchange needs a client secret; PKCE refresh can use the client ID without exposing a secret
 - ⚠️ Slightly more complex implementation
 
 **Use case** : Daily automated sync at 8am via Vercel Cron
 
-## Token Refresh Flow (Authorization Code)
+## Token refresh flow
 
 ```javascript
 // Initial connection (user clicks "Connect Spotify")
 const initialTokens = await exchangeCodeForTokens(authCode);
 // {
 //   access_token: "BQD...xyz",    // Valid 1 hour
-//   refresh_token: "AQC...abc",   // Valid indefinitely
+//   refresh_token: "AQC...abc",   // Long-lived; handle expiry/revocation
 //   expires_in: 3600
 // }
 
@@ -85,6 +83,7 @@ async function dailySync() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+      // Confidential-client variant. PKCE refresh sends client_id in the body.
       'Authorization': `Basic ${base64(clientId + ':' + clientSecret)}`
     },
     body: new URLSearchParams({
@@ -106,18 +105,18 @@ async function dailySync() {
 
 ## Security Considerations
 
-### PKCE
-- No secrets to protect
-- Token only lives in browser memory/session
-- Expires after 1 hour
-- Risk: low (short-lived, client-side only)
+### Browser-only PKCE
+- No client secret to protect
+- Access and refresh tokens currently live in local storage in v1
+- Access tokens expire after about one hour and are refreshed by the client
+- Browser token theft remains a risk; cron execution is impossible while the token remains browser-only
 
-### Authorization Code Flow
+### Server-side custody
 - **Critical**: refresh token must be encrypted in database
 - **Critical**: client secret must stay in environment variables (server-side)
 - **Never** expose refresh token or client secret to browser
 - Implement row-level security (RLS) on credentials table
-- Consider token rotation every 30-60 days
+- Handle Spotify token expiry, revocation, `invalid_grant`, and reconnection explicitly
 
 ## Implementation Plan
 
@@ -143,10 +142,11 @@ export async function connectSpotify() {
 // User clicks "Re-import" button → uses current access token
 ```
 
-### Phase 2 (v2.1+) - Migration to Authorization Code Flow
+### Phase 2 (v2.1+) - Add server-side token custody
 
 ```typescript
-// Step 1: One-time setup - store refresh token
+// Step 1: One-time setup - store a refresh token obtained through
+// PKCE or a confidential-server Authorization Code exchange.
 // api/spotify/callback.ts (new Vercel function)
 export default async function handler(req, res) {
   const { code } = req.query;
@@ -198,7 +198,7 @@ export default async function handler(req, res) {
 {
   "crons": [{
     "path": "/api/cron/sync-playlists",
-    "schedule": "0 8 * * *"  // 8am daily
+    "schedule": "0 8 * * *"  // Daily in UTC; Hobby execution may occur within the hour
   }]
 }
 ```
@@ -234,9 +234,9 @@ CREATE INDEX idx_playlists_auto_sync ON playlists(auto_sync) WHERE auto_sync = t
 
 ## Migration Path
 
-1. **v2.0 Launch** : Keep PKCE, manual refresh button works
-2. **After stabilization** : Add Authorization Code endpoint (doesn't affect existing users)
-3. **User migration** : Show banner "Enable automatic sync" → one-time reconnection
+1. **v2.0 Launch**: Keep PKCE and the manual refresh button
+2. **After stabilization**: Add server-side refresh-token custody and cron endpoint
+3. **User migration**: Show “Enable automatic sync” and reconnect once to place credentials server-side
 4. **Gradual rollout** : Keep manual button available as fallback
 5. **Monitor** : Track sync success rate, email notifications effectiveness
 6. **Full deployment** : Cron becomes primary, manual button stays for troubleshooting

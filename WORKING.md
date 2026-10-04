@@ -32,12 +32,12 @@
   - **Implication** : Plusieurs jours de nouveaux titres accumulés entre chaque session
 - 🎯 **Stratégie retenue** :
   - **v2.0 (P0)** : Refresh manuel via bouton "Ré-importer" (PKCE comme v1)
-  - **v2.1+ (P2)** : Cron automatique tous les matins (ex: 8h) avec refresh token → **très pertinent** vu l'accumulation
+  - **v2.1+ (P2)** : Cron automatique quotidien avec refresh token conservé côté serveur → **très pertinent** vu l'accumulation
 - 🔧 Options techniques identifiées :
-  - **Vercel Cron** (1 job gratuit sur Hobby) - recommandé
-  - **Supabase pg_cron** (plusieurs jobs possibles) - alternative
+  - **Vercel Cron** - recommandé ; le plan Hobby accepte une exécution quotidienne, en UTC et sans précision à la minute
+  - **Supabase Cron** - alternative, mais les tâches ne tournent pas lorsque le projet est en pause
 - 🔑 **Requis pour auto-sync** :
-  - Stocker refresh token Spotify (Authorization Code Flow)
+  - Stocker le refresh token Spotify côté serveur ; PKCE fournit déjà un refresh token
   - Table `spotify_credentials` avec token chiffré
   - Champs `auto_sync`, `last_synced_at`, `spotify_snapshot_id` dans `playlists`
 - 📋 **Flow cible v2.1** : Cron 8h quotidien → Fetch Spotify → Detect changes → Merge → Notif email hebdo → Session curation avec tous les titres de la semaine prêts
@@ -57,7 +57,7 @@
 ## 🔧 Décisions à Prendre
 
 ### Court terme
-- [ ] Confirmer l'orientation Supabase dans `doc/decisions.md`
+- [x] Confirmer l'orientation Supabase dans `doc/decisions.md`
 - [ ] Définir le schéma exact des 4 tables (playlists, playlist_items, releases, activity_events)
 - [ ] Spécifier le comportement exact des commentaires (attachés à une entrée de playlist)
 
@@ -78,8 +78,8 @@
 ### 2026-10-04 (10h)
 - Clarification : Auth Google = backoffice only, utilisateur unique (propriétaire)
 - Exploration : Sync automatique playlists Spotify via cron
-- Options : Vercel Cron (1 gratuit) ou Supabase pg_cron (plusieurs)
-- Décision : refresh token nécessaire (Authorization Code Flow vs PKCE actuel)
+- Options : Vercel Cron quotidien ou Supabase Cron
+- Décision : déplacer le refresh token PKCE du navigateur vers un stockage serveur sécurisé pour le cron
 - Recommandation : v2.0 = update manuelle, v2.1 = ajout cron optionnel
 
 ### 2026-10-04 (11h)
@@ -108,7 +108,7 @@
 
 ## 🚀 Quand je serai prêt à lancer v2
 
-1. Mettre à jour `doc/decisions.md` avec Supabase confirmé
+1. ~~Mettre à jour `doc/decisions.md` avec Supabase confirmé~~
 2. Finaliser le schéma de données dans `doc/architecture.md`
 3. Créer les projets Google OAuth + Supabase
 4. Commencer l'implémentation avec V2-002 (Foundation)
