@@ -7,7 +7,7 @@ test('creates a deployment with the linked GitHub repoId', async () => {
   const previousFetch = global.fetch;
   const envKeys = [
     'VERCEL_API_TOKEN',
-    'VERCEL_PROJECT_ID',
+    'PUBLIC_VERCEL_PROJECT_ID',
     'VERCEL_TEAM_ID',
     'VERCEL_DEPLOYMENT_NAME',
     'VERCEL_GIT_REF'
@@ -16,7 +16,7 @@ test('creates a deployment with the linked GitHub repoId', async () => {
   const requests = [];
 
   process.env.VERCEL_API_TOKEN = 'test-token';
-  process.env.VERCEL_PROJECT_ID = 'prj_public';
+  process.env.PUBLIC_VERCEL_PROJECT_ID = 'prj_public';
   delete process.env.VERCEL_TEAM_ID;
   delete process.env.VERCEL_DEPLOYMENT_NAME;
   delete process.env.VERCEL_GIT_REF;
