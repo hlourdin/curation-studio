@@ -38,7 +38,8 @@ Create a second personal Hobby project from the same branch.
 
 - Build command: `npm run build:v2`
 - Output directory: `dist`
-- Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` as production build variables.
+- Add `SUPABASE_URL` and a server credential as production build variables:
+  prefer `SUPABASE_SECRET_KEY`, or use the legacy `SUPABASE_SERVICE_ROLE_KEY`.
 - Set the public project ID in the Studio project as `PUBLIC_VERCEL_PROJECT_ID`.
 - Create a Vercel API token scoped to the personal account and store it only in the Studio project as `VERCEL_API_TOKEN`.
 - Do not attach `lacurio.site` during the trial.

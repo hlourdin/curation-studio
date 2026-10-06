@@ -3,12 +3,14 @@ import { buildStaticSite } from './export-site.js';
 
 const releaseId = process.env.RELEASE_ID;
 const supabaseUrl = process.env.SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const serviceRoleKey =
+  process.env.SUPABASE_SECRET_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const missingConfiguration = [
   ['RELEASE_ID', releaseId],
   ['SUPABASE_URL', supabaseUrl],
-  ['SUPABASE_SERVICE_ROLE_KEY', serviceRoleKey]
+  ['SUPABASE_SECRET_KEY_OR_SERVICE_ROLE_KEY', serviceRoleKey]
 ].filter(([, value]) => !value).map(([key]) => key);
 
 if (missingConfiguration.length) {
