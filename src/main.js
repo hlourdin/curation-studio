@@ -351,7 +351,16 @@ async function setupApp() {
           exportStudioSiteZIP(playlists);
         }
       } catch (e) {
-        exportStudioSiteZIP(playlists);
+        console.error('Publication du site :', e);
+        if (isSupabaseConfigured) {
+          showNotificationModal({
+            title: 'Publication impossible',
+            message: `La publication n’a pas démarré. Code : <strong>${escapeHTML(e.message || 'PUBLISH_FAILED')}</strong>. Aucun site public n’a été modifié.`,
+            showPreviewBtn: false
+          });
+        } else {
+          exportStudioSiteZIP(playlists);
+        }
       } finally {
         exportSiteBtn.disabled = false;
       }
