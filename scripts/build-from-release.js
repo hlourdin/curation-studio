@@ -5,8 +5,16 @@ const releaseId = process.env.RELEASE_ID;
 const supabaseUrl = process.env.SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!releaseId || !supabaseUrl || !serviceRoleKey) {
-  throw new Error('RELEASE_BUILD_CONFIGURATION_MISSING');
+const missingConfiguration = [
+  ['RELEASE_ID', releaseId],
+  ['SUPABASE_URL', supabaseUrl],
+  ['SUPABASE_SERVICE_ROLE_KEY', serviceRoleKey]
+].filter(([, value]) => !value).map(([key]) => key);
+
+if (missingConfiguration.length) {
+  throw new Error(
+    `RELEASE_BUILD_CONFIGURATION_MISSING:${missingConfiguration.join(',')}`
+  );
 }
 
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
