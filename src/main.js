@@ -5,7 +5,8 @@ import {
   getStoredSpotifyRefreshToken,
   getValidAccessToken,
   extractPlaylistId,
-  fetchSpotifyPlaylist
+  fetchSpotifyPlaylist,
+  enrichTracksMetadata
 } from './utils/spotify.js';
 
 import defaultConfig from './data/config.json';
@@ -851,6 +852,26 @@ function loadPlaylist(slug) {
 
   // Rendre les cartes de morceaux
   renderTracks(playlistTracks);
+  void enrichActivePlaylistTrackMetadata(slug);
+}
+
+async function enrichActivePlaylistTrackMetadata(slug) {
+  if (slug !== activePlaylistSlug) return;
+  const token = await getValidAccessToken();
+  if (!token) return;
+
+  const playlist = playlists[slug];
+  const tracks = playlist?.tracks;
+  if (!Array.isArray(tracks) || tracks.length === 0) return;
+
+  try {
+    const changed = await enrichTracksMetadata(tracks, token);
+    if (!changed || slug !== activePlaylistSlug) return;
+    savePlaylistsData();
+    renderTracks(tracks);
+  } catch (err) {
+    console.warn('Enrichissement année / label :', err);
+  }
 }
 
 function renderAutoSyncState(playlist) {
@@ -1034,12 +1055,13 @@ function renderTracks(tracks) {
         <div class="song-info">
           <div class="song-title-row">
             <h3 class="song-title" title="${track.title}">${track.title}</h3>
+            ${getTrackYearHTML(track)}
             <a href="${track.url}" target="_blank" class="spotify-link-icon" title="Ouvrir sur Spotify">
               <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.669.47-.745 3.85-.88 7.15-.506 9.818 1.13.296.18.387.563.209.86zm1.224-2.72c-.227.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.077-1.182-.413.125-.845-.108-.97-.52-.125-.413.108-.847.52-.973 3.67-1.114 8.24-.57 11.35 1.345.366.226.486.705.26 1.07zm.106-2.833C14.382 8.87 8.544 8.677 5.16 9.704c-.52.158-1.066-.144-1.224-.662-.158-.52.143-1.067.662-1.224 3.886-1.18 10.33-.96 14.39 1.45.47.28.623.89.344 1.357-.28.47-.89.622-1.358.344z"/></svg>
             </a>
           </div>
           <p class="song-artist">${getArtistHTML(track)}</p>
-          <p class="song-album" title="${track.album}">${track.album}</p>
+          ${getTrackAlbumRowHTML(track)}
         </div>
         <div class="comment-container" id="comment-container-${track.id}">
           <!-- Injecté dynamiquement -->
@@ -1613,6 +1635,23 @@ function escapeHTML(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+function getTrackYearHTML(track) {
+  const year = track.year ? String(track.year).trim() : '';
+  if (!year) return '';
+  return `<span class="song-year">(${escapeHTML(year)})</span>`;
+}
+
+function getTrackAlbumRowHTML(track) {
+  const album = track.album ? escapeHTML(track.album) : '';
+  const label = track.label ? String(track.label).trim() : '';
+  const labelHtml = label ? `<span class="song-label">${escapeHTML(label)}</span>` : '';
+  if (!album && !labelHtml) return '';
+  const albumHtml = album
+    ? `<span class="song-album" title="${album}">${album}</span>`
+    : '';
+  return `<p class="song-album-row">${albumHtml}${labelHtml}</p>`;
 }
 
 // --- TOGGLE DE VUE (CARTES / LISTE) ---

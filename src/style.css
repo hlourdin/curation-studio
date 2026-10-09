@@ -950,15 +950,31 @@ button {
 
 .song-title-row {
   display: flex;
-  align-items: flex-start;
+  align-items: baseline;
   gap: 0.5rem;
 }
 
 .song-title {
+  flex: 1;
+  min-width: 0;
   font-family: var(--font-display);
   font-size: 1.0625rem;
   font-weight: 500;
   line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.song-year {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  white-space: nowrap;
 }
 
 .song-card.playing .song-title {
@@ -997,14 +1013,41 @@ button {
   border-bottom-color: var(--signal);
 }
 
-.song-album {
+.song-album-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
   margin-top: auto;
   padding-top: 0.35rem;
+  min-width: 0;
+}
+
+.song-album-row .song-album {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0;
+  padding-top: 0;
   font-size: 0.625rem;
   letter-spacing: 0.1em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.song-label {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 0.5625rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 45%;
 }
 
 /* --------------------------------------------------------------------------
@@ -1120,7 +1163,12 @@ button {
   border: none;
 }
 
-.tracks-grid.list-view .song-album {
+.tracks-grid.list-view .song-album-row .song-album {
+  display: none;
+}
+
+/* Sans label, la ligne album ne laisse pas de vide en vue liste. */
+.tracks-grid.list-view .song-album-row:not(:has(.song-label)) {
   display: none;
 }
 
