@@ -1640,7 +1640,7 @@ function escapeHTML(str) {
 function getTrackYearHTML(track) {
   const year = track.year ? String(track.year).trim() : '';
   if (!year) return '';
-  return `<span class="song-year">${escapeHTML(year)}</span>`;
+  return `<span class="song-year">(${escapeHTML(year)})</span>`;
 }
 
 function getTrackAlbumRowHTML(track) {

@@ -49,7 +49,7 @@ function getCover(pl) {
 function trackYearHTML(track) {
   const year = track.year ? String(track.year).trim() : '';
   if (!year) return '';
-  return `<span class="track-year">${text(year)}</span>`;
+  return `<span class="track-year">(${text(year)})</span>`;
 }
 
 function trackAlbumRowHTML(track) {

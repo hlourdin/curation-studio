@@ -970,9 +970,9 @@ button {
   flex-shrink: 0;
   margin-left: auto;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.5rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ink-faint);
   white-space: nowrap;
 }

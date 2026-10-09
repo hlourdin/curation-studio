@@ -53,7 +53,7 @@ test('generates deterministic public files from an immutable release', () => {
 
     assert.match(homepage, /Test &amp; écoute/);
     assert.match(page, /Titre &lt;rare&gt;/);
-    assert.match(page, /class="track-year">2005</);
+    assert.match(page, /class="track-year">\(2005\)</);
     assert.match(page, /class="track-label">Ninja Tune</);
     assert.match(page, /class="track-album-row"/);
     assert.equal(JSON.parse(data).tracks.length, 1);
