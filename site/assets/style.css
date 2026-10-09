@@ -982,11 +982,27 @@ button {
 }
 
 .track-title {
+  flex: 1;
+  min-width: 0;
   font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: -0.005em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-year {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  white-space: nowrap;
 }
 
 .song-card.playing .track-title {
@@ -1027,11 +1043,20 @@ button {
   border-bottom-color: var(--signal);
 }
 
-.track-album {
-  /* Poussée en pied de cellule : les lignes d'album restent alignées
-     même quand les noms d'artistes tiennent sur deux lignes. */
+.track-album-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
   margin-top: auto;
   padding-top: 0.35rem;
+  min-width: 0;
+}
+
+.track-album-row .track-album {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0;
+  padding-top: 0;
   font-family: var(--font-mono);
   font-size: 0.625rem;
   letter-spacing: 0.1em;
@@ -1040,6 +1065,22 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.track-label {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 0.5625rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 45%;
 }
 
 /* Note de curation : pièce rare, traitée comme une citation d'appareil. */
@@ -1183,7 +1224,12 @@ button {
   font-size: 1.0625rem;
 }
 
-.track-set.list-view .track-album {
+.track-set.list-view .track-album-row .track-album {
+  display: none;
+}
+
+/* Sans label, la ligne album ne laisse pas de vide en vue liste. */
+.track-set.list-view .track-album-row:not(:has(.track-label)) {
   display: none;
 }
 

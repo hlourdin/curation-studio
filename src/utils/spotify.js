@@ -143,6 +143,37 @@ export async function getValidAccessToken() {
   return token;
 }
 
+function releaseYearFromDate(releaseDate) {
+  if (!releaseDate || typeof releaseDate !== 'string') return '';
+  const year = releaseDate.slice(0, 4);
+  return /^\d{4}$/.test(year) ? year : '';
+}
+
+async function fetchAlbumLabels(albumIds, token) {
+  const labels = new Map();
+  const uniqueIds = [...new Set(albumIds.filter(Boolean))];
+  if (uniqueIds.length === 0) return labels;
+
+  const headers = { Authorization: `Bearer ${token}` };
+
+  for (let i = 0; i < uniqueIds.length; i += 20) {
+    const batch = uniqueIds.slice(i, i + 20);
+    const res = await fetch(`https://api.spotify.com/v1/albums?ids=${batch.join(',')}`, { headers });
+    if (!res.ok) {
+      console.warn(`Impossible de récupérer les labels album (${res.status})`);
+      continue;
+    }
+    const data = await res.json();
+    (data.albums || []).forEach((album) => {
+      if (album?.id) {
+        labels.set(album.id, album.label || '');
+      }
+    });
+  }
+
+  return labels;
+}
+
 // Extraire l'ID de la playlist à partir d'une URL
 export function extractPlaylistId(urlOrId) {
   if (!urlOrId) return '';
@@ -210,6 +241,7 @@ export async function fetchSpotifyPlaylist(playlistId, token) {
       return item;
     })
     .map(t => {
+      const album = t.album || null;
       return {
         id: t.id,
         title: t.name,
@@ -218,13 +250,24 @@ export async function fetchSpotifyPlaylist(playlistId, token) {
           name: a.name,
           url: a.external_urls?.spotify || (a.id ? `https://open.spotify.com/artist/${a.id}` : `https://open.spotify.com/search/${encodeURIComponent(a.name)}`)
         })) : [],
-        album: t.album ? t.album.name : '',
-        image: t.album && t.album.images && t.album.images.length > 0 ? t.album.images[0].url : '',
+        album: album ? album.name : '',
+        albumId: album?.id || '',
+        year: album?.release_date ? releaseYearFromDate(album.release_date) : '',
+        label: '',
+        image: album && album.images && album.images.length > 0 ? album.images[0].url : '',
         url: t.external_urls?.spotify || '',
         previewUrl: t.preview_url || '',
         comment: '' // Sera complété par l'utilisateur
       };
     });
+
+  const labelMap = await fetchAlbumLabels(formattedTracks.map((track) => track.albumId), token);
+  formattedTracks.forEach((track) => {
+    if (track.albumId && labelMap.has(track.albumId)) {
+      track.label = labelMap.get(track.albumId) || '';
+    }
+    delete track.albumId;
+  });
 
   console.log(`Tracks items parsed: ${tracksItems.length}, formatted: ${formattedTracks.length}`);
 
@@ -237,4 +280,68 @@ export async function fetchSpotifyPlaylist(playlistId, token) {
     spotifyUrl: playlistInfo.external_urls?.spotify || `https://open.spotify.com/playlist/${playlistId}`,
     tracks: formattedTracks
   };
+}
+
+/** Complète année et label pour des morceaux déjà stockés (sans ré-import complet). */
+export async function enrichTracksMetadata(tracks, token) {
+  if (!token || !Array.isArray(tracks) || tracks.length === 0) return false;
+
+  const targets = tracks.filter(
+    (t) => t?.id && (!String(t.year || '').trim() || !String(t.label || '').trim())
+  );
+  if (targets.length === 0) return false;
+
+  const headers = { Authorization: `Bearer ${token}` };
+  const byId = new Map(tracks.map((t) => [t.id, t]));
+  let changed = false;
+
+  for (let i = 0; i < targets.length; i += 50) {
+    const batch = targets.slice(i, i + 50);
+    const res = await fetch(
+      `https://api.spotify.com/v1/tracks?ids=${batch.map((t) => t.id).join(',')}`,
+      { headers }
+    );
+    if (!res.ok) {
+      console.warn(`Enrichissement morceaux (${res.status})`);
+      continue;
+    }
+
+    const data = await res.json();
+    const albumIdsForLabels = new Set();
+
+    for (const spotifyTrack of data.tracks || []) {
+      if (!spotifyTrack?.id) continue;
+      const track = byId.get(spotifyTrack.id);
+      if (!track) continue;
+
+      const album = spotifyTrack.album;
+      if (!String(track.year || '').trim() && album?.release_date) {
+        const year = releaseYearFromDate(album.release_date);
+        if (year) {
+          track.year = year;
+          changed = true;
+        }
+      }
+      if (!String(track.label || '').trim() && album?.id) {
+        track.__albumIdForLabel = album.id;
+        albumIdsForLabels.add(album.id);
+      }
+    }
+
+    if (albumIdsForLabels.size > 0) {
+      const labelMap = await fetchAlbumLabels([...albumIdsForLabels], token);
+      for (const track of batch) {
+        const albumId = track.__albumIdForLabel;
+        delete track.__albumIdForLabel;
+        if (!albumId || String(track.label || '').trim()) continue;
+        const label = labelMap.get(albumId) || '';
+        if (label) {
+          track.label = label;
+          changed = true;
+        }
+      }
+    }
+  }
+
+  return changed;
 }

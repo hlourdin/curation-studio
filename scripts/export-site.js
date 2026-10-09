@@ -46,6 +46,21 @@ function getCover(pl) {
   );
 }
 
+function trackYearHTML(track) {
+  const year = track.year ? String(track.year).trim() : '';
+  if (!year) return '';
+  return `<span class="track-year">${text(year)}</span>`;
+}
+
+function trackAlbumRowHTML(track) {
+  const album = track.album ? text(track.album) : '';
+  const label = track.label ? String(track.label).trim() : '';
+  const labelHtml = label ? `<span class="track-label">${text(label)}</span>` : '';
+  if (!album && !labelHtml) return '';
+  const albumHtml = album ? `<span class="track-album">${album}</span>` : '';
+  return `<p class="track-album-row">${albumHtml}${labelHtml}</p>`;
+}
+
 /* ==========================================================================
    ICÔNES
    Tracés repris de la bibliothèque Feather (MIT) déjà utilisée par le projet,
@@ -499,10 +514,11 @@ function writePlaylistPage({ playlistsDir, slug, pl, index }) {
             <div class="track-text">
               <div class="track-title-row">
                 <h3 class="track-title">${text(track.title)}</h3>
+                ${trackYearHTML(track)}
                 <a class="track-out" href="${escapeHTML(track.url)}" target="_blank" rel="noopener" title="Ouvrir sur Spotify" aria-label="Ouvrir ${text(track.title)} sur Spotify">${ICON.external}</a>
               </div>
               <p class="track-artist">${artistsHTML(track)}</p>
-              <p class="track-album">${text(track.album)}</p>
+              ${trackAlbumRowHTML(track)}
               <p class="track-unavailable">Extrait indisponible</p>
             </div>${note ? `\n            <blockquote class="track-note">${escapeHTML(note)}</blockquote>` : ''}
           </div>

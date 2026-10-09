@@ -21,6 +21,8 @@ function fixture() {
         artist: 'Artiste',
         artists: [{ name: 'Artiste', url: 'https://example.test/artist' }],
         album: 'Album',
+        year: '2005',
+        label: 'Ninja Tune',
         image: 'https://example.test/track.jpg',
         url: 'https://open.spotify.com/track/track-1',
         previewUrl: '',
@@ -51,6 +53,9 @@ test('generates deterministic public files from an immutable release', () => {
 
     assert.match(homepage, /Test &amp; écoute/);
     assert.match(page, /Titre &lt;rare&gt;/);
+    assert.match(page, /class="track-year">2005</);
+    assert.match(page, /class="track-label">Ninja Tune</);
+    assert.match(page, /class="track-album-row"/);
     assert.equal(JSON.parse(data).tracks.length, 1);
     assert.ok(fs.existsSync(path.join(outDir, 'assets/style.css')));
 
