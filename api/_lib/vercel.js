@@ -2,7 +2,8 @@ const API_ROOT = 'https://api.vercel.com';
 
 function configuration() {
   const token = process.env.VERCEL_API_TOKEN;
-  const projectId = process.env.PUBLIC_VERCEL_PROJECT_ID;
+  const projectId =
+    process.env.PUBLIC_VERCEL_PROJECT_ID || process.env.VERCEL_PROJECT_ID;
   if (!token || !projectId) throw new Error('VERCEL_PUBLISH_CONFIGURATION_MISSING');
   return { token, projectId, teamId: process.env.VERCEL_TEAM_ID || '' };
 }
