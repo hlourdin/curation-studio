@@ -9,10 +9,10 @@ This page is the **repository copy** of the cutover runbook so any developer or 
 | Step | Status |
 |------|--------|
 | Merge [PR #2](https://github.com/hlourdin/curation-studio/pull/2) into `master` | Done (`7da1ef4`) |
-| Point `lacurio.site` / `www` to **curation-studio-v2-public** | **Manual — Vercel UI** |
-| Set **curation-studio** (v1) production branch to `v1-freeze` | **Manual — Vercel UI** |
+| Point `lacurio.site` / `www` to **curation-studio-v2-public** | Done (2026-10-09) |
+| Set **curation-studio** (v1) production branch to `v1-freeze` | Done (2026-10-09) |
 
-**Interim risk:** after the merge, the legacy Vercel project `curation-studio` still owns the custom domains and deployed `master` with the v2 Studio build. Visitors may see the Studio instead of the public catalogue until step 2 is completed.
+**Cutover completed 2026-10-09.** Public domains serve **curation-studio-v2-public**; legacy **curation-studio** production tracks **`v1-freeze`** (`27886ab`).
 
 ## Verify quickly
 
