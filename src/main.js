@@ -351,7 +351,16 @@ async function setupApp() {
           exportStudioSiteZIP(playlists);
         }
       } catch (e) {
-        exportStudioSiteZIP(playlists);
+        console.error('Publication du site :', e);
+        if (isSupabaseConfigured) {
+          showNotificationModal({
+            title: 'Publication impossible',
+            message: `La publication n’a pas démarré. Code : <strong>${escapeHTML(e.message || 'PUBLISH_FAILED')}</strong>. Aucun site public n’a été modifié.`,
+            showPreviewBtn: false
+          });
+        } else {
+          exportStudioSiteZIP(playlists);
+        }
       } finally {
         exportSiteBtn.disabled = false;
       }
@@ -1480,20 +1489,59 @@ function formatTime(seconds) {
 
 // --- FONCTIONS D'EXPORT & EFFACEMENT ---
 
-// Exporte les playlists du LocalStorage sous format JSON téléchargeable
-function exportPlaylistsToJSON() {
+function downloadJSON(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: 'application/json;charset=utf-8'
+  });
+  const url = URL.createObjectURL(blob);
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.href = url;
+  downloadAnchor.download = filename;
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+// Exporte une sauvegarde complète depuis Supabase, ou le catalogue local hors ligne.
+async function exportPlaylistsToJSON() {
+  if (isSupabaseConfigured) {
+    exportJsonBtn.disabled = true;
+    try {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      if (!session) {
+        alert("Reconnectez-vous avant d'exporter la sauvegarde.");
+        return;
+      }
+
+      const response = await fetch('/api/backup', {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || 'BACKUP_EXPORT_FAILED');
+      }
+      const backup = await response.json();
+      const timestamp = (backup.exportedAt || new Date().toISOString()).replace(/[:.]/g, '-');
+      downloadJSON(backup, `curation-studio-backup-${timestamp}.json`);
+      return;
+    } catch (error) {
+      console.error('Export de sauvegarde :', error);
+      alert("La sauvegarde n'a pas pu être téléchargée. Réessayez après avoir rechargé le Studio.");
+      return;
+    } finally {
+      exportJsonBtn.disabled = false;
+    }
+  }
+
   if (Object.keys(playlists).length === 0) {
     alert("Aucune donnée à exporter.");
     return;
   }
 
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(playlists, null, 2));
-  const downloadAnchor = document.createElement('a');
-  downloadAnchor.setAttribute("href", dataStr);
-  downloadAnchor.setAttribute("download", "melomanie-export-playlists.json");
-  document.body.appendChild(downloadAnchor);
-  downloadAnchor.click();
-  downloadAnchor.remove();
+  downloadJSON(playlists, "melomanie-export-playlists.json");
 }
 
 // Efface toutes les données locales

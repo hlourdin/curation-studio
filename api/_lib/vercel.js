@@ -2,7 +2,8 @@ const API_ROOT = 'https://api.vercel.com';
 
 function configuration() {
   const token = process.env.VERCEL_API_TOKEN;
-  const projectId = process.env.VERCEL_PROJECT_ID;
+  const projectId =
+    process.env.PUBLIC_VERCEL_PROJECT_ID || process.env.VERCEL_PROJECT_ID;
   if (!token || !projectId) throw new Error('VERCEL_PUBLISH_CONFIGURATION_MISSING');
   return { token, projectId, teamId: process.env.VERCEL_TEAM_ID || '' };
 }
@@ -58,21 +59,25 @@ export async function bindReleaseToProduction(releaseId) {
 
 export async function createReleaseDeployment(releaseId) {
   const { projectId } = configuration();
-  const repo = process.env.VERCEL_GIT_REPO_ID || 'hlourdin/curation-studio';
-  const [org, repository] = repo.split('/');
-  const ref = process.env.VERCEL_GIT_REF || 'codex/v2-online-studio';
+  const project = await vercelRequest(`/v9/projects/${projectId}`);
+  const repoId = project.link?.repoId;
+  if (!repoId || !['github', 'github-limited'].includes(project.link?.type)) {
+    throw new Error('VERCEL_GITHUB_LINK_MISSING');
+  }
+  const ref = process.env.VERCEL_GIT_REF ||
+    project.link.productionBranch ||
+    'codex/v2-online-studio';
 
   await bindReleaseToProduction(releaseId);
   return vercelRequest('/v13/deployments', {
     method: 'POST',
     body: JSON.stringify({
-      name: process.env.VERCEL_DEPLOYMENT_NAME || 'curation-studio-public-v2',
+      name: process.env.VERCEL_DEPLOYMENT_NAME || project.name,
       project: projectId,
       target: 'production',
       gitSource: {
         type: 'github',
-        org,
-        repo: repository,
+        repoId,
         ref
       },
       meta: {
