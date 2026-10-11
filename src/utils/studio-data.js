@@ -30,6 +30,8 @@ function playlistFromRow(row) {
       artist: item.artist,
       artists: item.artists || [],
       album: item.album,
+      year: item.release_year || '',
+      label: item.record_label || '',
       image: item.image_url,
       url: item.spotify_url,
       previewUrl: item.preview_url,
@@ -192,6 +194,23 @@ export async function createPublicRelease() {
   const { data, error } = await client.rpc('create_public_release');
   if (error) throw error;
   return Array.isArray(data) ? data[0] : data;
+}
+
+/** Persists year/label enriched from Spotify onto playlist_items. */
+export async function saveTracksMetadata(tracks) {
+  const client = requireClient();
+  const items = (tracks || [])
+    .filter((track) => track?._dbId && (track.year || track.label))
+    .map((track) => ({
+      id: track._dbId,
+      year: String(track.year || '').trim(),
+      label: String(track.label || '').trim()
+    }));
+  if (items.length === 0) return 0;
+
+  const { data, error } = await client.rpc('save_playlist_items_metadata', { items });
+  if (error) throw error;
+  return typeof data === 'number' ? data : 0;
 }
 
 export async function recordActivity(event) {
