@@ -19,3 +19,15 @@ Le site public montre le bon layout (ligne album) mais **aucune année ni label*
 |------------|---------------------|
 | `playlist_items.release_year` | `year` |
 | `playlist_items.record_label` | `label` |
+
+## Labels Spotify (Dev Mode, mars 2026)
+
+Ce n’est **pas** un bug d’affichage. En *Development Mode*, Spotify a retiré :
+
+- le fetch batch `GET /v1/albums?ids=…`
+- le champ `album.label`
+
+L’année reste disponible via `album.release_date` sur les morceaux.  
+Le Studio récupère donc le label via `GET /v1/albums/{id}` puis, si `label` est absent, un fallback sur `copyrights` (texte ℗/© nettoyé).
+
+Pour retrouver le vrai champ `label` Spotify : passer l’app en **Extended Quota Mode** sur le dashboard développeur.

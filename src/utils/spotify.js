@@ -149,25 +149,55 @@ function releaseYearFromDate(releaseDate) {
   return /^\d{4}$/.test(year) ? year : '';
 }
 
+/** Spotify Dev Mode (mars 2026) a retiré album.label — on retombe sur copyrights. */
+function labelFromAlbum(album) {
+  if (!album) return '';
+  const direct = typeof album.label === 'string' ? album.label.trim() : '';
+  if (direct) return direct;
+
+  const copyrights = Array.isArray(album.copyrights) ? album.copyrights : [];
+  const preferred =
+    copyrights.find((entry) => entry?.type === 'P' && entry.text) ||
+    copyrights.find((entry) => entry?.type === 'C' && entry.text) ||
+    copyrights.find((entry) => entry?.text);
+  if (!preferred?.text) return '';
+
+  // Ex. "2024 Domino Recording Co Ltd" → "Domino Recording Co Ltd"
+  return String(preferred.text)
+    .replace(/^©\s*/i, '')
+    .replace(/^℗\s*/i, '')
+    .replace(/^\d{4}\s+/, '')
+    .trim();
+}
+
+async function fetchAlbumLabel(albumId, token) {
+  const headers = { Authorization: `Bearer ${token}` };
+  // Fetch unitaire : GET /v1/albums?ids= a été retiré en Dev Mode (fév. 2026).
+  const res = await fetch(
+    `https://api.spotify.com/v1/albums/${encodeURIComponent(albumId)}?market=FR`,
+    { headers }
+  );
+  if (!res.ok) {
+    console.warn(`Label album ${albumId} indisponible (${res.status})`);
+    return '';
+  }
+  const album = await res.json();
+  return labelFromAlbum(album);
+}
+
 async function fetchAlbumLabels(albumIds, token) {
   const labels = new Map();
   const uniqueIds = [...new Set(albumIds.filter(Boolean))];
   if (uniqueIds.length === 0) return labels;
 
-  const headers = { Authorization: `Bearer ${token}` };
-
-  for (let i = 0; i < uniqueIds.length; i += 20) {
-    const batch = uniqueIds.slice(i, i + 20);
-    const res = await fetch(`https://api.spotify.com/v1/albums?ids=${batch.join(',')}`, { headers });
-    if (!res.ok) {
-      console.warn(`Impossible de récupérer les labels album (${res.status})`);
-      continue;
-    }
-    const data = await res.json();
-    (data.albums || []).forEach((album) => {
-      if (album?.id) {
-        labels.set(album.id, album.label || '');
-      }
+  const concurrency = 5;
+  for (let i = 0; i < uniqueIds.length; i += concurrency) {
+    const chunk = uniqueIds.slice(i, i + concurrency);
+    const results = await Promise.all(
+      chunk.map(async (albumId) => [albumId, await fetchAlbumLabel(albumId, token)])
+    );
+    results.forEach(([albumId, label]) => {
+      labels.set(albumId, label || '');
     });
   }
 
