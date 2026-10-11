@@ -26,6 +26,7 @@ import {
   savePlaylistDescription,
   savePlaylistOrder,
   saveTrackComment,
+  saveTracksMetadata,
   setPlaylistAutoSync,
   syncSpotifyPlaylist
 } from './utils/studio-data.js';
@@ -311,6 +312,7 @@ async function setupApp() {
       try {
         exportSiteBtn.disabled = true;
         if (isSupabaseConfigured) {
+          await enrichAndPersistAllTrackMetadata();
           const release = await createPublicRelease();
           const {
             data: { session }
@@ -868,9 +870,41 @@ async function enrichActivePlaylistTrackMetadata(slug) {
     const changed = await enrichTracksMetadata(tracks, token);
     if (!changed || slug !== activePlaylistSlug) return;
     savePlaylistsData();
+    if (isSupabaseConfigured) {
+      try {
+        await saveTracksMetadata(tracks);
+      } catch (persistErr) {
+        console.warn('Persistance année / label :', persistErr);
+      }
+    }
     renderTracks(tracks);
   } catch (err) {
     console.warn('Enrichissement année / label :', err);
+  }
+}
+
+/** Avant publication : complète année/label via Spotify et les enregistre en base. */
+async function enrichAndPersistAllTrackMetadata() {
+  const token = await getValidAccessToken();
+  if (!token) {
+    console.warn('Publication sans Spotify : année / label non enrichis.');
+    return;
+  }
+
+  for (const playlist of Object.values(playlists)) {
+    const tracks = playlist?.tracks;
+    if (!Array.isArray(tracks) || tracks.length === 0) continue;
+    try {
+      const changed = await enrichTracksMetadata(tracks, token);
+      if (!changed) continue;
+      await saveTracksMetadata(tracks);
+    } catch (err) {
+      console.warn('Enrichissement publication :', err);
+    }
+  }
+  savePlaylistsData();
+  if (activePlaylistSlug && playlists[activePlaylistSlug]) {
+    renderTracks(playlists[activePlaylistSlug].tracks || []);
   }
 }
 
