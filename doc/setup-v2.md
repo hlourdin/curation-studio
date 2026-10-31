@@ -21,7 +21,7 @@ The repository is ready for two separate Vercel projects backed by one personal 
 
 ## 2. Vercel Studio project
 
-Create a personal Hobby project from `codex/v2-online-studio`.
+Create a personal Hobby project from `master`.
 
 - Build command: `npm run build:v2`
 - Output directory: `dist`

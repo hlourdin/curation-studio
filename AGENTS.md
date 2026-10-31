@@ -7,7 +7,7 @@ Ce document centralise l'architecture, les workflows, les règles de design et l
 - `AGENTS.md` est la source des consignes pour les agents ; `GEMINI.md` est un lien symbolique vers ce fichier.
 - La documentation projet vit dans [`doc/`](doc/README.md) : [statut](doc/status.md), [architecture](doc/architecture.md), [backlog](doc/backlog.md), [décisions](doc/decisions.md) et [journalisation](doc/logging.md). Lire le statut avant de reprendre le travail et actualiser les documents concernés après un changement.
 - **Ne plus utiliser GSD** : pas de workflow, d'état ou de jalons GSD. Utiliser ces fichiers Markdown simples.
-- Développer la v2 sur `codex/v2-online-studio`. Conserver la v1 sur `master` et son service actif jusqu'à la décision explicite de basculer. Isoler aussi les ressources hébergées et les données de la v2.
+- La v2 est fusionnée sur `master`, seule branche active. Les projets Vercel v2 (Studio et public) déploient `master`. Isoler toujours les ressources hébergées et les données de la v2.
 - Objectif confirmé : Studio accessible en ligne avec connexion et base de données pour les commentaires, sans nouvelle dépense d'infrastructure. Les choix de fournisseurs restent des propositions tant qu'ils ne sont pas acceptés dans le journal des décisions.
 - Les sections ci-dessous décrivent l'existant v1 et son historique ; les propositions v2 sont dans `doc/`. La mention historique d'une direction Lookbook réservée à `new-design` est dépassée : le code inspecté sur `master` utilise déjà cette direction. Confirmer et documenter la référence visuelle avant de modifier l'interface.
 

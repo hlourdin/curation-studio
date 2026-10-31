@@ -30,7 +30,7 @@ test('creates a deployment with the linked GitHub repoId', async () => {
         link: {
           type: 'github',
           repoId: 1327864241,
-          productionBranch: 'codex/v2-online-studio'
+          productionBranch: 'master'
         }
       },
       2: { envs: [] },
@@ -54,7 +54,7 @@ test('creates a deployment with the linked GitHub repoId', async () => {
     assert.deepEqual(requestBody.gitSource, {
       type: 'github',
       repoId: 1327864241,
-      ref: 'codex/v2-online-studio'
+      ref: 'master'
     });
   } finally {
     global.fetch = previousFetch;

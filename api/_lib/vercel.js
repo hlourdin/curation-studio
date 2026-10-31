@@ -66,7 +66,7 @@ export async function createReleaseDeployment(releaseId) {
   }
   const ref = process.env.VERCEL_GIT_REF ||
     project.link.productionBranch ||
-    'codex/v2-online-studio';
+    'master';
 
   await bindReleaseToProduction(releaseId);
   return vercelRequest('/v13/deployments', {
