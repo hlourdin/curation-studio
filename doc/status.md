@@ -1,12 +1,12 @@
 # Project status
 
-Updated: 2026-10-04.
+Updated: 2026-10-31.
 
 ## Current state
 
 - Phase: v2 implementation foundation.
-- Active development branch: `codex/v2-online-studio`, based on `master` at `be6c045`.
-- Stable code: `master`; current local Studio and static public site remain v1.
+- Single branch: `master` (v2 merged). `codex/v2-online-studio` still exists only because Vercel deploys it until the switch below is verified.
+- Production: `lacurio.site` serves `curation-studio-v2-public`; the Studio runs at `curation-studio-v2-studio.vercel.app` (Supabase project `cplkymfifwejxxfmvoiz`).
 - Online v2: repository implementation exists; deployment and provider validation are blocked until personal Supabase, Google, Spotify, and Vercel credentials are supplied.
 - New infrastructure spend: none incurred by this work.
 - Production hosting settings and active browser-only content: not yet inspected.
@@ -33,9 +33,20 @@ Updated: 2026-10-04.
 - Added seven automated tests; v2 build, v1 static export, migration dry-run, JavaScript syntax checks, and dependency audit pass.
 - Manually validated the local fallback UI, catalogue, playlists, themes, and separate Spotify connection.
 
-## Next
+**Session 2026-10-31:**
+- Fast-forwarded local `master` to the merged v2; deleted, then recreated `codex/v2-online-studio` after publication failed with `INTERNAL_ERROR` (the public project's Production Branch still pointed to it).
+- Resumed the Supabase project after a free-tier inactivity pause; Google login and publication work again.
+- Code, `.env.example`, setup guide, and tests now default the deployment ref to `master` (`34ca8b6`). No `VERCEL_GIT_REF` variable exists; the ref comes from the public project's Production Branch.
+- Added V2-018 (Batch web push) and V2-019 (manual Instagram) to the backlog.
 
-Provision the personal Supabase and two isolated Vercel projects using [the setup guide](setup-v2.md). Apply the migration, enroll the owner, and run the live access, multi-device, Spotify, publication, restore, and rollback acceptance checks.
+## Next (todo)
+
+1. **Switch Vercel to `master`:** set Production Branch to `master` on `curation-studio-v2-public` and `curation-studio-v2-studio`, redeploy the Studio, publish once, and check that the public deployment shows branch `master`. Then delete `codex/v2-online-studio`. Until then, keep it equal to `master` (`git push origin master:codex/v2-online-studio`).
+2. **Diagnose the daily cron:** in `curation-studio-v2-studio` → Settings → Cron Jobs, click Run, then View Logs. 200 = fine; 401 = add `CRON_SECRET` (`openssl rand -hex 32`, Production) and redeploy; 500 = read the error. Suspected reason the Supabase project still paused despite the daily cron.
+3. **Disable the duplicate cron** on `curation-studio-v2-public` if it shows `/api/cron/sync-playlists` (same `vercel.json`).
+4. **Auto sync (optional):** reconnect Spotify once so the server stores the refresh token (`/api/spotify/connection`), then enable "Sync auto" per playlist.
+5. **Backup:** run `npm run backup:export` (needs `SUPABASE_URL` and the server key in `.env`); keep the file outside the repo.
+6. **Leftover stash:** port D010/D011, the `AGENTS.md` rule, and the `v2-plan.dm` 2026-10-09 section from `stash@{0}` as described in `BATCH_WEB_PUSH_PLAN.md`, then drop the stash.
 
 ## Open decisions
 
