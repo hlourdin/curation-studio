@@ -21,6 +21,8 @@ One ordered list. IDs remain stable if priorities change. `P0` is needed for the
 | V2-015 | P2 | deferred | Decide portable ZIP export | Keep it with shared rendering or retire it based on actual need |
 | V2-016 | P2 | deferred | Playback across page navigation | Establish whether uninterrupted listening justifies a navigation architecture change |
 | V2-017 | P2 | deferred | Automated external backups | Add only after export/restore works and a free destination/retention policy is agreed |
+| V2-018 | P2 | blocked | Batch web push announcements | Site public carries the Batch SDK, service worker at the site root, and opt-in; Studio exposes a per-track announce flag (`announce`, `announced_at` on `playlist_items`); after deployment confirmation an authenticated server function (pattern of `api/publish.js`) sends one Batch Campaigns API web-push per announced track (title, curation note, cover, deeplink to the static playlist page); a subscribed test browser receives it; repeated publish never re-notifies an announced track. Blocked until Batch account access (REST key, project key, web push option) is effective. Consequences: first third-party dependency on the public site; subscribers live in Batch; iOS only as installed PWA (16.4+) |
+| V2-019 | P2 | deferred | Manual Instagram announcements | Owner posts manually from the Instagram app; no Meta API integration (professional account and app review required; declined) |
 
 ## Delivery order
 
